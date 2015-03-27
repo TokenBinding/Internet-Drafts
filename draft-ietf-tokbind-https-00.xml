@@ -1,0 +1,570 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- This template is for creating an Internet Draft using xml2rfc,
+     which is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!-- One method to get references from the online citation libraries.
+     There has to be one entity for each item to be referenced. 
+     An alternate method (rfc include) is described in the references. -->
+
+<!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC5246 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml">
+<!ENTITY RFC7301 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7301.xml">
+<!ENTITY RFC2616 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml">
+<!ENTITY RFC5929 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5929.xml">
+<!ENTITY RFC4492 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4492.xml">
+<!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs), 
+     please see http://xml.resource.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+     (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space 
+     (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<!-- end of list of popular I-D processing instructions -->
+<rfc category="std" docName="draft-ietf-tokbind-https-00" ipr="trust200902">
+  <!-- category values: std, bcp, info, exp, and historic
+     ipr values: full3667, noModification3667, noDerivatives3667
+     you can add the attributes updates="NNNN" and obsoletes="NNNN" 
+     they will automatically be output with "(if approved)" -->
+
+  <!-- ***** FRONT MATTER ***** -->
+
+  <front>
+    <!-- The abbreviated title is used in the page header - it is only necessary if the 
+         full title is longer than 39 characters -->
+
+    <title>Token Binding over HTTP</title>
+
+    <!-- add 'role="editor"' below for the editors if appropriate -->
+
+    <!-- Another author who claims to be an editor -->
+
+    <author fullname="Andrei Popov" initials="A."
+            surname="Popov">
+      <organization>Microsoft Corp.</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <!-- Reorder these if your country does things differently -->
+
+          <city></city>
+
+          <region></region>
+
+          <code></code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>andreipo@microsoft.com</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+    <author fullname="Magnus Nyström" initials="M."
+            surname="Nyström">
+      <organization>Microsoft Corp.</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <!-- Reorder these if your country does things differently -->
+
+          <city></city>
+
+          <region></region>
+
+          <code></code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>mnystrom@microsoft.com</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+    <author fullname="Dirk Balfanz" initials="D."
+            surname="Balfanz" role="editor">
+      <organization>Google Inc.</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <!-- Reorder these if your country does things differently -->
+
+          <city></city>
+
+          <region></region>
+
+          <code></code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>balfanz@google.com</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+    <author fullname="Adam Langley" initials="A."
+            surname="Langley">
+      <organization>Google Inc.</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <!-- Reorder these if your country does things differently -->
+
+          <city></city>
+
+          <region></region>
+
+          <code></code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>agl@google.com</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+    <date year="2015" />
+
+    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
+         in the current day for you. If only the current year is specified, xml2rfc will fill 
+	 in the current day and month for you. If the year is not the current one, it is 
+	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the 
+	 purpose of calculating the expiry date).  With drafts it is normally sufficient to 
+	 specify just the year. -->
+
+    <!-- Meta-data Declarations -->
+
+    <area>General</area>
+
+    <workgroup>Internet Engineering Task Force</workgroup>
+
+    <!-- WG name at the upperleft corner of the doc,
+         IETF is fine for individual submissions.  
+	 If this element is not present, the default is "Network Working Group",
+         which is used by the RFC Editor as a nod to the history of the IETF. -->
+
+    <keyword>draft</keyword>
+
+    <!-- Keywords will be incorporated into HTML output
+         files in a meta tag but they have no effect on text or nroff
+         output. If you submit your draft to the RFC Editor, the
+         keywords will be used for the search engine. -->
+
+    <abstract>
+      <t>This document describes a collection of mechanisms that allow
+      HTTP servers to cryptographically bind authentication tokens
+      (such as cookies and OAuth tokens) to a <xref
+      target="RFC5246">TLS</xref> connection.</t>
+
+      <t>We describe both <spanx style="emph">first-party</spanx> as
+      well as <spanx style="emph">federated</spanx> scenarios. In a
+      first-party scenario, an HTTP server issues a security token
+      (such as a cookie) to a client, and expects the client to send
+      the security token back to the server at a later time in order
+      to authenticate. Binding the token to the TLS connection between
+      client and server protects the security token from theft, and
+      ensures that the security token can only be used by the client
+      that it was issued to.</t>
+
+      <t>Federated token bindings, on the other hand, allow servers to
+      cryptographically bind security tokens to a <xref
+      target="RFC5246">TLS</xref> connection that the client has with
+      a <spanx style="emph">different</spanx> server than the one
+      issuing the token.</t>
+
+      <t>This Internet-Draft is a companion document to <xref
+      target="TBPROTO">The Token Binding Protocol</xref></t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t><xref target="TBPROTO">The Token Binding Protocol</xref>
+      defines a Token Binding ID for a TLS connection between a client
+      and a server. The Token Binding ID of a TLS connection is
+      related to a private key that the client proves possession of to
+      the server, and is long-lived (i.e., subsequent TLS connections
+      between the same client and server have the same Token Binding
+      ID). When issuing a security token (e.g. an HTTP cookie or an
+      OAuth token) to a client, the server can include the Token
+      Binding ID in the token, thus cryptographically binding the
+      token to TLS connections between that particular client and
+      server, and inoculating the token against theft by
+      attackers.</t>
+      <t>While the <xref target="TBPROTO">Token Binding
+      Protocol</xref> defines a message format for establishing a
+      Token Binding ID, it doesn't specify how this message is
+      embedded in higher-level protocols. The purpose of this
+      specification is to define how TokenBindingMessages are embedded
+      in HTTP (both versions <xref target="RFC2616">1.1</xref> and
+      <xref target="I-D.ietf-httpbis-http2">2</xref>). Note that
+      TokenBindingMessages are only defined if the underlying
+      transport uses TLS. This means that Token Binding over HTTP is
+      only defined when the HTTP protocol is layered on top of TLS
+      (commonly referred to as HTTPS).</t>
+      <t>HTTP clients establish a Token Binding ID with a server by
+      including a special HTTP header in HTTP requests. The HTTP
+      header value is a TokenBindingMessage.</t>
+      <t>TokenBindingMessages allow clients to establish multiple
+      Token Binding IDs with the server, by including multiple
+      TokenBinding structures in the TokenBindingMessage. By default,
+      a client will establish a <spanx style="emph">provided</spanx>
+      Token Binding ID with the server, indicating a Token Binding ID
+      that the client will persistently use with the server. Under
+      certain conditions, the client can also include a <spanx
+      style="emph">referred</spanx> Token Binding ID in the
+      TokenBindingMessage, indicating a Token Binding ID that the
+      client is using with a <spanx style="emph">different</spanx>
+      server than the one that the TokenBindingMessage is sent
+      to. This is useful in federation scenarios.</t>
+
+      <section title="Requirements Language">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+        document are to be interpreted as described in <xref target="RFC2119" />.</t>
+      </section>
+    </section>
+
+    <section title="The Token-Binding Header">
+      <t>Once a client and server have negotiated the Token Binding
+      Protocol with HTTP/1.1 or HTTP/2 (see <xref
+      target="TBPROTO">The Token Binding Protocol</xref>), clients
+      MUST include the following header in their HTTP requests:
+      </t>
+      <figure><artwork><![CDATA[
+
+ Token-Binding: EncodedTokenBindingMessage
+        ]]></artwork></figure>
+
+      <t>The EncodedTokenBindingMessage is a web-safe Base64-encoding 
+      of the TokenBindingMessage as defined in the <xref
+      target="TBPROTO">TokenBindingProtocol</xref>.</t>
+
+      <t>The TokenBindingMessage MUST contain a TokenBinding with
+      TokenBindingType provided_token_binding, which MUST be signed
+      with the Token Binding key used by the client for connections
+      between itself and the server that the HTTP request is sent to
+      (clients use different Token Binding keys for different
+      servers). The Token Binding ID established by this TokenBinding
+      is called a <spanx style="emph">Provided Token Binding
+      ID</spanx></t>
+
+      <t>In HTTP/2, the client SHOULD use <xref
+      target="I-D.ietf-httpbis-header-compression">Header
+      Compression</xref> to avoid the overhead of repeating the same
+      header in subsequent HTTP requests.</t>
+    </section>
+
+    <section title="Federation Use Cases">
+
+      <section title="Introduction">
+	<t>For privacy reasons, clients use different private keys to
+	establish Provided Token Binding IDs with different
+	servers. As a result, a server cannot bind a security token
+	(such as an OAuth token or an OpenID Connect identity token)
+	to a TLS connection that the client has with a different
+	server. This is, however, a common requirement in federation
+	scenarios: For example, an Identity Provider may wish to issue
+	an identity token to a client and cryptographically bind that
+	token to the TLS connection between the client and a Relying
+	Party.</t>
+	
+	<t>In this section we describe mechanisms to achieve this. The
+	common idea among these mechanisms is that a server (called
+	the <spanx style="emph">Token Consumer</spanx> in this
+	document) gives the client permission to reveal the Provided
+	Token Binding ID that is used between the client and itself,
+	to another server (called the <spanx style="emph">Token
+	Provider</spanx> in this document). Also common across the
+	mechanisms is how the Token Binding ID is revealed to the
+	Token Provider: The client uses the <xref
+	target="TBPROTO">Token Binding Protocol</xref>, and
+	includes a TokenBinding structure in the Token-Binding HTTP
+	header defined above.  What differs between the various
+	mechanisms is <spanx style="emph">how</spanx> the Token
+	Consumer grants the permission to reveal the Token Binding ID
+	to the Token Provider.</t>
+      </section>
+
+      <section title="Overview">
+	<t>In a Federated Sign-On protocol, an Identity Provider issues
+	an identity token to a client, which sends the identity token
+	to a Relying Party to authenticate itself. Examples of this
+	include OpenID Connect (where the identity token is called "ID
+	Token") and SAML (where the identity token is a SAML
+	assertion).</t>
+	<t>To better protect the security of the identity token, the
+	Identity Provider may wish to bind the identity token to the TLS
+	connection between the client and the Relying Party, thus
+	ensuring that only said client can use the identity token: The
+	Relying Party will compare the Token Binding ID in the identity
+	token with the Token Binding ID of the TLS connection between it
+	an the client.</t>
+	<t>This is an example of a federation scenario, which more
+	generally can be described as follows:
+	<list style="symbols">
+	  <t>A Token Consumer causes the client to issue a token request
+	  to the Token Provider. The goal is for the client to obtain a
+	  token and then use it with the Token Consumer.</t>
+	  <t>The client delivers the token request to the Token
+	  Provider.</t>
+	  <t>The Token Provider issues the token. The token is issued
+	  for the specific Token Consumer who requested it (thus
+	  preventing malicious Token Consumers from using tokens with
+	  other Token Consumers). The token is, however, typically a
+	  bearer token, meaning that any client can use it with the
+	  Token Consumer, not just the client to which it was
+	  issued.</t>
+	  <t>Therefore, in the previous step, the Token Provider may
+	  want to include the Token Binding ID of the TLS connection
+	  between the client and the Token Consumer in the token.</t>
+	  <t>That Token Binding ID must therefore be communicated to
+	  the Token Provider along with the token request. Communicating a
+	  Token Binding ID involves proving possession of a private key
+	  and is described in the <xref target="TBPROTO">Token
+	  Binding Protocol</xref>.</t>
+	</list>
+	</t>
+	<t>The client will perform this last operation (proving
+	possession of a private key that corresponds to a Token Binding
+	ID between the client and the Token Consumer while delivering
+	the token request to the Token Provider) only if the Token
+	Consumer permits the client to do so.</t>
+	<t>Below, we will enumerate a number of mechanisms available to
+	Token Consumers to grant this permission.</t>
+      </section>
+      
+      <section title="HTTP Redirects">
+	<t>When a Token Consumer redirects the client to a Token
+	Provider as a means to deliver the token request, it SHOULD
+	include the following HTTP response header in its HTTP
+	response:</t> 
+	<figure><artwork><![CDATA[
+	
+ Include-Referer-Token-Binding-ID: true
+        ]]></artwork></figure>
+      
+	<t>Including this response header signals to the client that it
+	should reveal the Token Binding ID used between the client and
+	the Token Consumer to the Token Provider. In the absence of this 
+        response header, the client will not disclose any information 
+        about the Token Binding used between the client and the Token 
+        Consumer to the Token Provider.</t>
+	
+	<t>This header has only meaning if the HTTP status code is 302
+	or 301, and MUST be ignored by the client for any other status
+	codes. If the client supports the Token Binding Protocol, and
+	has negotiated the Token Binding Protocol with both the Token
+	Consumer and the Token Provider, it already sends the
+	following header to the Token Provider with each HTTP
+	request (see above):</t>
+	<figure><artwork><![CDATA[
+
+ Token-Binding: EncodedTokenBindingMessage
+        ]]></artwork></figure>
+
+	<t>The TokenBindingMessage SHOULD contain a TokenBinding with
+	TokenBindingType referred_token_binding. If included, this 
+        TokenBinding MUST be signed 
+	with the Token Binding key used by the client for connections
+	between itself and the Token Consumer (more specifically, the
+	web origin that issued the Include-Referer-Token-Binding-ID
+	response header). The Token Binding ID established by this
+	TokenBinding is called a <spanx style="emph">Referred Token
+	Binding ID</spanx>.</t>
+	
+	<t>As described above, the TokenBindingMessage MUST
+	additionally contain a Provided Token Binding ID, i.e., a
+	TokenBinding structure with TokenBindingType
+	provided_token_binding, which MUST be signed with the Token
+	Binding key used by the client for connections between itself
+	and the Token Privider (more specifically, the web origin that
+	the token request sent to).
+	</t>
+      </section>
+      
+      <section title="Cross-Origin Resource Sharing">
+	<t>When issuing an XML HTTP request across origins to a Token
+	Provider, a Token Consumer can reveal its Token Binding ID
+	through the withRefererTokenBindingID property of the
+	XmlHttpRequest object. Example:</t>
+	<figure><artwork><![CDATA[
+      
+ var xhr = new XMLHttpRequest();
+ xhr.withCredentials = true; // send cookies
+ xhr.withRefererTokenBindingID = true;
+ xhr.open(method, url, true);
+        ]]></artwork></figure>
+
+	<t>The client SHOULD include the Token-Binding: header to the 
+        outgoing request as described above if:
+	<list style="symbols">
+	  <t>the withRefererTokenBindingID property of the XmlHttpRequest
+	  object is set to true, and</t>
+	  <t>the client has negotiated the Token Binding Protocol both
+	  with the web origin that issued the XmlHttpRequest, and the
+	  web origin to which the XmlHttpRequest is addressed.</t>
+	</list></t>
+      </section>
+      
+      <section title="Negotiated Key Parameters">
+	<t>The <xref target="TBPROTO">Token Binding Protocol</xref>
+	allows the server and client to negotiate a signature algorithm
+	used in the TokenBindingMessage. It is possible that the Token
+	Binding ID used between the client and the Token Consumer, and
+	the Token Binding ID used between the client and Token Provider,
+	use different signature algorithms. The client MUST use the
+	signature algorithm negotiated with the Token Consumer in the
+	referred_token_binding TokenBinding of the TokenBindingMessage,
+	even if that signature algorithm is different from the one
+	negotiated with the origin that the header is sent to.</t>
+	<t>Token Providers SHOULD support all the
+	SignatureAndHashAlgorithms specified in the <xref
+	target="TBPROTO">Token Binding Protocol</xref>. If a token
+	provider does not support the SignatureAndHashAlgorithm
+	specified in the referred_token_binding TokenBinding in the
+	TokenBindingMessage, it MUST issue an unbound token.</t>
+      </section>
+    </section>
+
+    <section anchor="Security" title="Security Considerations">
+      <section title="Security Token Replay">
+        <t>The goal of the Federated Token Binding mechanisms is to
+        prevent attackers from exporting and replaying tokens used in
+        protocols between the client and Token Consumer, thereby
+        impersonating legitimate users and gaining access to protected
+        resources. Bound tokens can still be replayed by  malware
+        present in the client. In order to export the token to
+        another machine and successfully replay it, the attacker also
+        needs to export the corresponding private key. The Token
+        Binding private key is therefore a high-value asset and MUST
+        be strongly protected, ideally by generating it in a hardware
+        security module that prevents key export.</t>
+      </section>
+      <section title="Privacy Considerations">
+        <t>The Token Binding protocol uses persistent, long-lived TLS
+        Token Binding IDs. To protect privacy, TLS Token Binding IDs
+        are never transmitted in clear text and can be reset by the
+        user at any time, e.g. when clearing browser cookies. Unique
+        Token Binding IDs MUST be generated for connections to
+        different origins, so they cannot be used by cooperating
+        servers to link user identities.</t>
+      </section>
+      <section title="Triple Handshake Vulnerability in TLS">
+        <t>The Token Binding protocol relies on the tls_unique value
+        to associate a TLS connection with a TLS Token Binding. The
+        triple handshake attack <xref target="TRIPLE-HS" /> is a known
+        TLS protocol vulnerability allowing the attacker to
+        synchronize tls_unique values between TLS connections. The
+        attacker can then successfully replay bound tokens. For this
+        reason, the Token Binding protocol MUST NOT be negotiated
+        unless the Extended Master Secret TLS extension <xref
+        target="I-D.ietf-tls-session-hash"/> has also been
+        negotiated.</t>
+      </section>
+    </section>
+  </middle>
+
+  <!--  *****BACK MATTER ***** -->
+
+  <back>
+    <!-- References split into informative and normative -->
+
+    <!-- There are 2 ways to insert reference entries from the citation libraries:
+     1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+     2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+        (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+
+     Both are cited textually in the same manner: by using xref elements.
+     If you use the PI option, xml2rfc will, by default, try to find included files in the same
+     directory as the including file. You can also define the XML_LIBRARY environment variable
+     with a value containing a set of directories to search.  These can be either in the local
+     filing system or remote ones accessed by http (http://domain/dir/... ).-->
+
+    <references title="Normative References">
+      &RFC2119;
+      &RFC5246;
+      &RFC7301;
+      &RFC2616;
+      &RFC5929;
+      &RFC4492;
+      &RFC5226;
+      <reference anchor="TBPROTO">
+        <front>
+          <title>The Token Binding Protocol Version 1.0</title>
+          <author initials="A." surname="Popov">
+            <organization>Microsoft</organization>
+          </author>
+          <date year="2014" />
+        </front>
+      </reference>
+      <?rfc include="reference.I-D.ietf-httpbis-header-compression.xml"?>
+    </references>
+
+    <references title="Informative References">
+      <?rfc include="reference.I-D.ietf-httpbis-http2.xml"?>
+      <?rfc include="reference.I-D.ietf-tls-session-hash.xml"?>
+
+      <reference anchor="TRIPLE-HS">
+        <front>
+          <title>Triple Handshakes and Cookie Cutters: Breaking and Fixing Authentication over 
+          TLS. IEEE Symposium on Security and Privacy</title>
+          <author initials="K." surname="Bhargavan">
+            <organization>Inria Paris-Rocquencourt</organization>
+          </author>
+          <author initials="A." surname="Delignat-Lavaud">
+            <organization>Inria Paris-Rocquencourt</organization>
+          </author>
+          <author initials="C." surname="Fournet">
+            <organization>Inria Paris-Rocquencourt</organization>
+          </author>
+          <author initials="A." surname="Pironti">
+            <organization>Inria Paris-Rocquencourt</organization>
+          </author>
+          <author initials="P." surname="Strub">
+            <organization>Inria Paris-Rocquencourt</organization>
+          </author>
+          <date year="2014" />
+        </front>
+      </reference>
+    </references>
+
+    <!-- Change Log
+      v00 2014-08-21  Andrei Popov   Initial version
+      v00 2015-03-27  Andrei Popov   Renamed as tokbind WG draft-->
+  </back>
+</rfc>
