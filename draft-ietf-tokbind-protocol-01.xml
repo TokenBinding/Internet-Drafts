@@ -8,8 +8,8 @@
 
 <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY RFC5246 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml">
-<!ENTITY RFC7301 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7301.xml">
-<!ENTITY RFC2616 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml">
+<!ENTITY RFC7230 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7230.xml">
+<!ENTITY RFC7540 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7540.xml">
 <!ENTITY RFC5929 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5929.xml">
 <!ENTITY RFC4492 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4492.xml">
 <!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
@@ -39,7 +39,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-00" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-01" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -231,18 +231,10 @@
     </section>
 
     <section title="Token Binding Protocol Overview">
-      <t>The client and server use ALPN protocol IDs <xref target="RFC7301" /> to negotiate the 
-      use of the Token Binding protocol, in addition to the actual application protocol such as 
-      HTTP/1.1 <xref target="RFC2616"/> or HTTP/2 <xref target="I-D.ietf-httpbis-http2"/>. 
-      ALPN IDs are also used to negotiate the parameters (signature algorithm, length) of the 
-      Token Binding key. This negotiation does not require TLS protocol changes or additional 
-      round-trips.</t>
-
-      <t>The "IANA Considerations" section of this document defines an initial set of ALPN 
-      protocol IDs that allow the use of the Token Binding protocol with HTTP/1.1 and HTTP/2. The 
-      initial set of supported key parameters includes ECDSA with NIST P256 curve and 2048-bit 
-      RSA. New ALPN protocol IDs can be defined in the future to support Token Binding usage with 
-      other application protocols and key parameters.</t>
+      <t>The client and server use the Token Binding Negotiation TLS Extension 
+      <xref target="TBNEGO" /> to negotiate the Token Binding protocol version and the parameters 
+      (signature and hash algorithm, length) of the Token Binding key. This negotiation does not 
+      require additional round-trips.</t>
 
       <t>The Token Binding protocol consists of one message sent by the client to the server, 
       proving possession of one or more client-generated asymmetric keys. This message is 
@@ -251,9 +243,9 @@
       application_data records.</t>
 
       <t>A server receiving the Token Binding message verifies that the key parameters in the 
-      message match the Token Binding parameters negotiated via ALPN, and then validates the 
-      signatures contained in the Token Binding message. If either of these checks fails, the 
-      server terminates the connection, otherwise the TLS Token Binding is successfully 
+      message match the Token Binding parameters negotiated via <xref target="TBNEGO" />, and then 
+      validates the signatures contained in the Token Binding message. If either of these checks 
+      fails, the server terminates the connection, otherwise the TLS Token Binding is successfully 
       established with the ID contained in the Token Binding message.</t>
 
       <t>When a server supporting the Token Binding protocol receives a bound token, the server 
@@ -261,58 +253,29 @@
       established with the client. If the bound token came from a TLS connection without a Token 
       Binding, or if the IDs don't match, the token is discarded.</t>
 
-      <t>This document describes the negotiation of the Token Binding protocol and key 
-      parameters, the format of the Token Binding protocol message, the process of establishing 
-      a TLS Token Binding, the format of the Token Binding ID, and the process of validating a 
-      security token. Token Binding over HTTP <xref target="HTTPSTB" /> explains how the Token 
-      Binding message is encapsulated within application protocol messages. 
+      <t>This document defines the format of the Token Binding protocol message, the process of 
+      establishing a TLS Token Binding, the format of the Token Binding ID, and the process of 
+      validating a security token. Token Binding Negotiation TLS Extension <xref target="TBNEGO" /> 
+      describes the negotiation of the Token Binding protocol and key parameters. Token Binding 
+      over HTTP <xref target="HTTPSTB" /> explains how the Token Binding message is encapsulated 
+      within HTTP/1.1 <xref target="RFC7230"/> or HTTP/2 <xref target="RFC7540"/> messages. 
       <xref target="HTTPSTB" /> also describes Token Binding between multiple communicating 
       parties: User Agent, Identity Provider and Relying Party.</t> 
-    </section>
-
-    <section title="Negotiating the Token Binding Protocol and Key Parameters">
-      <t>The Token Binding protocol is used within TLS connections, in combination with an 
-      application protocol such as HTTP/1.1 or HTTP/2. The "IANA Considerations" section of this 
-      document defines a set of ALPN protocol IDs that combine application protocol and token 
-      binding key parameters:</t>
-
-      <t>  
-        <list style="symbols">
-          <t>"h2_tb_p256" indicates support for HTTP/2 with Token Binding using ECDSA key and 
-          NIST P256 curve;</t>
-          <t>"h2_tb_rsa2048" indicates support for HTTP/2 with Token Binding using 2048-bit RSA 
-          key;</t>
-          <t>"http/1.1_tb_p256" indicates support for HTTP/1.1 with Token Binding using ECDSA key 
-          and NIST P256 curve;</t>
-          <t>"http/1.1_tb_rsa2048" indicates support for HTTP/1.1 with Token Binding using 
-          2048-bit RSA key.</t>
-        </list>
-      </t>
-
-      <t>The client advertises support of the Token Binding protocol by sending some of these IDs 
-      in the ALPN extension in the ClientHello. Application protocol IDs without Token Binding, 
-      such as "http/1.1" and "h2", can also be included for compatibility with the servers that 
-      do not support the Token Binding protocol.</t>
-
-      <t>The server indicates support of the Token Binding protocol by sending one of the above 
-      IDs in the ALPN extension in the ServerHello. The server implements the protocol selection 
-      logic as described in section 3.2 "Protocol Selection" of <xref target="RFC7301" />, taking 
-      into account the application protocols and key parameters supported by the server.</t>
     </section>
 
     <section title="Token Binding Protocol Message">
       <figure>
         <preamble>The Token Binding message is sent by the client and proves possession of one or 
         more private keys held by the client. This message MUST be sent if the client and server 
-        successfully negotiated the use of the Token Binding protocol via ALPN, and MUST NOT be 
-        sent otherwise. This message MUST be sent in the client's first application protocol 
-        message. This message MAY also be sent in subsequent application protocol messages, 
-        proving possession of other keys by the same client, to facilitate token binding between 
-        more than two communicating parties. Token Binding over HTTP <xref target="HTTPSTB" /> 
-        specifies the encapsulation of the Token Binding message in the application protocol 
-        messages, and the scenarios involving more than two communicating parties. The Token 
-        Binding message format is defined using TLS specification language, and reuses existing 
-        TLS structures and IANA registrations where possible:</preamble>
+        successfully negotiated the use of the Token Binding protocol via <xref target="TBNEGO" />, 
+        and MUST NOT be sent otherwise. This message MUST be sent in the client's first application 
+        protocol message. This message MAY also be sent in subsequent application protocol 
+        messages, proving possession of other keys by the same client, to facilitate token binding 
+        between more than two communicating parties. Token Binding over HTTP 
+        <xref target="HTTPSTB" /> specifies the encapsulation of the Token Binding message in the 
+        application protocol messages, and the scenarios involving more than two communicating 
+        parties. The Token Binding message format is defined using TLS specification language, and 
+        reuses existing TLS structures and IANA registrations where possible:</preamble>
         <artwork><![CDATA[
 
 enum {
@@ -384,34 +347,35 @@ struct {
         label (“token binding”) and the tls_unique, optionally followed by Extension structures. 
         An implementation MUST ignore any unknown extensions. Initially, no extension types are 
         defined. At least one TokenBinding MUST be included in the Token Binding message. The 
-        signature algorithm and key length used in the TokenBinding MUST match the parameters 
-        negotiated via ALPN. The client SHOULD generate and store Token Binding keys in a secure 
-        manner that prevents key export. In order to prevent cooperating servers from linking 
-        user identities, different keys SHOULD be used by the client for connections to 
-        different servers, according to the token scoping rules of the application protocol.
+        signature and hash algorithm and key length used in the TokenBinding MUST match the 
+        parameters negotiated via <xref target="TBNEGO" />. The client SHOULD generate and store 
+        Token Binding keys in a secure manner that prevents key export. In order to prevent 
+        cooperating servers from linking user identities, different keys SHOULD be used by the 
+        client for connections to different servers, according to the token scoping rules of the 
+        application protocol.
         </postamble>
       </figure>
     </section>
 
     <section title="Establishing a TLS Token Binding">
-      <t>Triple handshake vulnerability in the TLS protocol affects the security of the Token 
+      <t>The triple handshake vulnerability in the TLS protocol affects the security of the Token 
       Binding protocol, as described in the "Security Considerations" section below. Therefore, 
       the server MUST NOT negotiate the use of the Token Binding protocol unless the server also 
       negotiates Extended Master Secret TLS extension 
       <xref target="I-D.ietf-tls-session-hash"/>.</t>
 
       <t>The server MUST terminate the connection if the use of the Token Binding protocol has 
-      been successfully negotiated via ALPN within the TLS handshake, but the client's first 
-      application message does not contain the Token Binding message. The server MUST terminate 
-      the connection if the use of the Token Binding protocol was not negotiated, but the client 
-      sends the Token Binding message.</t>
+      been successfully negotiated via <xref target="TBNEGO" /> within the TLS handshake, but the 
+      client's first application message does not contain the Token Binding message. The server 
+      MUST terminate the connection if the use of the Token Binding protocol was not negotiated, 
+      but the client sends the Token Binding message.</t>
 
       <t>If the Token Binding type is "provided_token_binding", the server MUST verify that the 
       signature algorithm (including elliptic curve in the case of ECDSA) and key length in the 
-      Token Binding message match those negotiated via ALPN. In the case of a mismatch, the 
-      server MUST terminate the connection. As described in <xref target="HTTPSTB" />, Token 
-      Bindings of type "referred_token_binding" may have different key parameters than those 
-      negotiated via ALPN.</t>
+      Token Binding message match those negotiated via <xref target="TBNEGO" />. In the case of a 
+      mismatch, the server MUST terminate the connection. As described in 
+      <xref target="HTTPSTB" />, Token Bindings of type "referred_token_binding" may have different 
+      key parameters than those negotiated via <xref target="TBNEGO" />.</t>
 
       <t>If the Token Binding message does not contain at least one TokenBinding structure, 
       or the signature contained in a TokenBinding structure is invalid, the server MUST 
@@ -436,7 +400,7 @@ struct {
 
         ]]></artwork>
         <postamble>TokenBindingID includes the type of the token binding and the key parameters 
-        negotiated via ALPN. This document defines two token binding types: 
+        negotiated via <xref target="TBNEGO" />. This document defines two token binding types: 
         provided_token_binding used to establish a Token Binding when connecting to a server, 
         and referred_token_binding used when requesting tokens to be presented to a different 
         server. Token Binding over HTTP <xref target="HTTPSTB" /> describes Token Binding between 
@@ -513,40 +477,6 @@ struct {
       interoperable implementations using the identified Token Binding extension. This document 
       creates no initial registrations in the "Token Binding Extensions" registry.</t>
 
-      <t>This document creates the following registrations for the identification of the Token 
-      Binding protocol in the "Application Layer Protocol Negotiation (ALPN) Protocol IDs" 
-      registry originally created in <xref target="RFC7301" />:</t>
-
-      <t>  
-        <list style="empty">
-          <t>Protocol: HTTP/2 with Token Binding using ECDSA key and NIST P256 curve</t>
-          <t>Identification Sequence: 0x68 0x32 0x5f 0x74 0x62 0x5f 0x70 0x32 0x35 0x36 
-          ("h2_tb_p256")</t>
-          <t>Specification: this document</t>
-        </list>
-
-        <list style="empty">
-          <t>Protocol: HTTP/2 with Token Binding using 2048-bit RSA key</t>
-          <t>Identification Sequence: 0x68 0x32 0x5f 0x74 0x62 0x5f 0x72 0x73 0x61 0x32 0x30 0x34 
-          0x38 ("h2_tb_rsa2048")</t>
-          <t>Specification: this document</t>
-        </list>
-
-        <list style="empty">
-          <t>Protocol: HTTP/1.1 with Token Binding using ECDSA key and NIST P256 curve</t>
-          <t>Identification Sequence: 0x68 0x74 0x74 0x70 0x2f 0x31 0x2e 0x31 0x5f 0x74 0x62 0x5f 
-          0x70 0x32 0x35 0x36 ("http/1.1_tb_p256")</t>
-          <t>Specification: this document</t>
-        </list>
-
-        <list style="empty">
-          <t>Protocol: HTTP/1.1 with Token Binding using 2048-bit RSA key</t>
-          <t>Identification Sequence: 0x68 0x74 0x74 0x70 0x2f 0x31 0x2e 0x31 0x5f 0x74 0x62 0x5f 
-          0x72 0x73 0x61 0x32 0x30 0x34 0x38 ("http/1.1_tb_rsa2048")</t>
-          <t>Specification: this document</t>
-        </list>
-      </t>
-
       <t>This document uses "TLS SignatureAlgorithm" and "TLS HashAlgorithm" registries 
       originally created in <xref target="RFC5246" />, and "TLS NamedCurve" registry originally 
       created in <xref target="RFC4492" />. This document creates no new registrations in these 
@@ -564,12 +494,13 @@ struct {
         generating them in a hardware security module that prevents key export.</t>
       </section>
       <section title="Downgrade Attacks">
-        <t>The Token Binding protocol is only used when negotiated via ALPN within the TLS 
-        handshake. TLS prevents active attackers from modifying the messages of the TLS 
-        handshake, therefore it is not possible for the attacker to remove or modify the ALPN IDs 
-        used to negotiate the Token Binding protocol and key parameters. The signature algorithm 
-        and key length used in the TokenBinding of type "provided_token_binding" MUST match the 
-        parameters negotiated via ALPN.</t>
+        <t>The Token Binding protocol is only used when negotiated via <xref target="TBNEGO" /> 
+        within the TLS handshake. TLS prevents active attackers from modifying the messages of the 
+        TLS handshake, therefore it is not possible for the attacker to remove or modify the Token 
+        Binding Negotiation TLS Extension used to negotiate the Token Binding protocol and key 
+        parameters. The signature algorithm and key length used in the TokenBinding of type 
+        "provided_token_binding" MUST match the parameters negotiated via 
+        <xref target="TBNEGO" />.</t>
       </section>
       <section title="Privacy Considerations">
         <t>The Token Binding protocol uses persistent, long-lived TLS Token Binding IDs. To 
@@ -578,6 +509,13 @@ struct {
         cooperating servers from linking user identities, different keys SHOULD be used by the 
         client for connections to different servers, according to the token scoping rules of the 
         application protocol.</t>
+      </section>
+      <section title="Token Binding Key Sharing Between Applications">
+        <t>Existing systems provide a variety of platform-specific mechanisms for certain 
+        applications to share tokens, e.g. to enable single sign-on scenarios. For these scenarios 
+        to keep working with bound tokens, the applications that are allowed to share tokens will 
+        need to also share Token Binding keys. Care must be taken to restrict the sharing of Token 
+        Binding keys to the same group(s) of applications that share the same tokens.</t>
       </section>
       <section title="Triple Handshake Vulnerability in TLS">
         <t>The Token Binding protocol relies on the tls_unique value to associate a TLS 
@@ -610,11 +548,30 @@ struct {
     <references title="Normative References">
       &RFC2119;
       &RFC5246;
-      &RFC7301;
-      &RFC2616;
+      &RFC7230;
+      &RFC7540;
       &RFC5929;
       &RFC4492;
       &RFC5226;
+      <reference anchor="TBNEGO">
+        <front>
+          <title>Transport Layer Security (TLS) Extension for Token Binding Protocol 
+          Negotiation</title>
+          <author initials="A." surname="Popov">
+            <organization>Microsoft Corp.</organization>
+          </author>
+          <author initials="M." surname="Nyström">
+            <organization>Microsoft Corp.</organization>
+          </author>
+          <author initials="D." surname="Balfanz">
+            <organization>Google Inc.</organization>
+          </author>
+          <author initials="A." surname="Langley">
+            <organization>Google Inc.</organization>
+          </author>
+          <date year="2015" />
+        </front>
+      </reference>
       <reference anchor="HTTPSTB">
         <front>
           <title>Token Binding over HTTP</title>
@@ -636,7 +593,6 @@ struct {
     </references>
 
     <references title="Informative References">
-      <?rfc include="reference.I-D.ietf-httpbis-http2.xml"?>
       <?rfc include="reference.I-D.ietf-tls-session-hash.xml"?>
 
       <reference anchor="TRIPLE-HS">
@@ -665,6 +621,7 @@ struct {
 
     <!-- Change Log
       v00 2014-08-21  Andrei Popov   Initial version
-      v00 2015-03-27  Andrei Popov   Renamed as tokbind WG draft-->
+      v00 2015-03-27  Andrei Popov   Renamed as tokbind WG draft
+      v00 2015-05-26  Andrei Popov   Replaced ALPN-based TB negotiation with TBNEGO-->
   </back>
 </rfc>

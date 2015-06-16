@@ -1,0 +1,438 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- This template is for creating an Internet Draft using xml2rfc,
+     which is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!-- One method to get references from the online citation libraries.
+     There has to be one entity for each item to be referenced. 
+     An alternate method (rfc include) is described in the references. -->
+
+<!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC5246 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml">
+<!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs), 
+     please see http://xml.resource.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+     (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space 
+     (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<!-- end of list of popular I-D processing instructions -->
+<rfc category="std" docName="draft-popov-tokbind-negotiation-00" ipr="trust200902">
+  <!-- category values: std, bcp, info, exp, and historic
+     ipr values: full3667, noModification3667, noDerivatives3667
+     you can add the attributes updates="NNNN" and obsoletes="NNNN" 
+     they will automatically be output with "(if approved)" -->
+
+  <!-- ***** FRONT MATTER ***** -->
+
+  <front>
+    <!-- The abbreviated title is used in the page header - it is only necessary if the 
+         full title is longer than 39 characters -->
+
+    <title abbrev="Token Binding Negotiation TLS Extension">
+      Transport Layer Security (TLS) Extension for Token Binding Protocol Negotiation
+    </title>
+
+    <!-- add 'role="editor"' below for the editors if appropriate -->
+
+    <author fullname="Andrei Popov" initials="A." 
+            surname="Popov" role="editor">
+      <organization>Microsoft Corp.</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <!-- Reorder these if your country does things differently -->
+
+          <city></city>
+
+          <region></region>
+
+          <code></code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>andreipo@microsoft.com</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+    <author fullname="Magnus Nyström" initials="M."
+            surname="Nyström">
+      <organization>Microsoft Corp.</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <!-- Reorder these if your country does things differently -->
+
+          <city></city>
+
+          <region></region>
+
+          <code></code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>mnystrom@microsoft.com</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+    <author fullname="Dirk Balfanz" initials="D."
+            surname="Balfanz">
+      <organization>Google Inc.</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <!-- Reorder these if your country does things differently -->
+
+          <city></city>
+
+          <region></region>
+
+          <code></code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>balfanz@google.com</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+    <author fullname="Adam Langley" initials="A."
+            surname="Langley">
+      <organization>Google Inc.</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <!-- Reorder these if your country does things differently -->
+
+          <city></city>
+
+          <region></region>
+
+          <code></code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>agl@google.com</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+    <date year="2015" />
+
+    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
+         in the current day for you. If only the current year is specified, xml2rfc will fill 
+	 in the current day and month for you. If the year is not the current one, it is 
+	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the 
+	 purpose of calculating the expiry date).  With drafts it is normally sufficient to 
+	 specify just the year. -->
+
+    <!-- Meta-data Declarations -->
+
+    <area>General</area>
+
+    <workgroup>Internet Engineering Task Force</workgroup>
+
+    <!-- WG name at the upperleft corner of the doc,
+         IETF is fine for individual submissions.  
+	 If this element is not present, the default is "Network Working Group",
+         which is used by the RFC Editor as a nod to the history of the IETF. -->
+
+    <keyword>draft</keyword>
+
+    <!-- Keywords will be incorporated into HTML output
+         files in a meta tag but they have no effect on text or nroff
+         output. If you submit your draft to the RFC Editor, the
+         keywords will be used for the search engine. -->
+
+    <abstract>
+      <t>This document specifies a Transport Layer Security (TLS) <xref target="RFC5246" /> 
+      extension for the negotiation of Token Binding protocol <xref target="TBPROTO" /> version 
+      and key parameters.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t>In order to use the Token Binding protocol <xref target="TBPROTO" />, the client and 
+      server need to agree on the Token Binding protocol version and the parameters (signature and 
+      hash algorithm, length) of the Token Binding key. This document specifies a new TLS 
+      extension to accomplish this negotiation without introducing additional network 
+      round-trips.</t>
+
+      <section title="Requirements Language">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+        document are to be interpreted as described in <xref target="RFC2119" />.</t>
+      </section>
+    </section>
+
+    <section title="Token Binding Negotiation Client Hello Extension">
+      <t>The client uses the "token_binding" TLS extension to indicate supported Token Binding 
+      protocol version and key parameters.</t>
+
+        <figure>
+        <artwork align="left"><![CDATA[
+enum {
+    token_binding(TBD), (65535)
+} ExtensionType;
+        ]]></artwork>
+        </figure>
+
+        <t>The "extension_data" field of this extension contains a "TokenBindingParameters" value.</t>
+
+        <figure>
+        <artwork align="left"><![CDATA[
+struct {
+    uint8 major;
+    uint8 minor;
+} ProtocolVersion;
+
+enum {
+    rsa2048_pkcs1.5_sha256(0), rsa2048_pss_sha256(1), ecdsap256_sha256(2), (255)
+} TokenBindingKeyParameters;
+
+struct {
+    ProtocolVersion token_binding_version;
+    TokenBindingKeyParameters key_parameters_list<2..2^16-1>
+} TokenBindingParameters;
+        ]]></artwork>
+        </figure>
+
+      <t>"token_binding_version" indicates the supported version of the Token Binding protocol. 
+      <xref target="TBPROTO" /> describes version {1, 0} of the protocol. Protype implementations 
+      of Token Binding drafts can indicate support of a specific draft version, e.g. {0, 0} or 
+      {0, 1}.</t>
+
+      <t>"key_parameters_list" contains the list of identifiers of the Token Binding key 
+      parameters supported by the client, in descending order of preference.</t>
+    </section>
+
+    <section title="Token Binding Negotiation Server Hello Extension">
+      <t>The server uses the "token_binding" TLS extension to indicate support for the Token 
+      Binding protocol version offered by the client and to select key parameters.</t>
+
+      <t>The server that supports Token Binding and receives a client hello message containing the 
+      "token_binding" extension, will include the "token_binding" extension in the server hello if 
+      all of the following conditions are satisfied:
+      <list style="numbers">
+        <t>The server supports the Token Binding protocol version offered by the client.</t>
+        <t>The server finds acceptable Token Binding key parameters on the client's list.</t>
+        <t>The server is also negotiating Extended Master Secret TLS extension 
+        <xref target="I-D.ietf-tls-session-hash"/> (see security considerations section below for 
+        more details).</t>
+      </list></t>
+
+      <t>The server will ignore any key parameters that it does not recognize. The 
+      "extension_data" field of the "token_binding" extension is structured the same as described 
+      above for the client "extension_data".</t>
+
+      <t>"token_binding_version" echos the Token Binding protocol version advertised by the client.</t>
+
+      <t>"key_parameters_list" contains exactly one Token Binding key parameters identifier 
+      selected by the server from the client's list.</t>
+    </section>
+
+    <section title="Negotiating Token Binding Protocol Version and Key Parameters">
+      <t>It is expected that a server will have a list of Token Binding key parameters identifiers 
+      that it supports, in preference order. The server MUST only select an identifier that the 
+      client offered. The server SHOULD select the most highly preferred key parameters identifier 
+      it supports which is also advertised by the client. In the event that the server supports 
+      none of the key parameters that the client advertises, then the server MUST NOT include 
+      "token_binding" extension in the server hello.</t>
+
+      <t>The client receiving the "token_binding" extension MUST terminate the handshake with a 
+      fatal "unsupported_extension" alert if any of the following conditions are true:
+      <list style="numbers">
+        <t>The client did not include the "token_binding" extension in the client hello.</t>
+        <t>"token_binding_version" does not match the Token Binding protocol version advertised by 
+        the client.</t>
+        <t>"key_parameters_list" includes more than one Token Binding key parameters 
+        identifier.</t>
+        <t>"key_parameters_list" includes an identifier that was not advertised by the client.</t>
+        <t>Extended Master Secret <xref target="I-D.ietf-tls-session-hash"/> is not negotiated (see 
+        security considerations section below for more details).</t>
+      </list></t>
+
+      <t>If the "token_binding" extension is included in the server hello and the TLS handshake 
+      succeeds, it means that the Token Binding protocol version and key parameters have been 
+      negotiated between the client and the server and SHALL be definitive for the TLS session. 
+      In this case, the client MUST use the negotiated key parameters in the 
+      "provided_token_binding" as described in <xref target="TBPROTO" />.</t>
+    </section>
+
+    <section title="IANA Considerations">
+      <t>This document defines a new TLS extension "token_binding", which needs to be added to the 
+      IANA "Transport Layer Security (TLS) Extensions" registry.</t>
+
+      <t>This document establishes a registry for identifiers of Token Binding key parameters 
+      entitled "Token Binding Key Parameters" under the "Token Binding Protocol" heading.</t>
+
+      <t>Entries in this registry require the following fields:
+        <list style="symbols">
+          <t>Value: The octet value that identifies a set of Token Binding key parameters 
+          (0-255).</t>
+          <t>Description: The description of the Token Binding key parameters.</t>
+          <t>Specification: A reference to a specification that defines the Token Binding key 
+          parameters.</t>
+        </list>
+      </t>
+
+      <t>This registry operates under the "Expert Review" policy as defined in 
+      <xref target="RFC5226"/>. The designated expert is advised to encourage the inclusion of a 
+      reference to a permanent and readily available specification that enables the creation of 
+      interoperable implementations using the identified set of Token Binding key parameters.</t>
+
+     <t>An initial set of registrations for this registry follows:
+       <list style="empty">
+         <t>Value: 0</t>
+         <t>Description: rsa2048_pkcs1.5_sha256</t>
+         <t>Specification: this document</t>
+       </list>
+
+       <list style="empty">
+         <t>Value: 1</t>
+         <t>Description: rsa2048_pss_sha256</t>
+         <t>Specification: this document</t>
+       </list>
+
+       <list style="empty">
+         <t>Value: 2</t>
+         <t>Description: ecdsap256_sha256</t>
+         <t>Specification: this document</t>
+       </list>
+     </t>
+    </section>
+
+    <section title="Security Considerations">
+      <section title="Downgrade Attacks">
+        <t>The Token Binding protocol version and key parameters are negotiated via 
+        "token_binding" extension  within the TLS handshake. TLS prevents active attackers from 
+        modifying the messages of the TLS handshake, therefore it is not possible for the attacker 
+        to remove or modify the "token_binding" extension. The signature and hash algorithms and 
+        key length used in the TokenBinding of type "provided_token_binding" MUST match the 
+        parameters negotiated via "token_binding" extension.</t>
+      </section>
+      <section title="Triple Handshake Vulnerability in TLS">
+        <t>The Token Binding protocol relies on the tls_unique value to associate a TLS 
+        connection with a TLS Token Binding. The triple handshake attack 
+        <xref target="TRIPLE-HS" /> is a known TLS protocol vulnerability allowing the attacker 
+        to synchronize tls_unique values between TLS connections. The attacker can then 
+        successfully replay bound tokens. For this reason, the Token Binding protocol MUST NOT be 
+        negotiated unless the Extended Master Secret TLS extension 
+        <xref target="I-D.ietf-tls-session-hash"/> has also been negotiated.</t>
+      </section>
+    </section>
+
+    <section anchor="Acknowledgements" title="Acknowledgements">
+      <t>This document incorporates comments and suggestions offered by Eric Rescorla, Gabriel 
+      Montenegro, Martin Thomson, Vinod Anupam.</t>
+    </section>
+  </middle>
+
+  <!--  *****BACK MATTER ***** -->
+
+  <back>
+    <!-- References split into informative and normative -->
+
+    <!-- There are 2 ways to insert reference entries from the citation libraries:
+     1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+     2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+        (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+
+     Both are cited textually in the same manner: by using xref elements.
+     If you use the PI option, xml2rfc will, by default, try to find included files in the same
+     directory as the including file. You can also define the XML_LIBRARY environment variable
+     with a value containing a set of directories to search.  These can be either in the local
+     filing system or remote ones accessed by http (http://domain/dir/... ).-->
+
+    <references title="Normative References">
+      &RFC2119;
+      &RFC5246;
+      &RFC5226;
+      <reference anchor="TBPROTO">
+        <front>
+          <title>The Token Binding Protocol Version 1.0</title>
+          <author initials="A." surname="Popov">
+            <organization>Microsoft Corp.</organization>
+          </author>
+          <author initials="M." surname="Nyström">
+            <organization>Microsoft Corp.</organization>
+          </author>
+          <author initials="D." surname="Balfanz">
+            <organization>Google Inc.</organization>
+          </author>
+          <author initials="A." surname="Langley">
+            <organization>Google Inc.</organization>
+          </author>
+          <date year="2014" />
+        </front>
+      </reference>
+    </references>
+
+    <references title="Informative References">
+      <?rfc include="reference.I-D.ietf-tls-session-hash.xml"?>
+
+      <reference anchor="TRIPLE-HS">
+        <front>
+          <title>Triple Handshakes and Cookie Cutters: Breaking and Fixing Authentication over 
+          TLS. IEEE Symposium on Security and Privacy</title>
+          <author initials="K." surname="Bhargavan">
+            <organization>Inria Paris-Rocquencourt</organization>
+          </author>
+          <author initials="A." surname="Delignat-Lavaud">
+            <organization>Inria Paris-Rocquencourt</organization>
+          </author>
+          <author initials="C." surname="Fournet">
+            <organization>Inria Paris-Rocquencourt</organization>
+          </author>
+          <author initials="A." surname="Pironti">
+            <organization>Inria Paris-Rocquencourt</organization>
+          </author>
+          <author initials="P." surname="Strub">
+            <organization>Inria Paris-Rocquencourt</organization>
+          </author>
+          <date year="2014" />
+        </front>
+      </reference>
+    </references>
+
+    <!-- Change Log
+      v00 2015-05-07  Andrei Popov   Initial version-->
+  </back>
+</rfc>
