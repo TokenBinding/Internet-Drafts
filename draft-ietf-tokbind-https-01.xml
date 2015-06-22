@@ -417,30 +417,6 @@
 	</t>
       </section>
       
-      <section title="Cross-Origin Resource Sharing">
-	<t>When issuing an XML HTTP request across origins to a Token
-	Provider, a Token Consumer can reveal its Token Binding ID
-	through the withRefererTokenBindingID property of the
-	XmlHttpRequest object. Example:</t>
-	<figure><artwork><![CDATA[
-      
- var xhr = new XMLHttpRequest();
- xhr.withCredentials = true; // send cookies
- xhr.withRefererTokenBindingID = true;
- xhr.open(method, url, true);
-        ]]></artwork></figure>
-
-	<t>The client SHOULD include the Token-Binding: header to the 
-        outgoing request as described above if:
-	<list style="symbols">
-	  <t>the withRefererTokenBindingID property of the XmlHttpRequest
-	  object is set to true, and</t>
-	  <t>the client has negotiated the Token Binding Protocol both
-	  with the web origin that issued the XmlHttpRequest, and the
-	  web origin to which the XmlHttpRequest is addressed.</t>
-	</list></t>
-      </section>
-      
       <section title="Negotiated Key Parameters">
 	<t>The <xref target="TBPROTO">Token Binding Protocol</xref>
 	allows the server and client to negotiate a signature algorithm
