@@ -355,7 +355,7 @@
 	  <t>Therefore, in the previous step, the Token Provider may
 	  want to include in the token the Token-Binding public key that the client
     uses when communicating with the Token Consumer, thus 
-    <spanx style="emph">binding<spanx/> the token to client's Token-Binding
+    <spanx style="emph">binding</spanx> the token to client's Token-Binding
     keypair. The client
     proves possession of the private key when communicating with 
     the Token Consumer through the <xref target="TBPROTO">Token
