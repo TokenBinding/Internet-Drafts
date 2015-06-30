@@ -376,7 +376,8 @@
 	response. The ABNF of the Include-Referer-Token-Binding-ID is:</t> 
 	<figure><artwork><![CDATA[
 
- Include-Referer-Token-Binding-ID = "Include-Referer-Token-Binding-ID" ":" [CFWS] "true"	
+ Include-Referer-Token-Binding-ID = "Include-Referer-Token-Binding-ID" ":" 
+                                     [CFWS] "true"	
         ]]></artwork></figure>
       
 	<t>Including this response header signals to the client that it
