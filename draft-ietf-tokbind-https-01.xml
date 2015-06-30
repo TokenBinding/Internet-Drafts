@@ -373,11 +373,11 @@
 	<t>When a Token Consumer redirects the client to a Token
 	Provider as a means to deliver the token request, it SHOULD
 	include a Include-Referer-Token-Binding-ID HTTP response header in its HTTP
-	response. The ABNF of the Include-Referer-Token-Binding-ID is:</t> 
+	response. The ABNF of the Include-Referer-Token-Binding-ID header is:</t> 
 	<figure><artwork><![CDATA[
 
  Include-Referer-Token-Binding-ID = "Include-Referer-Token-Binding-ID" ":" 
-                                     [CFWS] "true"	
+                                     [CFWS] %x74.72.75.65 ; "true", case-sensitive	
         ]]></artwork></figure>
       
 	<t>Including this response header signals to the client that it
