@@ -318,7 +318,9 @@
 	header defined above.  What differs between the various
 	mechanisms is <spanx style="emph">how</spanx> the Token
 	Consumer grants the permission to reveal the Token Binding ID
-	to the Token Provider.</t>
+	to the Token Provider. Below we specify one such mechanism, which is 
+  suitable for redirect-based interactions between Token Consumers and
+  Token Providers.</t>
       </section>
 
       <section title="Overview">
@@ -351,12 +353,22 @@
 	  Token Consumer, not just the client to which it was
 	  issued.</t>
 	  <t>Therefore, in the previous step, the Token Provider may
-	  want to include the Token Binding ID of the TLS connection
-	  between the client and the Token Consumer in the token.</t>
-	  <t>That Token Binding ID must therefore be communicated to
-	  the Token Provider along with the token request. Communicating a
-	  Token Binding ID involves proving possession of a private key
-	  and is described in the <xref target="TBPROTO">Token
+	  want to include in the token the Token-Binding public key that the client
+    uses when communicating with the Token Consumer, thus 
+    <spanx style="emph">binding<spanx/> the token to client's Token-Binding
+    keypair. The client
+    proves possession of the private key when communicating with 
+    the Token Consumer through the <xref target="TBPROTO">Token
+	  Binding Protocol</xref>, and reveals the corresponding public key of this 
+    keypair as part of the Token Binding ID. Comparing the public key from the
+    token with the public key from the Token Binding ID allows the Token 
+    Consumer to verify that the token was sent to it by the legitimate 
+    client.</t>
+	  <t>To allow the Token Provider to include the Token-Binding public key in
+    the token, the Token Binding ID (between client and Token Consumer) must 
+    therefore be communicated to the Token Provider along with the token
+    request. Communicating a Token Binding ID involves proving possession of a 
+    private key and is described in the <xref target="TBPROTO">Token
 	  Binding Protocol</xref>.</t>
 	</list>
 	</t>
@@ -365,8 +377,8 @@
 	ID between the client and the Token Consumer while delivering
 	the token request to the Token Provider) only if the Token
 	Consumer permits the client to do so.</t>
-	<t>Below, we will enumerate a number of mechanisms available to
-	Token Consumers to grant this permission.</t>
+	<t>Below, we specify how Token Consumers can grant this permission. during
+  redirect-based federation protocols.</t>
       </section>
       
       <section title="HTTP Redirects">
