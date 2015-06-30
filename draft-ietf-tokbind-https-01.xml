@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- This template is for creating an Internet Draft using xml2rfc,
      which is available here: http://xml.resource.org. -->
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
@@ -39,7 +39,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-https-00" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-https-01" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -259,15 +259,16 @@
       </section>
     </section>
 
-    <section title="The Token-Binding Header">
+    <section title="The Sec-Token-Binding Header">
       <t>Once a client and server have negotiated the Token Binding
       Protocol with HTTP/1.1 or HTTP/2 (see <xref
       target="TBPROTO">The Token Binding Protocol</xref>), clients
-      MUST include the following header in their HTTP requests:
+      MUST include the Sec-Token-Binding header in their HTTP requests. The ABNF 
+      of the Sec-Token-Binding header is:
       </t>
       <figure><artwork><![CDATA[
 
- Token-Binding: EncodedTokenBindingMessage
+ Sec-Token-Binding = "Sec-Token-Binding" ":" [CFWS] EncodedTokenBindingMessage
         ]]></artwork></figure>
 
       <t>The EncodedTokenBindingMessage is a web-safe Base64-encoding 
@@ -313,11 +314,13 @@
 	mechanisms is how the Token Binding ID is revealed to the
 	Token Provider: The client uses the <xref
 	target="TBPROTO">Token Binding Protocol</xref>, and
-	includes a TokenBinding structure in the Token-Binding HTTP
+	includes a TokenBinding structure in the Sec-Token-Binding HTTP
 	header defined above.  What differs between the various
 	mechanisms is <spanx style="emph">how</spanx> the Token
 	Consumer grants the permission to reveal the Token Binding ID
-	to the Token Provider.</t>
+	to the Token Provider. Below we specify one such mechanism, which is 
+  suitable for redirect-based interactions between Token Consumers and
+  Token Providers.</t>
       </section>
 
       <section title="Overview">
@@ -350,12 +353,22 @@
 	  Token Consumer, not just the client to which it was
 	  issued.</t>
 	  <t>Therefore, in the previous step, the Token Provider may
-	  want to include the Token Binding ID of the TLS connection
-	  between the client and the Token Consumer in the token.</t>
-	  <t>That Token Binding ID must therefore be communicated to
-	  the Token Provider along with the token request. Communicating a
-	  Token Binding ID involves proving possession of a private key
-	  and is described in the <xref target="TBPROTO">Token
+	  want to include in the token the Token-Binding public key that the client
+    uses when communicating with the Token Consumer, thus 
+    <spanx style="emph">binding<spanx/> the token to client's Token-Binding
+    keypair. The client
+    proves possession of the private key when communicating with 
+    the Token Consumer through the <xref target="TBPROTO">Token
+	  Binding Protocol</xref>, and reveals the corresponding public key of this 
+    keypair as part of the Token Binding ID. Comparing the public key from the
+    token with the public key from the Token Binding ID allows the Token 
+    Consumer to verify that the token was sent to it by the legitimate 
+    client.</t>
+	  <t>To allow the Token Provider to include the Token-Binding public key in
+    the token, the Token Binding ID (between client and Token Consumer) must 
+    therefore be communicated to the Token Provider along with the token
+    request. Communicating a Token Binding ID involves proving possession of a 
+    private key and is described in the <xref target="TBPROTO">Token
 	  Binding Protocol</xref>.</t>
 	</list>
 	</t>
@@ -364,18 +377,19 @@
 	ID between the client and the Token Consumer while delivering
 	the token request to the Token Provider) only if the Token
 	Consumer permits the client to do so.</t>
-	<t>Below, we will enumerate a number of mechanisms available to
-	Token Consumers to grant this permission.</t>
+	<t>Below, we specify how Token Consumers can grant this permission. during
+  redirect-based federation protocols.</t>
       </section>
       
       <section title="HTTP Redirects">
 	<t>When a Token Consumer redirects the client to a Token
 	Provider as a means to deliver the token request, it SHOULD
-	include the following HTTP response header in its HTTP
-	response:</t> 
+	include a Include-Referer-Token-Binding-ID HTTP response header in its HTTP
+	response. The ABNF of the Include-Referer-Token-Binding-ID header is:</t> 
 	<figure><artwork><![CDATA[
-	
- Include-Referer-Token-Binding-ID: true
+
+ Include-Referer-Token-Binding-ID = "Include-Referer-Token-Binding-ID" ":" 
+                                     [CFWS] %x74.72.75.65 ; "true", case-sensitive	
         ]]></artwork></figure>
       
 	<t>Including this response header signals to the client that it
@@ -394,7 +408,7 @@
 	request (see above):</t>
 	<figure><artwork><![CDATA[
 
- Token-Binding: EncodedTokenBindingMessage
+ Sec-Token-Binding: EncodedTokenBindingMessage
         ]]></artwork></figure>
 
 	<t>The TokenBindingMessage SHOULD contain a TokenBinding with
@@ -415,30 +429,6 @@
 	and the Token Privider (more specifically, the web origin that
 	the token request sent to).
 	</t>
-      </section>
-      
-      <section title="Cross-Origin Resource Sharing">
-	<t>When issuing an XML HTTP request across origins to a Token
-	Provider, a Token Consumer can reveal its Token Binding ID
-	through the withRefererTokenBindingID property of the
-	XmlHttpRequest object. Example:</t>
-	<figure><artwork><![CDATA[
-      
- var xhr = new XMLHttpRequest();
- xhr.withCredentials = true; // send cookies
- xhr.withRefererTokenBindingID = true;
- xhr.open(method, url, true);
-        ]]></artwork></figure>
-
-	<t>The client SHOULD include the Token-Binding: header to the 
-        outgoing request as described above if:
-	<list style="symbols">
-	  <t>the withRefererTokenBindingID property of the XmlHttpRequest
-	  object is set to true, and</t>
-	  <t>the client has negotiated the Token Binding Protocol both
-	  with the web origin that issued the XmlHttpRequest, and the
-	  web origin to which the XmlHttpRequest is addressed.</t>
-	</list></t>
       </section>
       
       <section title="Negotiated Key Parameters">
