@@ -263,11 +263,12 @@
       <t>Once a client and server have negotiated the Token Binding
       Protocol with HTTP/1.1 or HTTP/2 (see <xref
       target="TBPROTO">The Token Binding Protocol</xref>), clients
-      MUST include the following header in their HTTP requests:
+      MUST include the Sec-Token-Binding header in their HTTP requests. The ABNF 
+      of the Sec-Token-Binding header is:
       </t>
       <figure><artwork><![CDATA[
 
- Sec-Token-Binding: EncodedTokenBindingMessage
+ Sec-Token-Binding = "Sec-Token-Binding" ":" [CFWS] EncodedTokenBindingMessage
         ]]></artwork></figure>
 
       <t>The EncodedTokenBindingMessage is a web-safe Base64-encoding 
@@ -371,11 +372,11 @@
       <section title="HTTP Redirects">
 	<t>When a Token Consumer redirects the client to a Token
 	Provider as a means to deliver the token request, it SHOULD
-	include the following HTTP response header in its HTTP
-	response:</t> 
+	include a Include-Referer-Token-Binding-ID HTTP response header in its HTTP
+	response. The ABNF of the Include-Referer-Token-Binding-ID is:</t> 
 	<figure><artwork><![CDATA[
-	
- Include-Referer-Token-Binding-ID: true
+
+ Include-Referer-Token-Binding-ID = "Include-Referer-Token-Binding-ID" ":" [CFWS] "true"	
         ]]></artwork></figure>
       
 	<t>Including this response header signals to the client that it
