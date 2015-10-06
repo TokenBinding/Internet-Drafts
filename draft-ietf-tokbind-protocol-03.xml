@@ -39,7 +39,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-02" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-03" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -277,12 +277,12 @@
         parties. Token Binding over HTTP <xref target="I-D.ietf-tokbind-https"/> specifies the 
         encapsulation of the Token Binding message in the application protocol messages, and the 
         scenarios involving more than two communicating parties. The Token Binding message format 
-        is defined using TLS specification language, and reuses existing TLS structures and IANA 
-        registrations where possible:</preamble>
+        is defined using TLS specification language, and reuses existing TLS structures where 
+        possible:</preamble>
         <artwork><![CDATA[
 
 enum {
-    rsa2048_pkcs1.5_sha256(0), rsa2048_pss_sha256(1), ecdsap256_sha256(2), (255)
+    rsa2048_pkcs1.5(0), rsa2048_pss(1), ecdsap256(2), (255)
 } TokenBindingKeyParameters;
 
 struct {
@@ -290,18 +290,9 @@ struct {
     opaque publicexponent<1..2^8-1>;
 } RSAPublicKey;
 
-enum {
-    secp256r1 (23), (0xFFFF)
-} NamedCurve;
-
 struct {
     opaque point <1..2^8-1>;
 } ECPoint;
-
-struct {
-    NamedCurve namedcurve;
-    ECPoint point;              // Uncompressed format
-} ECDSAParams;
 
 enum {
     provided_token_binding(0), referred_token_binding(1), (255)
@@ -311,11 +302,11 @@ struct {
     TokenBindingType tokenbinding_type;
     TokenBindingKeyParameters key_parameters;
     select (key_parameters) {
-        case rsa2048_pkcs1.5_sha256: 
-        case rsa2048_pss_sha256:
+        case rsa2048_pkcs1.5: 
+        case rsa2048_pss:
             RSAPublicKey rsapubkey;
-        case ecdsap256_sha256: 
-            ECDSAParams ecdsaparams;
+        case ecdsap256: 
+            ECPoint point;
     }
 } TokenBindingID;
 
@@ -402,11 +393,11 @@ struct {
     TokenBindingType tokenbinding_type;
     TokenBindingKeyParameters key_parameters;
     select (key_parameters) {
-        case rsa2048_pkcs1.5_sha256: 
-        case rsa2048_pss_sha256:
+        case rsa2048_pkcs1.5: 
+        case rsa2048_pss:
             RSAPublicKey rsapubkey;
-        case ecdsap256_sha256: 
-            ECDSAParams ecdsaparams;
+        case ecdsap256: 
+            ECPoint point;
     }
 } TokenBindingID;
 
@@ -491,9 +482,8 @@ struct {
       creates no initial registrations in the "Token Binding Extensions" registry.</t>
 
       <t>This document uses "Token Binding Key Parameters" registry originally created in 
-      <xref target="I-D.ietf-tokbind-negotiation"/> and "TLS NamedCurve" registry originally 
-      created in <xref target="RFC4492" />. This document creates no new registrations in these 
-      registries.</t>
+      <xref target="I-D.ietf-tokbind-negotiation"/>. This document creates no new registrations in 
+      this registry.</t>
     </section>
 
     <section anchor="Security" title="Security Considerations">
@@ -608,6 +598,7 @@ struct {
       v00 2014-08-21  Andrei Popov   Initial version
       v00 2015-03-27  Andrei Popov   Renamed as tokbind WG draft
       v01 2015-05-26  Andrei Popov   Replaced ALPN-based TB negotiation with TBNEGO
-      v02 2015-09-11  Andrei Popov   Replaced TLS-UNIQUE with RFC5705 exporters, SignatureAndHashAlgorithm with 1-byte key parameters IDs from TBNEGO-->
+      v02 2015-09-11  Andrei Popov   Replaced TLS-UNIQUE with RFC5705 exporters, SignatureAndHashAlgorithm with 1-byte key parameters IDs from TBNEGO
+      v03 2015-10-06  Andrei Popov   Removed ECDSAParams because NamedCurve is indicated by key_parameters -->
   </back>
 </rfc>

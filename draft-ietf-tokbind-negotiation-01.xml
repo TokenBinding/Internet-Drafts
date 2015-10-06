@@ -36,7 +36,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-negotiation-00" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-negotiation-01" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -192,8 +192,8 @@
     <section title="Introduction">
       <t>In order to use the Token Binding protocol <xref target="I-D.ietf-tokbind-protocol"/>, 
       the client and server need to agree on the Token Binding protocol version and the parameters 
-      (signature and hash algorithm, length) of the Token Binding key. This document specifies a 
-      new TLS extension to accomplish this negotiation without introducing additional network 
+      (signature algorithm, length) of the Token Binding key. This document specifies a new TLS 
+      extension to accomplish this negotiation without introducing additional network 
       round-trips.</t>
 
       <section title="Requirements Language">
@@ -225,7 +225,7 @@ struct {
 } ProtocolVersion;
 
 enum {
-    rsa2048_pkcs1.5_sha256(0), rsa2048_pss_sha256(1), ecdsap256_sha256(2), (255)
+    rsa2048_pkcs1.5(0), rsa2048_pss(1), ecdsap256(2), (255)
 } TokenBindingKeyParameters;
 
 struct {
@@ -334,19 +334,19 @@ struct {
      <t>An initial set of registrations for this registry follows:
        <list style="empty">
          <t>Value: 0</t>
-         <t>Description: rsa2048_pkcs1.5_sha256</t>
+         <t>Description: rsa2048_pkcs1.5</t>
          <t>Specification: this document</t>
        </list>
 
        <list style="empty">
          <t>Value: 1</t>
-         <t>Description: rsa2048_pss_sha256</t>
+         <t>Description: rsa2048_pss</t>
          <t>Specification: this document</t>
        </list>
 
        <list style="empty">
          <t>Value: 2</t>
-         <t>Description: ecdsap256_sha256</t>
+         <t>Description: ecdsap256</t>
          <t>Specification: this document</t>
        </list>
      </t>
@@ -357,9 +357,9 @@ struct {
         <t>The Token Binding protocol version and key parameters are negotiated via 
         "token_binding" extension  within the TLS handshake. TLS prevents active attackers from 
         modifying the messages of the TLS handshake, therefore it is not possible for the attacker 
-        to remove or modify the "token_binding" extension. The signature and hash algorithms and 
-        key length used in the TokenBinding of type "provided_token_binding" MUST match the 
-        parameters negotiated via "token_binding" extension.</t>
+        to remove or modify the "token_binding" extension. The signature algorithm and key length 
+        used in the TokenBinding of type "provided_token_binding" MUST match the parameters 
+        negotiated via "token_binding" extension.</t>
       </section>
       <section title="Triple Handshake Vulnerability in TLS">
         <t>The Token Binding protocol relies on the TLS Exporters <xref target="RFC5705" /> to 
@@ -431,6 +431,7 @@ struct {
 
     <!-- Change Log
       v00 2015-05-07  Andrei Popov   Initial version
-      v00 2015-09-09  Andrei Popov   Added TLS-style TB version negotiation, limited key parameters list to 1..2^8-1 -->
+      v00 2015-09-09  Andrei Popov   Added TLS-style TB version negotiation, limited key parameters list to 1..2^8-1
+      v01 2015-10-06  Andrei Popov   Removed _SHA256 suffixes from TB key parameters -->
   </back>
 </rfc>
