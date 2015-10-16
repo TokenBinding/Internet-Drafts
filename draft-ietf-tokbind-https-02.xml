@@ -568,12 +568,12 @@
           <list style="symbols">
             <t>
               The client has an authentication token with the Token Provider
-              that is bound to the client’s Token Binding key.
+              that is bound to the client's Token Binding key.
             </t>
             <t>
               The client wants to establish a secure (i.e., free of
               men-in-the-middle) authenticated session with the Token Consumer,
-              but hasn’t done so yet (in other words, we’re about to run the
+              but hasn't done so yet (in other words, we're about to run the
               federated sign-on protocol).
             </t>
             <t>
@@ -594,7 +594,7 @@
           Provider to the client. (This means, among other things, that the
           man-in-the-middle controls the Javascript running at the client in
           the origin of the Token Provider.) It is not, however, in possession
-          of the client’s Token Binding key. Therefore, it can either choose to
+          of the client's Token Binding key. Therefore, it can either choose to
           replace the Token Binding key in requests from the client to the
           Token Provider, and create a Token-Binding header that matches the
           TLS connection between the client and the Token Provider; or it can
@@ -608,7 +608,7 @@
           Token Provider), then the Token Binding message will match the
           connection between man-in-the-middle and Token Provider, but the
           Token Binding key in the message will not match the Token Binding key
-          that the client’s authentication token is bound to. Either way, the
+          that the client's authentication token is bound to. Either way, the
           man-in-the-middle is detected by the Token Provider, but only if the
           proof of key possession of the provided Token Binding key is required
           in the protocol (as we do above).
@@ -624,15 +624,15 @@
           the man-in-the-middle controls the redirect URL, and can tamper with
           any redirect URL issued by the Token Consumer. The goal of the
           man-in-the-middle is to trick the Token Issuer to issue a token bound
-          to _its_ Token Binding key, not to the Token Binding key of the
-          legitimate client. To thwart this goal of the man-in-the-middle, the
-          client’s referred Token Binding key must be communicated to the Token
-          Producer in a manner that can not be affected by the
-          man-in-the-middle (who, as we recall, can modify redirect URLs and
-          Javascript at the client). Including the referred Token Binding
-          message in the Token-Binding header (as opposed to, say, including
-          the referred Token Binding key in an application-level message as
-          part of the redirect URL) is one way to assure that the
+          to <spanx style="emph">its</spanx> Token Binding key, not to the
+          Token Binding key of the legitimate client. To thwart this goal of
+          the man-in-the-middle, the client's referred Token Binding key must
+          be communicated to the Token Producer in a manner that can not be
+          affected by the man-in-the-middle (who, as we recall, can modify
+          redirect URLs and Javascript at the client). Including the referred
+          Token Binding message in the Token-Binding header (as opposed to,
+          say, including the referred Token Binding key in an application-level
+          message as part of the redirect URL) is one way to assure that the
           man-in-the-middle between client and Token Consumer cannot affect the
           communication of the referred Token Binding key to the Token Provider.
         </t>
