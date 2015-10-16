@@ -39,7 +39,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-https-01" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-https-02" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -259,16 +259,16 @@
       </section>
     </section>
 
-    <section title="The Sec-Token-Binding Header">
+    <section title="The Token-Binding Header">
       <t>Once a client and server have negotiated the Token Binding
       Protocol with HTTP/1.1 or HTTP/2 (see <xref
       target="TBPROTO">The Token Binding Protocol</xref>), clients
-      MUST include the Sec-Token-Binding header in their HTTP requests. The ABNF 
-      of the Sec-Token-Binding header is:
+      MUST include the Token-Binding header in their HTTP requests. The ABNF 
+      of the Token-Binding header is:
       </t>
       <figure><artwork><![CDATA[
 
- Sec-Token-Binding = "Sec-Token-Binding" ":" [CFWS] EncodedTokenBindingMessage
+ Token-Binding = "Token-Binding" ":" [CFWS] EncodedTokenBindingMessage
         ]]></artwork></figure>
 
       <t>The EncodedTokenBindingMessage is a web-safe Base64-encoding 
@@ -314,7 +314,7 @@
 	mechanisms is how the Token Binding ID is revealed to the
 	Token Provider: The client uses the <xref
 	target="TBPROTO">Token Binding Protocol</xref>, and
-	includes a TokenBinding structure in the Sec-Token-Binding HTTP
+	includes a TokenBinding structure in the Token-Binding HTTP
 	header defined above.  What differs between the various
 	mechanisms is <spanx style="emph">how</spanx> the Token
 	Consumer grants the permission to reveal the Token Binding ID
@@ -408,7 +408,7 @@
 	request (see above):</t>
 	<figure><artwork><![CDATA[
 
- Sec-Token-Binding: EncodedTokenBindingMessage
+ Token-Binding: EncodedTokenBindingMessage
         ]]></artwork></figure>
 
 	<t>The TokenBindingMessage SHOULD contain a TokenBinding with
