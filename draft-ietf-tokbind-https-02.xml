@@ -597,21 +597,21 @@
           of the client's Token Binding key. Therefore, it can either choose to
           replace the Token Binding key in requests from the client to the
           Token Provider, and create a Token-Binding header that matches the
-          TLS connection between the client and the Token Provider; or it can
-          choose to leave the Token-Binding header unchanged. If it chooses the
-          latter, the signature in the Token Binding message (created by the
-          original client on the exported keying material (EKM) for the
-          connection between client and man-in-the-middle) will not match the
-          EKM between man-in-the-middle and the Token Provider. If it chooses
-          the former (and creates its own signature, with its own Token Binding
-          key, over the EKM for the connection between man-in-the-middle and
-          Token Provider), then the Token Binding message will match the
-          connection between man-in-the-middle and Token Provider, but the
-          Token Binding key in the message will not match the Token Binding key
-          that the client's authentication token is bound to. Either way, the
-          man-in-the-middle is detected by the Token Provider, but only if the
-          proof of key possession of the provided Token Binding key is required
-          in the protocol (as we do above).
+          TLS connection between the man-in-the-middle and the Token Provider;
+          or it can choose to leave the Token-Binding header unchanged. If it
+          chooses the latter, the signature in the Token Binding message
+          (created by the original client on the exported keying material (EKM)
+          for the connection between client and man-in-the-middle) will not
+          match the EKM between man-in-the-middle and the Token Provider. If it
+          chooses the former (and creates its own signature, with its own Token
+          Binding key, over the EKM for the connection between
+          man-in-the-middle and Token Provider), then the Token Binding message
+          will match the connection between man-in-the-middle and Token
+          Provider, but the Token Binding key in the message will not match the
+          Token Binding key that the client's authentication token is bound to.
+          Either way, the man-in-the-middle is detected by the Token Provider,
+          but only if the proof of key possession of the provided Token Binding
+          key is required in the protocol (as we do above).
         </t>
         <t>
           Next, consider the presence of a man-in-the-middle between client and
