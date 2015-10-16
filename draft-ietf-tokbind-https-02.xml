@@ -486,6 +486,163 @@
           unless the Extended Master Secret TLS extension <xref
           target="I-D.ietf-tls-session-hash"/> has also been negotiated.</t>
       </section>
+      <section title="Sensitivity of the Token-Binding Header">
+        <t>
+          The purpose of the Token Binding protocol is to convince the server
+          that the client that initiated the TLS connection controls a certain
+          key pair. For the server to correctly draw this conclusion after
+          processing the Token-Binding header, certain secrecy and integrity
+          requirements must be met.
+        </t>
+        <t>
+          For example, the client's private Token Binding key must be kept
+          secret by the client. If the private key is not secret, then another
+          actor in the system could create a valid Token Binding header,
+          impersonating the client. This can render the main purpose of the
+          protocol - to bind bearer tokens to certain clients - moot: Consider,
+          for example, an attacker who obtained (perhaps through a network
+          intrusion) an authentication cookie that a client uses with a certain
+          server. Consider further that the server bound that cookie to the
+          client's Token Binding ID precisely to thwart cookie theft. If the
+          attacker were to come into possession of the client's private key, he
+          could then establish a TLS connection with the server and craft a
+          Token-Binding header that matches the binding present in the cookie,
+          thus successfully authenticating as the client, and gaining access to
+          the client's data at the server. The Token Binding protocol, in this
+          case, didn't successfully bind the cookie to the client.
+        </t>
+        <t>
+          Likewise, we need integrity protection of the Token-Binding header: A
+          client shouldn't be tricked into sending a Token-Binding header to a
+          server that contains Token Binding messages about key pairs that the
+          client doesn't control. Consider an attacker A that somehow has
+          knowledge of the exported keying material (EKM) for a TLS connection
+          between a client C and a server S. (While that is somewhat unlikely,
+          it's also not entirely out of the question, since the client might
+          not treat the EKM as a secret - after all, a pre-image-resistant hash
+          function has been applied to the TLS master secret, making it
+          impossible for someone knowing the EKM to recover the TLS master
+          secret. Such considerations might lead some clients to not treat the
+          EKM as a secret.) Such an attacker A could craft a Token-Binding
+          header with A's key pair over C's EKM. If the attacker could now
+          trick C to send such a header to S, it would appear to S as if C
+          controls a certain key pair when in fact it doesn't (the attacker A
+          controls the key pair).
+        </t>
+        <t>
+          If A has a pre-existing relationship with S (perhaps has an account
+          on S), it now appears to the server S as if A is connecting to it,
+          even though it is really C. (If the server S doesn't simply use Token
+          Binding keys to identify clients, but also uses bound authentication
+          cookies, then A would also have to trick C into sending one of A's
+          cookies to S, which it can do through a variety of means - inserting
+          cookies through Javascript APIs, setting cookies through
+          related-domain attacks, etc.) In other words, A tricked C into
+          logging into A's account on S. This could lead to a loss of privacy
+          for C, since A presumably has some other way to also access the
+          account, and can thus indirectly observe A's behavior (for example,
+          if S has a feature that lets account holders see their activity
+          history on S).
+        </t>
+        <t>
+          Therefore, we need to protect the integrity of the Token-Binding
+          header. One origin should not be able to set the Token-Binding header
+          (through a DOM API or otherwise) that the User Agent uses with
+          another origin.
+        </t>
+      </section>
+      <section title="Securing Federated Sign-On Protocols">
+        <t>
+          As explained above, in a federated sign-in scenario a client will
+          prove possession of two different key pairs to a Token Provider: One
+          key pair is the "provided" Token Binding key pair (which the client
+          normally uses with the Token Provider), and the other is the
+          "referred" Token Binding key pair (which the client normally uses
+          with the Token Consumer). The Token Provider is expected to issue a
+          token that is bound to the referred Token Binding key.
+        </t>
+        <t>
+          Both proofs (that of the provided Token Binding key and that of the
+          referred Token Binding key) are necessary. To show this, consider the
+          following scenario:
+          <list style="symbols">
+            <t>
+              The client has an authentication token with the Token Provider
+              that is bound to the client’s Token Binding key.
+            </t>
+            <t>
+              The client wants to establish a secure (i.e., free of
+              men-in-the-middle) authenticated session with the Token Consumer,
+              but hasn’t done so yet (in other words, we’re about to run the
+              federated sign-on protocol).
+            </t>
+            <t>
+              A man-in-the-middle is allowed to intercept the connection
+              between client and Token Consumer or between Client and Token
+              Provider (or both).
+            </t>
+          </list>
+          The goal is to detect the presence of the man-in-the-middle in these
+          scenarios.
+        </t>
+        <t>
+          First, consider a man-in-the-middle between the client and the Token
+          Provider. Recall that we assume that the client possesses a bound
+          authentication token (e.g., cookie) for the Token Provider. The
+          man-in-the-middle can intercept and modify any message sent by the
+          client to the Token Provider, and any message sent by the Token
+          Provider to the client. (This means, among other things, that the
+          man-in-the-middle controls the Javascript running at the client in
+          the origin of the Token Provider.) It is not, however, in possession
+          of the client’s Token Binding key. Therefore, it can either choose to
+          replace the Token Binding key in requests from the client to the
+          Token Provider, and create a Token-Binding header that matches the
+          TLS connection between the client and the Token Provider; or it can
+          choose to leave the Token-Binding header unchanged. If it chooses the
+          latter, the signature in the Token Binding message (created by the
+          original client on the exported keying material (EKM) for the
+          connection between client and man-in-the-middle) will not match the
+          EKM between man-in-the-middle and the Token Provider. If it chooses
+          the former (and creates its own signature, with its own Token Binding
+          key, over the EKM for the connection between man-in-the-middle and
+          Token Provider), then the Token Binding message will match the
+          connection between man-in-the-middle and Token Provider, but the
+          Token Binding key in the message will not match the Token Binding key
+          that the client’s authentication token is bound to. Either way, the
+          man-in-the-middle is detected by the Token Provider, but only if the
+          proof of key possession of the provided Token Binding key is required
+          in the protocol (as we do above).
+        </t>
+        <t>
+          Next, consider the presence of a man-in-the-middle between client and
+          Token Consumer. That man-in-the-middle can intercept and modify any
+          message sent by the client to the Token Consumer, and any message
+          sent by the Token Consumer to the client. This means in particular
+          that the man-in-the-middle controls the Javascript running at the
+          client in the origin of the Token Consumer. The Token Consumer is the
+          party that redirects the client to the Token Provider. In this case,
+          the man-in-the-middle controls the redirect URL, and can tamper with
+          any redirect URL issued by the Token Consumer. The goal of the
+          man-in-the-middle is to trick the Token Issuer to issue a token bound
+          to _its_ Token Binding key, not to the Token Binding key of the
+          legitimate client. To thwart this goal of the man-in-the-middle, the
+          client’s referred Token Binding key must be communicated to the Token
+          Producer in a manner that can not be affected by the
+          man-in-the-middle (who, as we recall, can modify redirect URLs and
+          Javascript at the client). Including the referred Token Binding
+          message in the Token-Binding header (as opposed to, say, including
+          the referred Token Binding key in an application-level message as
+          part of the redirect URL) is one way to assure that the
+          man-in-the-middle between client and Token Consumer cannot affect the
+          communication of the referred Token Binding key to the Token Provider.
+        </t>
+        <t>
+          Therefore, the Token-Binding header in the federated sign-on use case
+          contains both, a proof of possession of the provided Token Binding
+          key, as well as a proof of possession of the referred Token Binding
+          key.
+        </t>
+      </section>
     </section>
   </middle>
 
