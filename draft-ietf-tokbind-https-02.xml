@@ -400,8 +400,8 @@
         about the Token Binding used between the client and the Token 
         Consumer to the Token Provider.</t>
 	
-	<t>This header has only meaning if the HTTP status code is 302
-	or 301, and MUST be ignored by the client for any other status
+	<t>This header has only meaning if the HTTP status code is 301,
+	302, 303, 307 or 308, and MUST be ignored by the client for any other status
 	codes. If the client supports the Token Binding Protocol, and
 	has negotiated the Token Binding Protocol with both the Token
 	Consumer and the Token Provider, it already sends the
