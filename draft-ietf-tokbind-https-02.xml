@@ -667,6 +667,7 @@
       &RFC5246;
       &RFC7301;
       &RFC2616;
+      &RFC5705;
       &RFC5929;
       &RFC4492;
       &RFC5226;
@@ -712,6 +713,9 @@
 
     <!-- Change Log
       v00 2014-08-21  Andrei Popov   Initial version
-      v00 2015-03-27  Andrei Popov   Renamed as tokbind WG draft-->
+      v00 2015-03-27  Andrei Popov   Renamed as tokbind WG draft
+      v01 2015-06-30  Dirk Balfanz   Added Sec- prefix to header
+      v02 2015-06-30  Dirk Balfanz   Removed Sec- prefix, added design rationalization in Security Considerations section
+    -->
   </back>
 </rfc>
