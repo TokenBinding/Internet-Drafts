@@ -617,18 +617,17 @@
           Next, consider the presence of a man-in-the-middle between client and
           Token Consumer. That man-in-the-middle can intercept and modify any
           message sent by the client to the Token Consumer, and any message
-          sent by the Token Consumer to the client. This means in particular
-          that the man-in-the-middle controls the Javascript running at the
-          client in the origin of the Token Consumer. The Token Consumer is the
+          sent by the Token Consumer to the client. The Token Consumer is the
           party that redirects the client to the Token Provider. In this case,
           the man-in-the-middle controls the redirect URL, and can tamper with
-          any redirect URL issued by the Token Consumer. The goal of the
-          man-in-the-middle is to trick the Token Issuer to issue a token bound
-          to <spanx style="emph">its</spanx> Token Binding key, not to the
-          Token Binding key of the legitimate client. To thwart this goal of
-          the man-in-the-middle, the client's referred Token Binding key must
-          be communicated to the Token Producer in a manner that can not be
-          affected by the man-in-the-middle (who, as we recall, can modify
+          any redirect URL issued by the Token Consumer (as well as with any
+          Javascript running in the origin of the Token Consumer). The goal of
+          the man-in-the-middle is to trick the Token Issuer to issue a token
+          bound to <spanx style="emph">its</spanx> Token Binding key, not to
+          the Token Binding key of the legitimate client. To thwart this goal
+          of the man-in-the-middle, the client's referred Token Binding key
+          must be communicated to the Token Producer in a manner that can not
+          be affected by the man-in-the-middle (who, as we recall, can modify
           redirect URLs and Javascript at the client). Including the referred
           Token Binding message in the Token-Binding header (as opposed to,
           say, including the referred Token Binding key in an application-level
