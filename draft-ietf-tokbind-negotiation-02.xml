@@ -10,6 +10,8 @@
 <!ENTITY RFC5246 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml">
 <!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
 <!ENTITY RFC5705 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5705.xml">
+<!ENTITY RFC7627 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7627.xml">
+<!ENTITY RFC5746 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5746.xml">
 ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <!-- used by XSLT processors -->
@@ -36,7 +38,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-negotiation-01" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-negotiation-02" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -256,9 +258,10 @@ struct {
         <t>The server supports the Token Binding protocol version offered by the client or a lower 
         version.</t>
         <t>The server finds acceptable Token Binding key parameters on the client's list.</t>
-        <t>The server is also negotiating Extended Master Secret TLS extension 
-        <xref target="I-D.ietf-tls-session-hash"/> (see security considerations section below for 
-        more details).</t>
+        <t>The server is also negotiating Extended Master Secret <xref target="RFC7627" /> and 
+        Renegotiation Indication <xref target="RFC5746" /> TLS extensions. This requirement only 
+        applies when TLS 1.2 or an older TLS version is used (see security considerations section 
+        below for more details).</t>
       </list></t>
 
       <t>The server will ignore any key parameters that it does not recognize. The 
@@ -290,8 +293,10 @@ struct {
         <t>"key_parameters_list" includes more than one Token Binding key parameters 
         identifier.</t>
         <t>"key_parameters_list" includes an identifier that was not advertised by the client.</t>
-        <t>Extended Master Secret <xref target="I-D.ietf-tls-session-hash"/> is not negotiated (see 
-        security considerations section below for more details).</t>
+        <t>TLS 1.2 or an older TLS version is used, but Extended Master Secret 
+        <xref target="RFC7627" /> and Renegotiation Indication <xref target="RFC5746" /> TLS 
+        extensions are not negotiated (see security considerations section below for more 
+        details).</t>
       </list></t>
 
       <t>If the "token_binding" extension is included in the server hello and the client supports 
@@ -361,14 +366,15 @@ struct {
         used in the TokenBinding of type "provided_token_binding" MUST match the parameters 
         negotiated via "token_binding" extension.</t>
       </section>
-      <section title="Triple Handshake Vulnerability in TLS">
+      <section title="Triple Handshake Vulnerability in TLS 1.2 and Older TLS Versions">
         <t>The Token Binding protocol relies on the TLS Exporters <xref target="RFC5705" /> to 
         associate a TLS connection with a Token Binding. The triple handshake attack 
         <xref target="TRIPLE-HS" /> is a known TLS protocol vulnerability allowing the attacker 
         to synchronize exported keying material between TLS connections. The attacker can then 
         successfully replay bound tokens. For this reason, the Token Binding protocol MUST NOT be 
-        negotiated unless the Extended Master Secret TLS extension 
-        <xref target="I-D.ietf-tls-session-hash"/> has also been negotiated.</t>
+        negotiated with these TLS versions, unless the Extended Master Secret 
+        <xref target="RFC7627" /> and Renegotiation Indication <xref target="RFC5746" /> TLS 
+        extensions have also been negotiated.</t>
       </section>
     </section>
 
@@ -399,12 +405,12 @@ struct {
       &RFC5246;
       &RFC5226;
       &RFC5705;
+      &RFC7627;
+      &RFC5746;
       <?rfc include="reference.I-D.ietf-tokbind-protocol.xml"?>
     </references>
 
     <references title="Informative References">
-      <?rfc include="reference.I-D.ietf-tls-session-hash.xml"?>
-
       <reference anchor="TRIPLE-HS">
         <front>
           <title>Triple Handshakes and Cookie Cutters: Breaking and Fixing Authentication over 
@@ -432,6 +438,7 @@ struct {
     <!-- Change Log
       v00 2015-05-07  Andrei Popov   Initial version
       v00 2015-09-09  Andrei Popov   Added TLS-style TB version negotiation, limited key parameters list to 1..2^8-1
-      v01 2015-10-06  Andrei Popov   Removed _SHA256 suffixes from TB key parameters -->
+      v01 2015-10-06  Andrei Popov   Removed _SHA256 suffixes from TB key parameters 
+      v02 2015-12-18  Andrei Popov   Added requirement for Renegotiation Indication -->
   </back>
 </rfc>

@@ -13,6 +13,9 @@
 <!ENTITY RFC5705 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5705.xml">
 <!ENTITY RFC4492 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4492.xml">
 <!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
+<!ENTITY RFC3447 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3447.xml">
+<!ENTITY RFC7627 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7627.xml">
+<!ENTITY RFC5746 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5746.xml">
 ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <!-- used by XSLT processors -->
@@ -39,7 +42,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-03" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-04" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -196,10 +199,10 @@
 
   <middle>
     <section title="Introduction">
-      <t>Web services generate various security tokens (e.g. HTTP cookies, OAuth tokens) for 
-      web applications to access protected resources. Any party in possession of such token 
+      <t>Servers generate various security tokens (e.g. HTTP cookies, OAuth tokens) for 
+      applications to access protected resources. Any party in possession of such token 
       gains access to the protected resource. Attackers export bearer tokens from the user’s 
-      machine, present them to web services, and impersonate authenticated users. The idea of 
+      machine, present them to the servers, and impersonate authenticated users. The idea of 
       Token Binding is to prevent such attacks by cryptographically binding security tokens to 
       the TLS layer.</t>
 
@@ -207,10 +210,11 @@
       pair (possibly within a secure hardware module, such as TPM) per target server, and 
       proving possession of the private key on every TLS connection to the target server. The 
       proof of possession involves signing the exported keying material <xref target="RFC5705" /> 
-      for the TLS connection with the private key. Such TLS Token Binding is identified by the 
-      corresponding public key. TLS Token Bindings are long-lived, i.e. they encompass multiple 
+      for the TLS connection with the private key. The corresponding public key is included in the 
+      TLS Token Binding identifier structure (described in the "TLS Token Binding ID Format" 
+      section of this document). TLS Token Bindings are long-lived, i.e. they encompass multiple 
       TLS connections and TLS sessions between a given client and server. To protect privacy, 
-      TLS Token Binding identifiers are never transmitted in clear text and can be reset by the 
+      TLS Token Binding IDs are never transmitted in clear text and can be reset by the 
       user at any time, e.g. when clearing browser cookies.</t>
 
       <t>When issuing a security token to a client that supports TLS Token Binding, a server 
@@ -277,8 +281,7 @@
         parties. Token Binding over HTTP <xref target="I-D.ietf-tokbind-https"/> specifies the 
         encapsulation of the Token Binding message in the application protocol messages, and the 
         scenarios involving more than two communicating parties. The Token Binding message format 
-        is defined using TLS specification language, and reuses existing TLS structures where 
-        possible:</preamble>
+        is defined using TLS specification language:</preamble>
         <artwork><![CDATA[
 
 enum {
@@ -336,6 +339,19 @@ struct {
         </postamble>
       </figure>
 
+      <t>When an rsa2048_pkcs1.5 or rsa2048_pss key is used, TokenBinding.signature contains the 
+      signature generated using, respectively, the RSASSA-PKCS1-v1_5 or RSASSA-PSS signature scheme 
+      defined in <xref target="RFC3447"/>. RSAPublicKey.modulus and RSAPublicKey.publicexponent 
+      contain the length-prefixed modulus and exponent of the RSA public key represented in 
+      big-endian format.</t>
+
+      <t>When an ecdsap256 key is used, TokenBinding.signature contains a pair of integers, R 
+      followed by S, as defined in <xref target="ANSI.X9-62.2005"/>. R and S are encoded in 
+      big-endian format. ECPoint.point contains the X coordinate followed by the Y coordinate. The 
+      X and Y coordinates are unsigned integers encoded in big-endian format. Future specifications 
+      may define Token Binding keys using other elliptic curves with their corresponding signature 
+      and point formats.</t>
+
       <t>The EKM is obtained using the Keying Material Exporters for TLS defined in 
       <xref target="RFC5705" />, by supplying the following input values:
         <list style="symbols">
@@ -361,11 +377,11 @@ struct {
     </section>
 
     <section title="Establishing a TLS Token Binding">
-      <t>The triple handshake vulnerability in the TLS protocol affects the security of the Token 
-      Binding protocol, as described in the "Security Considerations" section below. Therefore, 
-      the server MUST NOT negotiate the use of the Token Binding protocol unless the server also 
-      negotiates Extended Master Secret TLS extension 
-      <xref target="I-D.ietf-tls-session-hash"/>.</t>
+      <t>The triple handshake vulnerability in TLS 1.2 and older TLS versions affects the security 
+      of the Token Binding protocol, as described in the "Security Considerations" section below. 
+      Therefore, the server MUST NOT negotiate the use of the Token Binding protocol with these TLS 
+      versions, unless the server also negotiates Extended Master Secret <xref target="RFC7627" /> 
+      and Renegotiation Indication <xref target="RFC5746" /> TLS extensions.</t>
 
       <t>The server MUST terminate the connection if the use of the Token Binding protocol 
       was not negotiated, but the client sends the Token Binding message. If the Token Binding 
@@ -509,11 +525,18 @@ struct {
         <t>The Token Binding protocol uses persistent, long-lived TLS Token Binding IDs. To 
         protect privacy, TLS Token Binding IDs are never transmitted in clear text and can be 
         reset by the user at any time, e.g. when clearing browser cookies. Some applications offer 
-        special privacy modes where they don't store or use tokens supplied by the server, e.g. 
-        "in private" browsing. Connections made in these special privacy modes SHOULD NOT 
-        negotiate Token Binding. In order to prevent cooperating servers from linking user 
-        identities, different keys SHOULD be used by the client for connections to different 
-        servers, according to the token scoping rules of the application protocol.</t>
+        a special privacy mode where they don't store or use tokens supplied by the server, e.g. 
+        "in private" browsing. When operating in this special privacy mode, applications SHOULD use 
+        newly generated Token Binding keys and delete them when exiting this mode, or else SHOULD 
+        NOT negotiate Token Binding at all.</t>
+
+        <t>In order to prevent cooperating servers from linking user identities, different keys 
+        SHOULD be used by the client for connections to different servers, according to the token 
+        scoping rules of the application protocol.</t>
+
+        <t>A server can use tokens and Token Binding IDs to track clients. Client applications that 
+        automatically limit the lifetime of tokens to maintain user privacy SHOULD apply the same 
+        validity time limits to Token Binding keys.</t>
       </section>
       <section title="Token Binding Key Sharing Between Applications">
         <t>Existing systems provide a variety of platform-specific mechanisms for certain 
@@ -522,14 +545,15 @@ struct {
         need to also share Token Binding keys. Care must be taken to restrict the sharing of Token 
         Binding keys to the same group(s) of applications that share the same tokens.</t>
       </section>
-      <section title="Triple Handshake Vulnerability in TLS">
+      <section title="Triple Handshake Vulnerability in TLS 1.2 and Older TLS Versions">
         <t>The Token Binding protocol relies on the exported keying material (EKM) to associate a 
         TLS connection with a Token Binding. The triple handshake attack 
-        <xref target="TRIPLE-HS" /> is a known TLS protocol vulnerability allowing the attacker 
-        to synchronize keying material between TLS connections. The attacker can then successfully 
-        replay bound tokens. For this reason, the Token Binding protocol MUST NOT be negotiated 
-        unless the Extended Master Secret TLS extension <xref target="I-D.ietf-tls-session-hash"/> 
-        has also been negotiated.</t>
+        <xref target="TRIPLE-HS" /> is a known vulnerability in TLS 1.2 and older TLS versions, 
+        allowing the attacker to synchronize keying material between TLS connections. The attacker 
+        can then successfully replay bound tokens. For this reason, the Token Binding protocol MUST 
+        NOT be negotiated with these TLS versions, unless the Extended Master Secret 
+        <xref target="RFC7627" /> and Renegotiation Indication <xref target="RFC5746" /> TLS 
+        extensions have also been negotiated.</t>
       </section>
     </section>
 
@@ -563,13 +587,35 @@ struct {
       &RFC5705;
       &RFC4492;
       &RFC5226;
+      &RFC3447;
+      &RFC7627;
+      &RFC5746;
       <?rfc include="reference.I-D.ietf-tokbind-negotiation.xml"?>
       <?rfc include="reference.I-D.ietf-tokbind-https.xml"?>
+      <reference anchor="ANSI.X9-62.2005">
+
+        <front>
+
+          <title>Public Key Cryptography for the Financial Services Industry, The Elliptic Curve 
+          Digital Signature Algorithm (ECDSA)</title>
+
+          <author>
+
+            <organization>American National Standards Institute</organization>
+
+          </author>
+
+          <date year="2005" />
+
+        </front>
+
+        <seriesInfo name="ANSI" value="X9.62" />
+
+      </reference>
+
     </references>
 
     <references title="Informative References">
-      <?rfc include="reference.I-D.ietf-tls-session-hash.xml"?>
-
       <reference anchor="TRIPLE-HS">
         <front>
           <title>Triple Handshakes and Cookie Cutters: Breaking and Fixing Authentication over 
@@ -599,6 +645,7 @@ struct {
       v00 2015-03-27  Andrei Popov   Renamed as tokbind WG draft
       v01 2015-05-26  Andrei Popov   Replaced ALPN-based TB negotiation with TBNEGO
       v02 2015-09-11  Andrei Popov   Replaced TLS-UNIQUE with RFC5705 exporters, SignatureAndHashAlgorithm with 1-byte key parameters IDs from TBNEGO
-      v03 2015-10-06  Andrei Popov   Removed ECDSAParams because NamedCurve is indicated by key_parameters -->
+      v03 2015-10-06  Andrei Popov   Removed ECDSAParams because NamedCurve is indicated by key_parameters
+      v04 2015-12-18  Andrei Popov   Added requirement for Renegotiation Indication, specified public key and signature formats -->
   </back>
 </rfc>
