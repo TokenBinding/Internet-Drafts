@@ -156,7 +156,7 @@
       </address>
     </author>
 
-    <date year="2015" />
+    <date year="2016" />
 
     <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
          in the current day for you. If only the current year is specified, xml2rfc will fill 
@@ -439,6 +439,6 @@ struct {
       v00 2015-05-07  Andrei Popov   Initial version
       v00 2015-09-09  Andrei Popov   Added TLS-style TB version negotiation, limited key parameters list to 1..2^8-1
       v01 2015-10-06  Andrei Popov   Removed _SHA256 suffixes from TB key parameters 
-      v02 2015-12-18  Andrei Popov   Added requirement for Renegotiation Indication -->
+      v02 2016-01-08  Andrei Popov   Added requirement for Renegotiation Indication -->
   </back>
 </rfc>

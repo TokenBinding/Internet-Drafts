@@ -160,7 +160,7 @@
       </address>
     </author>
 
-    <date year="2015" />
+    <date year="2016" />
 
     <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
          in the current day for you. If only the current year is specified, xml2rfc will fill 
@@ -302,7 +302,6 @@ enum {
 } TokenBindingType;
 
 struct {
-    TokenBindingType tokenbinding_type;
     TokenBindingKeyParameters key_parameters;
     select (key_parameters) {
         case rsa2048_pkcs1.5: 
@@ -323,6 +322,7 @@ struct {
 } Extension;
 
 struct {
+    TokenBindingType tokenbinding_type;
     TokenBindingID tokenbindingid;
     opaque signature<0..2^16-1>;// Signature over the exported keying material value
     Extension extensions<0..2^16-1>;
@@ -334,10 +334,16 @@ struct {
 
         ]]></artwork>
         <postamble>The Token Binding message consists of a series of TokenBinding structures 
-        containing the TokenBindingID, a signature over the exported keying material (EKM) value, 
-        optionally followed by Extension structures.
+        containing the type of the token binding, the TokenBindingID, a signature over the exported 
+        keying material (EKM) value, optionally followed by Extension structures.
         </postamble>
       </figure>
+
+      <t>This document defines two token binding types: provided_token_binding used to establish a 
+      Token Binding when connecting to a server, and referred_token_binding used when requesting 
+      tokens to be presented to a different server. Token Binding over HTTP 
+      <xref target="I-D.ietf-tokbind-https"/> describes Token Binding between multiple 
+      communicating parties: User Agent, Identity Provider and Relying Party.</t>
 
       <t>When an rsa2048_pkcs1.5 or rsa2048_pss key is used, TokenBinding.signature contains the 
       signature generated using, respectively, the RSASSA-PKCS1-v1_5 or RSASSA-PSS signature scheme 
@@ -406,7 +412,6 @@ struct {
         <artwork><![CDATA[
 
 struct {
-    TokenBindingType tokenbinding_type;
     TokenBindingKeyParameters key_parameters;
     select (key_parameters) {
         case rsa2048_pkcs1.5: 
@@ -418,17 +423,12 @@ struct {
 } TokenBindingID;
 
         ]]></artwork>
-        <postamble>TokenBindingID includes the type of the token binding and the key parameters 
-        negotiated via <xref target="I-D.ietf-tokbind-negotiation"/>. This document defines two 
-        token binding types: provided_token_binding used to establish a Token Binding when 
-        connecting to a server, and referred_token_binding used when requesting tokens to be 
-        presented to a different server. Token Binding over HTTP 
-        <xref target="I-D.ietf-tokbind-https"/> describes Token Binding between multiple 
-        communicating parties: User Agent, Identity Provider and Relying Party. TLS Token Binding 
-        ID can be obtained from the TokenBinding structure described in the "Token Binding 
-        Protocol Message" section of this document by discarding the signature and extensions. TLS 
-        Token Binding ID will be available at the application layer and used by the server to 
-        generate and verify bound tokens.</postamble>
+        <postamble>TokenBindingID contains the key parameters negotiated via 
+        <xref target="I-D.ietf-tokbind-negotiation"/>. TLS Token Binding ID can be obtained from 
+        the TokenBinding structure described in the "Token Binding Protocol Message" section of 
+        this document by discarding the token binding type, signature and extensions. TLS Token 
+        Binding ID will be available at the application layer and used by the server to generate 
+        and verify bound tokens.</postamble>
       </figure>
     </section>
 
@@ -646,6 +646,6 @@ struct {
       v01 2015-05-26  Andrei Popov   Replaced ALPN-based TB negotiation with TBNEGO
       v02 2015-09-11  Andrei Popov   Replaced TLS-UNIQUE with RFC5705 exporters, SignatureAndHashAlgorithm with 1-byte key parameters IDs from TBNEGO
       v03 2015-10-06  Andrei Popov   Removed ECDSAParams because NamedCurve is indicated by key_parameters
-      v04 2015-12-18  Andrei Popov   Added requirement for Renegotiation Indication, specified public key and signature formats -->
+      v04 2016-01-08  Andrei Popov   Moved TB type out of the TB ID, added requirement for Renegotiation Indication, specified public key and signature formats -->
   </back>
 </rfc>
