@@ -200,9 +200,11 @@
   <middle>
     <section title="Introduction">
       <t>Servers generate various security tokens (e.g. HTTP cookies, OAuth tokens) for 
-      applications to access protected resources. Any party in possession of such token 
-      gains access to the protected resource. Attackers export bearer tokens from the user’s 
-      machine, present them to the servers, and impersonate authenticated users. The idea of 
+      applications to access protected resources. In general, any party in possession of such
+      "bearer" security tokens
+      gain access to protected resource(s). Attackers obtain bearer security tokens from users' 
+      application connections or machines, present them to application servers, and
+      impersonate authenticated users. The idea of 
       Token Binding is to prevent such attacks by cryptographically binding security tokens to 
       the TLS layer.</t>
 
