@@ -339,12 +339,17 @@ struct {
         </postamble>
       </figure>
 
-      <t>This document defines two token binding types: provided_token_binding used to establish a 
-      Token Binding when connecting to a server, and referred_token_binding used when requesting 
-      tokens to be presented to a different server. Token Binding over HTTP 
-      <xref target="I-D.ietf-tokbind-https"/> describes Token Binding between multiple 
-      communicating parties: User Agent, Identity Provider and Relying Party.</t>
-
+      <t>This document defines two token binding types: 
+        <list style="symbols">
+          <t>provided_token_binding - used to establish a Token Binding for the TLS session with the
+          present server, and, </t>
+          <t>referred_token_binding - used to convey a Token Binding ID, that is established with
+          another server, to the present server. A companion specification, Token Binding over HTTP
+          <xref target="I-D.ietf-tokbind-https"/>, specifies a "federation" use case for referred
+          Token Binding where Token Bindings are established between multiple communicating parties:
+          Client, Token Consumer, Token Provider.</t>
+        </list>
+      </t>
       <t>When an rsa2048_pkcs1.5 or rsa2048_pss key is used, TokenBinding.signature contains the 
       signature generated using, respectively, the RSASSA-PKCS1-v1_5 or RSASSA-PSS signature scheme 
       defined in <xref target="RFC3447"/>. RSAPublicKey.modulus and RSAPublicKey.publicexponent 
@@ -367,42 +372,63 @@ struct {
         </list>
       </t>
 
-      <t>An implementation MUST ignore any unknown extensions. Initially, no extension types are 
-      defined. One of the possible uses of extensions envisioned at the time of this writing is 
-      attestation: cryptographic proof that allows the server to verify that the Token Binding key 
-      is hardware-bound. The definitions of such Token Binding protocol extensions are outside the 
-      scope of this specification.</t>
-
-      <t>At least one TokenBinding MUST be included in the Token Binding message. The signature 
-      algorithm and key length used in the TokenBinding MUST match the parameters negotiated via 
-      <xref target="I-D.ietf-tokbind-negotiation"/>. The client SHOULD generate and store Token 
-      Binding keys in a secure manner that prevents key export. In order to prevent cooperating 
-      servers from linking user identities, different keys SHOULD be used by the client for 
-      connections to different servers, according to the token scoping rules of the application 
-      protocol.</t>
     </section>
-
+    
     <section title="Establishing a TLS Token Binding">
-      <t>The triple handshake vulnerability in TLS 1.2 and older TLS versions affects the security 
-      of the Token Binding protocol, as described in the "Security Considerations" section below. 
-      Therefore, the server MUST NOT negotiate the use of the Token Binding protocol with these TLS 
-      versions, unless the server also negotiates Extended Master Secret <xref target="RFC7627" /> 
-      and Renegotiation Indication <xref target="RFC5746" /> TLS extensions.</t>
+    
+      <section title="Client Processing Rules">
+        <t>The client MUST include least one TokenBinding structure, of type "provided_token_binding", in the Token Binding message. The key parameters 
+        used in the TokenBinding MUST match the those negotiated with the server via 
+        <xref target="I-D.ietf-tokbind-negotiation"/>.</t>
+        
+        <t>The client SHOULD generate and store Token 
+        Binding keys in a secure manner that prevents key export. In order to prevent cooperating 
+        servers from linking user identities, different keys SHOULD be used by the client for 
+        connections to different servers, according to the token scoping rules of the application 
+        protocol.</t>
+        
+        <t>Whenever the client includes a referred Token Binding from a token-bound TLS session with another server in a Token Binding Message intended for the present server, the client SHALL construct the referred Token Binding structure in the following manner: 
+          <list style="symbols">
+            <t>Set TokenBinding.tokenbinding_type to "referred_token_binding".</t>
+            <t>Set TokenBinding.tokenbindingid to the Token Binding ID from the other token-bound TLS session.</t>
+            <t>Set TokenBinding.signature to the result of signing the current EKM value of the TLS session with the present server, using the private key associated the other token-bound TLS session and the signature algorithm indicated by the associated key parameters. Note that these key parameters may differ from the key parameters negotiated with the present server.</t>
+            <t>Set TokenBinding.extensions to the client's current Token Binding extensions.   [[?]]</t>
+          </list>
+        Conveying referred Token Bindings in this fashion allows the present server to verify the proof of possession (of the private keys) for both the provided and referred Token Binding IDs.
+        </t>
+      </section>
 
-      <t>The server MUST terminate the connection if the use of the Token Binding protocol 
-      was not negotiated, but the client sends the Token Binding message. If the Token Binding 
-      type is "provided_token_binding", the server MUST verify that the signature algorithm 
-      (including elliptic curve in the case of ECDSA) and key length in the Token Binding message 
-      match those negotiated via <xref target="I-D.ietf-tokbind-negotiation"/>. In the case of a 
-      mismatch, the server MUST terminate the connection. As described in 
-      <xref target="I-D.ietf-tokbind-https"/>, Token Bindings of type "referred_token_binding" may 
-      have different key parameters than those negotiated via 
-      <xref target="I-D.ietf-tokbind-negotiation"/>.</t>
 
-      <t>If the Token Binding message does not contain at least one TokenBinding structure, 
-      or the signature contained in a TokenBinding structure is invalid, the server MUST 
-      terminate the connection. Otherwise, the TLS Token Binding is successfully established and 
-      its ID can be provided to the application for security token validation.</t>
+      <section title="Server Processing Rules">
+        <t>The triple handshake vulnerability in TLS 1.2 and older TLS versions affects the security
+        of the Token Binding protocol, as described in the "Security Considerations" section below.
+        Therefore, the server MUST NOT negotiate the use of the Token Binding protocol with these
+        TLS versions, unless the server also negotiates Extended Master Secret <xref
+        target="RFC7627" /> and Renegotiation Indication <xref target="RFC5746" /> TLS
+        extensions.</t>
+  
+        <t>The server MUST terminate the connection if the use of the Token Binding protocol was not
+        negotiated, but the client sends the Token Binding message. If the Token Binding type is
+        "provided_token_binding", the server MUST verify that the signature algorithm (including
+        elliptic curve in the case of ECDSA) and key length in the Token Binding message match those
+        negotiated via <xref target="I-D.ietf-tokbind-negotiation"/>. In the case of a mismatch, the
+        server MUST terminate the connection. Token Bindings of type "referred_token_binding" may
+        have different key parameters than those negotiated for the TLS session with the present
+        server.</t>
+        
+        <t>If the Token Binding message does not contain at least one TokenBinding structure, 
+        or if any signature contained in TokenBinding structure(s) is invalid, the server MUST 
+        terminate the connection. </t>
+        
+        <t>Servers MUST ignore unknown extensions. Initially, no extension types are defined. One of
+        the possible uses of extensions envisioned at the time of this writing is attestation:
+        cryptographic proof that allows the server to verify that the Token Binding key is
+        hardware-bound. The definitions of such Token Binding protocol extensions are outside the
+        scope of this specification.</t>
+        
+        <t>Otherwise, the TLS Token Binding is successfully established and 
+        its ID can be provided to the application for security token validation.</t>
+      </section>
     </section>
 
     <section title="TLS Token Binding ID Format">
