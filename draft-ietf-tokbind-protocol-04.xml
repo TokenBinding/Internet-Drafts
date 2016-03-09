@@ -374,7 +374,7 @@ struct {
 
     </section>
     
-    <section title="Establishing a TLS Token Binding">
+    <section title="Establishing TLS Token Binding">
     
       <section title="Client Processing Rules">
         <t>The client MUST include least one TokenBinding structure, of type "provided_token_binding", in the Token Binding message. The key parameters 
@@ -426,12 +426,18 @@ struct {
         hardware-bound. The definitions of such Token Binding protocol extensions are outside the
         scope of this specification.</t>
         
-        <t>Otherwise, the TLS Token Binding is successfully established and 
-        its ID can be provided to the application for security token validation.</t>
+        <t>If all checks defined above have passed successfully and the TLS session remains open,
+        the Token Binding ID for the token-bound TLS session between this client and server is
+        successfully established. The TokenBindingID structure(s) conveyed in the Token Binding
+        Message are extracted from the TokenBindingMessage and noted (in their binary
+        representation) by the the server-side application. The application may then use the Token
+        Binding IDs for bound security token creation and validation -- e.g., as is done in
+        [I-D.ietf-tokbind-https] for HTTPS -- or other application uses as appropriate. </t>
       </section>
     </section>
 
     <section title="TLS Token Binding ID Format">
+    [[ISSUE: is this section really needed? the same information is essentially available in the above section.]]
       <figure>
         <preamble>The ID of the TLS Token Binding established as a result of Token Binding 
         message processing is a binary representation of the following structure:</preamble>
