@@ -394,11 +394,17 @@
         ]]></artwork></figure>
       
 	<t>Including this response header signals to the client that it
-	should reveal the Token Binding ID used between the client and
+	should reveal the provided Token Binding ID used between the client and
 	the Token Consumer to the Token Provider. In the absence of this 
         response header, the client will not disclose any information 
         about the Token Binding used between the client and the Token 
         Consumer to the Token Provider.</t>
+	
+	<t>When a client receives this header, it should take the TokenBindingID
+	of the provided TokenBinding from the referrer and create a referred TokenBinding
+	with it to include in the TokenBindingMessage on the redirect request. Only
+	the provided TokenBindingID from the referrer should be forwarded; no
+	referred TokenBindingIDs from the referrer should be forwarded.</t>
 	
 	<t>This header has only meaning if the HTTP status code is 301,
 	302, 303, 307 or 308, and MUST be ignored by the client for any other status
