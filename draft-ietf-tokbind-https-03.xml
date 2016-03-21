@@ -285,16 +285,16 @@
       </section>
     </section>
 
-    <section title="The Token-Binding Header">
+    <section title="The Sec-Token-Binding Header">
       <t>Once a client and server have negotiated the Token Binding
       Protocol with HTTP/1.1 or HTTP/2 (see <xref
       target="TBPROTO">The Token Binding Protocol</xref>), clients
-      MUST include the Token-Binding header in their HTTP requests. The ABNF 
-      of the Token-Binding header is:
+      MUST include the Sec-Token-Binding header in their HTTP requests. The ABNF 
+      of the Sec-Token-Binding header is:
       </t>
       <figure><artwork><![CDATA[
 
- Token-Binding = "Token-Binding" ":" [CFWS] EncodedTokenBindingMessage
+ Sec-Token-Binding = "Sec-Token-Binding" ":" [CFWS] EncodedTokenBindingMessage
         ]]></artwork></figure>
 
       <t>The EncodedTokenBindingMessage is a web-safe Base64-encoding 
@@ -340,7 +340,7 @@
 	mechanisms is how the Token Binding ID is revealed to the
 	Token Provider: The client uses the <xref
 	target="TBPROTO">Token Binding Protocol</xref>, and
-	includes a TokenBinding structure in the Token-Binding HTTP
+	includes a TokenBinding structure in the Sec-Token-Binding HTTP
 	header defined above.  What differs between the various
 	mechanisms is <spanx style="emph">how</spanx> the Token
 	Consumer grants the permission to reveal the Token Binding ID
@@ -441,7 +441,7 @@
 	request (see above):</t>
 	<figure><artwork><![CDATA[
 
- Token-Binding: EncodedTokenBindingMessage
+ Sec-Token-Binding: EncodedTokenBindingMessage
         ]]></artwork></figure>
 
 	<t>The TokenBindingMessage SHOULD contain a TokenBinding with
@@ -503,7 +503,7 @@
                       m = n, else if TB's type is referred_token_binding, then
                       m != n. E.g., see step 1b in diagram below.</c>
 
-           <c>ETBMSG:</c>    <c>"Token-Binding" HTTP header field conveying an
+           <c>ETBMSG:</c>    <c>"Sec-Token-Binding" HTTP header field conveying an
                       EncodedTokenBindingMessage, in turn conveying
                       TokenBinding (TB)struct(s), e.g.:
                       ETBMSG[[TB]] or ETBMSG[[TB1],[TB2]]</c>
@@ -633,12 +633,12 @@
           unless the Extended Master Secret TLS extension <xref
           target="I-D.ietf-tls-session-hash"/> has also been negotiated.</t>
       </section>
-      <section title="Sensitivity of the Token-Binding Header">
+      <section title="Sensitivity of the Sec-Token-Binding Header">
         <t>
           The purpose of the Token Binding protocol is to convince the server
           that the client that initiated the TLS connection controls a certain
           key pair. For the server to correctly draw this conclusion after
-          processing the Token-Binding header, certain secrecy and integrity
+          processing the Sec-Token-Binding header, certain secrecy and integrity
           requirements must be met.
         </t>
         <t>
@@ -653,14 +653,14 @@
           client's Token Binding ID precisely to thwart cookie theft. If the
           attacker were to come into possession of the client's private key, he
           could then establish a TLS connection with the server and craft a
-          Token-Binding header that matches the binding present in the cookie,
+          Sec-Token-Binding header that matches the binding present in the cookie,
           thus successfully authenticating as the client, and gaining access to
           the client's data at the server. The Token Binding protocol, in this
           case, didn't successfully bind the cookie to the client.
         </t>
         <t>
-          Likewise, we need integrity protection of the Token-Binding header: A
-          client shouldn't be tricked into sending a Token-Binding header to a
+          Likewise, we need integrity protection of the Sec-Token-Binding header: A
+          client shouldn't be tricked into sending a Sec-Token-Binding header to a
           server that contains Token Binding messages about key pairs that the
           client doesn't control. Consider an attacker A that somehow has
           knowledge of the exported keying material (EKM) for a TLS connection
@@ -670,7 +670,7 @@
           function has been applied to the TLS master secret, making it
           impossible for someone knowing the EKM to recover the TLS master
           secret. Such considerations might lead some clients to not treat the
-          EKM as a secret.) Such an attacker A could craft a Token-Binding
+          EKM as a secret.) Such an attacker A could craft a Sec-Token-Binding
           header with A's key pair over C's EKM. If the attacker could now
           trick C to send such a header to S, it would appear to S as if C
           controls a certain key pair when in fact it doesn't (the attacker A
@@ -692,8 +692,8 @@
           history on S).
         </t>
         <t>
-          Therefore, we need to protect the integrity of the Token-Binding
-          header. One origin should not be able to set the Token-Binding header
+          Therefore, we need to protect the integrity of the Sec-Token-Binding
+          header. One origin should not be able to set the Sec-Token-Binding header
           (through a DOM API or otherwise) that the User Agent uses with
           another origin.
         </t>
@@ -743,9 +743,9 @@
           the origin of the Token Provider.) It is not, however, in possession
           of the client's Token Binding key. Therefore, it can either choose to
           replace the Token Binding key in requests from the client to the
-          Token Provider, and create a Token-Binding header that matches the
+          Token Provider, and create a Sec-Token-Binding header that matches the
           TLS connection between the man-in-the-middle and the Token Provider;
-          or it can choose to leave the Token-Binding header unchanged. If it
+          or it can choose to leave the Sec-Token-Binding header unchanged. If it
           chooses the latter, the signature in the Token Binding message
           (created by the original client on the exported keying material (EKM)
           for the connection between client and man-in-the-middle) will not
@@ -776,14 +776,14 @@
           must be communicated to the Token Producer in a manner that can not
           be affected by the man-in-the-middle (who, as we recall, can modify
           redirect URLs and Javascript at the client). Including the referred
-          Token Binding message in the Token-Binding header (as opposed to,
+          Token Binding message in the Sec-Token-Binding header (as opposed to,
           say, including the referred Token Binding key in an application-level
           message as part of the redirect URL) is one way to assure that the
           man-in-the-middle between client and Token Consumer cannot affect the
           communication of the referred Token Binding key to the Token Provider.
         </t>
         <t>
-          Therefore, the Token-Binding header in the federated sign-on use case
+          Therefore, the Sec-Token-Binding header in the federated sign-on use case
           contains both, a proof of possession of the provided Token Binding
           key, as well as a proof of possession of the referred Token Binding
           key.
