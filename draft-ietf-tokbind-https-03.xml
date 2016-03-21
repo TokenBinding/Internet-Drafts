@@ -613,15 +613,6 @@
         be strongly protected, ideally by generating it in a hardware
         security module that prevents key export.</t>
       </section>
-      <section title="Privacy Considerations">
-        <t>The Token Binding protocol uses persistent, long-lived TLS
-        Token Binding IDs. To protect privacy, TLS Token Binding IDs
-        are never transmitted in clear text and can be reset by the
-        user at any time, e.g. when clearing browser cookies. Unique
-        Token Binding IDs MUST be generated for connections to
-        different origins, so they cannot be used by cooperating
-        servers to link user identities.</t>
-      </section>
       <section title="Triple Handshake Vulnerability in TLS">
         <t>The Token Binding protocol relies on the exported key material (EKM)
           value <xref target="RFC5705" /> to associate a TLS connection with a
@@ -787,6 +778,39 @@
           contains both, a proof of possession of the provided Token Binding
           key, as well as a proof of possession of the referred Token Binding
           key.
+        </t>
+      </section>
+    </section>
+    <section title="Privacy Considerations">
+      <section title="Scoping of Token Binding Keys">
+        <t>Clients must use different Token Binding keys for different servers, so as 
+          to not allow Token Binding to become a tracking tool across different servers.
+          When Token Binding is used over HTTPS, this key scoping should in particular
+          happen at the granularity of "effective top-level domain (public suffix) + 1",
+          i.e., at the same granularity at which cookies can be set.
+        </t>        
+        <t>The reason for this is that servers may use Token Binding to secure their
+          cookies. These cookies can be attached to any 
+          sub-domain of public suffixes, and clients therefore should use the same 
+          Token Binding key across such subdomains. This will ensure that any server
+          capable of receiving the cookie will see the same Token Binding ID from 
+          the client, and thus be able to verify the token binding of the cookie.
+        </t>
+      </section>
+      <section title="Life Time of Token Binding Keys">
+        <t>Token Binding keys don't have an expiration time. This means that they 
+          can potentially be used by a server to track a user across an extended
+          period of time (similar to a long-lived cookie). HTTPS clients such as 
+          web user agents should therefore provide a user interface for discarding
+          Token Binding keys (similar to the affordances provided to delete cookies).
+        </t>
+        <t>If a user agent provides modes such as private browsing mode in which
+          the user is promised that browsing state such as cookies are discarded 
+          after the session is over, the user agent should also discard Token
+          Binding keys from such modes after the session is over. Generally speaking,
+          users should be given the same level of control over life time of Token
+          Binding keys as they have over cookies or other potential tracking 
+          mechanisms.
         </t>
       </section>
     </section>
