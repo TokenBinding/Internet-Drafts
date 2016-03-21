@@ -431,6 +431,10 @@
   words, the Token Binding message in the redirect request to the Token Provider
   includes one provided binding and one referred binding, the latter constructed
   from the binding between the client and the Token Consumer.</t>
+  
+  <t>If the Include-Referer-Token-Binding-ID header is received in response to a
+  request that did not include the Token-Binding header, the client MUST ignore
+  the Include-Referer-Token-Binding-ID header.</t>
 	
 	<t>This header has only meaning if the HTTP status code is 301,
 	302, 303, 307 or 308, and MUST be ignored by the client for any other status
