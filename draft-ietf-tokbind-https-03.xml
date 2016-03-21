@@ -811,12 +811,12 @@
     <references title="Normative References">
       &RFC2119;
       &RFC5246;
-      &RFC7301;
+      <!-- &RFC7301; -->
       &RFC2616;
       &RFC5705;
-      &RFC5929;
-      &RFC4492;
-      &RFC5226;
+      <!-- &RFC5929; -->
+      <!-- &RFC4492; -->
+      <!-- &RFC5226; -->
       <reference anchor="TBPROTO">
         <front>
           <title>The Token Binding Protocol Version 1.0</title>
