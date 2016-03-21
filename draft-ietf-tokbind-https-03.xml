@@ -158,6 +158,31 @@
       </address>
     </author>
 
+    <author fullname="Jeff Hodges" initials="J."
+            surname="Hodges">
+      <organization>Paypal</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <!-- Reorder these if your country does things differently -->
+
+          <city></city>
+
+          <region></region>
+
+          <code></code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>Jeff.Hodges@paypal.com</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
     <date year="2016" />
 
     <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
@@ -456,6 +481,121 @@
 	specified in the referred_token_binding TokenBinding in the
 	TokenBindingMessage, it MUST issue an unbound token.</t>
       </section>
+      
+      <section title="Federation Example">
+        
+        
+        <t> The diagram below shows a 
+           typical HTTP Redirect-based Web Browser SSO Profile
+           (no artifact, no callbacks), featuring binding of,
+           e.g., a TLS Token Binding ID into an OpenID Connect "ID Token".
+        </t>
+        
+        <texttable>
+        <preamble>Legend:</preamble>
+        <ttcol></ttcol><ttcol></ttcol>
+           <c>EKM:</c>       <c>TLS Exported Keying Material [RFC5705]</c>
+
+           <c>{EKMn}Ksm:</c> <c>EKM for server "n", signed by private key of TBID "m",
+                      where "n" must represent server receiving the ETBMSG,
+                      if a conveyed TB's type is provided_token_binding, then
+                      m = n, else if TB's type is referred_token_binding, then
+                      m != n. E.g., see step 1b in diagram below.</c>
+
+           <c>ETBMSG:</c>    <c>"Token-Binding" HTTP header field conveying an
+                      EncodedTokenBindingMessage, in turn conveying
+                      TokenBinding (TB)struct(s), e.g.:
+                      ETBMSG[[TB]] or ETBMSG[[TB1],[TB2]]</c>
+
+           <c>ID Token:</c>  <c>the "ID Token" in OIDC, it is the semantic equivalent
+                      of a SAML "authentication assertion". "ID Token w/TBIDn"
+                      denotes a "token bound" ID Token containing TBIDn.</c>
+
+           <c>Ks &amp; Kp:</c>   <c>private (aka secret) key, and public key, respectively,
+                      of client-side Token Binding key pair</c>
+
+           <c>OIDC:</c>      <c>Open ID Connect</c>
+
+           <c>TB:</c>        <c>TokenBinding struct containing signed EKM, TBID, and
+                      TB type, e.g.: [{EKM1}Ks1,TBID1,provided_token_binding]</c>
+
+           <c>TBIDn:</c>     <c>Token Binding ID for client and server n's token-bound
+                      TLS association. TBIDn contains Kpn.</c>
+           </texttable>
+
+
+<figure><artwork><![CDATA[
+ Client,                      Token Consumer,       Token Provider,
+ aka:                         aka:                  aka:
+ User Agent                   OpenID Client,        OpenID Provider,
+                              OIDC Relying Party,   OIDC Provider,
+                              SAML Relying Party    SAML Identity Provider
+                              [ server "1" ]        [ server "2" ]
+ +--------+                        +----+                +-----+
+ | Client |                        | TC |                | TP  |
+ +--------+                        +----+                +-----+
+     |                               |                      |
+     |                               |                      |
+     |                               |                      |
+     | 0. Client interacts w/TC      |                      |
+     | over HTTPS, establishes Ks1 & Kp1, TBID1             |
+     | ETBMSG[[{EKM1}Ks1,TBID1,provided_token_binding]]     |
+     |------------------------------>|                      |
+     |                               |                      |
+     |                               |                      |
+     |                               |                      |
+     | 1a. OIDC ID Token request, aka|                      |
+     | "Authentication Request", conveyed with              |
+     | HTTP response header field of:                       |
+     | Include-Referer-Token-Binding-ID:true                |
+     | any security-relevant cookies |                      |
+     | should contain TBID1          |                      |
+   +<- - - - - - - - - - - - - - - - |                      |
+   . | (redirect to TP via 301, 302, |                      |
+   . |  303, 307, or 308)            |                      |
+   . |                               |                      |
+   +------------------------------------------------------->|
+     | 1b. opens HTTPS w/ TP,                               |
+     | establishes Ks2, Kp2, TBID2;                         |
+     | sends GET or POST with                               |
+     | ETBMSG[[{EKM2}Ks2,TBID2,provided_token_binding],     |
+     |       [{EKM2}Ks1,TBID1,referred_token_binding]]      |
+     | as well as the ID Token request                      |
+     |                               |                      |
+     |                               |                      |
+     |                               |                      |
+     | 2. user authentication (if applicable,               |
+     |    methods vary, particulars are out of scope)       |
+     |<====================================================>|
+     | (TP generates ID Token for TC containing TBID1, may  |
+     |  also set cookie(s) containing TBID2 and/or TBID1,   |
+     |  details vary, particulars are out of scope)         |
+     |                               |                      |
+     |                               |                      |
+     |                               |                      |
+     | 3a. ID Token containing Kp1, issued for TC,          |
+     |    conveyed via OIDC "Authentication Response"       |
+   +<- - - - - - - - - - - - - - - - - - - - - - - - - - - -|
+   . |   (redirect to TC)            |                      |
+   . |                               |                      |
+   . |                               |                      |
+   +-------------------------------->|                      |
+     | 3b. HTTPS GET or POST with                           |
+     | ETBMSG[[{EKM1}Ks1,TBID1,provided_token_binding]]     |
+     | conveying Authn Reponse containing                   |
+     | ID Token w/TBID1, issued for TC                      |
+     |                               |                      |
+     |                               |                      |
+     |                               |                      |
+     | 4. user is signed-on, any security-relevant cookie(s)|
+     | that are set SHOULD contain TBID1                    |
+     |<------------------------------|                      |
+     |                               |                      |
+     |                               |                      |        
+]]></artwork></figure>
+      </section>
+      
+      
     </section>
 
     <section anchor="Security" title="Security Considerations">
