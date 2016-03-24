@@ -40,7 +40,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-https-02" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-https-03" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -158,7 +158,32 @@
       </address>
     </author>
 
-    <date year="2015" />
+    <author fullname="Jeff Hodges" initials="J."
+            surname="Hodges">
+      <organization>Paypal</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <!-- Reorder these if your country does things differently -->
+
+          <city></city>
+
+          <region></region>
+
+          <code></code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>Jeff.Hodges@paypal.com</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+    <date year="2016" />
 
     <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
          in the current day for you. If only the current year is specified, xml2rfc will fill 
@@ -260,16 +285,16 @@
       </section>
     </section>
 
-    <section title="The Token-Binding Header">
+    <section title="The Sec-Token-Binding Header">
       <t>Once a client and server have negotiated the Token Binding
       Protocol with HTTP/1.1 or HTTP/2 (see <xref
       target="TBPROTO">The Token Binding Protocol</xref>), clients
-      MUST include the Token-Binding header in their HTTP requests. The ABNF 
-      of the Token-Binding header is:
+      MUST include the Sec-Token-Binding header in their HTTP requests. The ABNF 
+      of the Sec-Token-Binding header is:
       </t>
       <figure><artwork><![CDATA[
 
- Token-Binding = "Token-Binding" ":" [CFWS] EncodedTokenBindingMessage
+ Sec-Token-Binding = "Sec-Token-Binding" ":" [CFWS] EncodedTokenBindingMessage
         ]]></artwork></figure>
 
       <t>The EncodedTokenBindingMessage is a web-safe Base64-encoding 
@@ -315,7 +340,7 @@
 	mechanisms is how the Token Binding ID is revealed to the
 	Token Provider: The client uses the <xref
 	target="TBPROTO">Token Binding Protocol</xref>, and
-	includes a TokenBinding structure in the Token-Binding HTTP
+	includes a TokenBinding structure in the Sec-Token-Binding HTTP
 	header defined above.  What differs between the various
 	mechanisms is <spanx style="emph">how</spanx> the Token
 	Consumer grants the permission to reveal the Token Binding ID
@@ -394,11 +419,22 @@
         ]]></artwork></figure>
       
 	<t>Including this response header signals to the client that it
-	should reveal the Token Binding ID used between the client and
-	the Token Consumer to the Token Provider. In the absence of this 
+	should reveal, to the Token Provider, the Token Binding ID used between itself and
+	the Token Consumer. In the absence of this 
         response header, the client will not disclose any information 
         about the Token Binding used between the client and the Token 
         Consumer to the Token Provider.</t>
+	
+	<t>When a client receives this header, it should take the TokenBindingID
+	of the provided TokenBinding from the referrer and create a referred TokenBinding
+	with it to include in the TokenBindingMessage on the redirect request. In other
+  words, the Token Binding message in the redirect request to the Token Provider
+  includes one provided binding and one referred binding, the latter constructed
+  from the binding between the client and the Token Consumer.</t>
+  
+  <t>If the Include-Referer-Token-Binding-ID header is received in response to a
+  request that did not include the Token-Binding header, the client MUST ignore
+  the Include-Referer-Token-Binding-ID header.</t>
 	
 	<t>This header has only meaning if the HTTP status code is 301,
 	302, 303, 307 or 308, and MUST be ignored by the client for any other status
@@ -409,7 +445,7 @@
 	request (see above):</t>
 	<figure><artwork><![CDATA[
 
- Token-Binding: EncodedTokenBindingMessage
+ Sec-Token-Binding: EncodedTokenBindingMessage
         ]]></artwork></figure>
 
 	<t>The TokenBindingMessage SHOULD contain a TokenBinding with
@@ -450,6 +486,121 @@
 	specified in the referred_token_binding TokenBinding in the
 	TokenBindingMessage, it MUST issue an unbound token.</t>
       </section>
+      
+      <section title="Federation Example">
+        
+        
+        <t> The diagram below shows a 
+           typical HTTP Redirect-based Web Browser SSO Profile
+           (no artifact, no callbacks), featuring binding of,
+           e.g., a TLS Token Binding ID into an OpenID Connect "ID Token".
+        </t>
+        
+        <texttable>
+        <preamble>Legend:</preamble>
+        <ttcol></ttcol><ttcol></ttcol>
+           <c>EKM:</c>       <c>TLS Exported Keying Material [RFC5705]</c>
+
+           <c>{EKMn}Ksm:</c> <c>EKM for server "n", signed by private key of TBID "m",
+                      where "n" must represent server receiving the ETBMSG,
+                      if a conveyed TB's type is provided_token_binding, then
+                      m = n, else if TB's type is referred_token_binding, then
+                      m != n. E.g., see step 1b in diagram below.</c>
+
+           <c>ETBMSG:</c>    <c>"Sec-Token-Binding" HTTP header field conveying an
+                      EncodedTokenBindingMessage, in turn conveying
+                      TokenBinding (TB)struct(s), e.g.:
+                      ETBMSG[[TB]] or ETBMSG[[TB1],[TB2]]</c>
+
+           <c>ID Token:</c>  <c>the "ID Token" in OIDC, it is the semantic equivalent
+                      of a SAML "authentication assertion". "ID Token w/TBIDn"
+                      denotes a "token bound" ID Token containing TBIDn.</c>
+
+           <c>Ks &amp; Kp:</c>   <c>private (aka secret) key, and public key, respectively,
+                      of client-side Token Binding key pair</c>
+
+           <c>OIDC:</c>      <c>Open ID Connect</c>
+
+           <c>TB:</c>        <c>TokenBinding struct containing signed EKM, TBID, and
+                      TB type, e.g.: [{EKM1}Ks1,TBID1,provided_token_binding]</c>
+
+           <c>TBIDn:</c>     <c>Token Binding ID for client and server n's token-bound
+                      TLS association. TBIDn contains Kpn.</c>
+           </texttable>
+
+
+<figure><artwork><![CDATA[
+ Client,                      Token Consumer,       Token Provider,
+ aka:                         aka:                  aka:
+ User Agent                   OpenID Client,        OpenID Provider,
+                              OIDC Relying Party,   OIDC Provider,
+                              SAML Relying Party    SAML Identity Provider
+                              [ server "1" ]        [ server "2" ]
+ +--------+                        +----+                +-----+
+ | Client |                        | TC |                | TP  |
+ +--------+                        +----+                +-----+
+     |                               |                      |
+     |                               |                      |
+     |                               |                      |
+     | 0. Client interacts w/TC      |                      |
+     | over HTTPS, establishes Ks1 & Kp1, TBID1             |
+     | ETBMSG[[{EKM1}Ks1,TBID1,provided_token_binding]]     |
+     |------------------------------>|                      |
+     |                               |                      |
+     |                               |                      |
+     |                               |                      |
+     | 1a. OIDC ID Token request, aka|                      |
+     | "Authentication Request", conveyed with              |
+     | HTTP response header field of:                       |
+     | Include-Referer-Token-Binding-ID:true                |
+     | any security-relevant cookies |                      |
+     | should contain TBID1          |                      |
+   +<- - - - - - - - - - - - - - - - |                      |
+   . | (redirect to TP via 301, 302, |                      |
+   . |  303, 307, or 308)            |                      |
+   . |                               |                      |
+   +------------------------------------------------------->|
+     | 1b. opens HTTPS w/ TP,                               |
+     | establishes Ks2, Kp2, TBID2;                         |
+     | sends GET or POST with                               |
+     | ETBMSG[[{EKM2}Ks2,TBID2,provided_token_binding],     |
+     |       [{EKM2}Ks1,TBID1,referred_token_binding]]      |
+     | as well as the ID Token request                      |
+     |                               |                      |
+     |                               |                      |
+     |                               |                      |
+     | 2. user authentication (if applicable,               |
+     |    methods vary, particulars are out of scope)       |
+     |<====================================================>|
+     | (TP generates ID Token for TC containing TBID1, may  |
+     |  also set cookie(s) containing TBID2 and/or TBID1,   |
+     |  details vary, particulars are out of scope)         |
+     |                               |                      |
+     |                               |                      |
+     |                               |                      |
+     | 3a. ID Token containing Kp1, issued for TC,          |
+     |    conveyed via OIDC "Authentication Response"       |
+   +<- - - - - - - - - - - - - - - - - - - - - - - - - - - -|
+   . |   (redirect to TC)            |                      |
+   . |                               |                      |
+   . |                               |                      |
+   +-------------------------------->|                      |
+     | 3b. HTTPS GET or POST with                           |
+     | ETBMSG[[{EKM1}Ks1,TBID1,provided_token_binding]]     |
+     | conveying Authn Reponse containing                   |
+     | ID Token w/TBID1, issued for TC                      |
+     |                               |                      |
+     |                               |                      |
+     |                               |                      |
+     | 4. user is signed-on, any security-relevant cookie(s)|
+     | that are set SHOULD contain TBID1                    |
+     |<------------------------------|                      |
+     |                               |                      |
+     |                               |                      |        
+]]></artwork></figure>
+      </section>
+      
+      
     </section>
 
     <section anchor="Security" title="Security Considerations">
@@ -466,15 +617,6 @@
         be strongly protected, ideally by generating it in a hardware
         security module that prevents key export.</t>
       </section>
-      <section title="Privacy Considerations">
-        <t>The Token Binding protocol uses persistent, long-lived TLS
-        Token Binding IDs. To protect privacy, TLS Token Binding IDs
-        are never transmitted in clear text and can be reset by the
-        user at any time, e.g. when clearing browser cookies. Unique
-        Token Binding IDs MUST be generated for connections to
-        different origins, so they cannot be used by cooperating
-        servers to link user identities.</t>
-      </section>
       <section title="Triple Handshake Vulnerability in TLS">
         <t>The Token Binding protocol relies on the exported key material (EKM)
           value <xref target="RFC5705" /> to associate a TLS connection with a
@@ -486,12 +628,12 @@
           unless the Extended Master Secret TLS extension <xref
           target="I-D.ietf-tls-session-hash"/> has also been negotiated.</t>
       </section>
-      <section title="Sensitivity of the Token-Binding Header">
+      <section title="Sensitivity of the Sec-Token-Binding Header">
         <t>
           The purpose of the Token Binding protocol is to convince the server
           that the client that initiated the TLS connection controls a certain
           key pair. For the server to correctly draw this conclusion after
-          processing the Token-Binding header, certain secrecy and integrity
+          processing the Sec-Token-Binding header, certain secrecy and integrity
           requirements must be met.
         </t>
         <t>
@@ -506,14 +648,14 @@
           client's Token Binding ID precisely to thwart cookie theft. If the
           attacker were to come into possession of the client's private key, he
           could then establish a TLS connection with the server and craft a
-          Token-Binding header that matches the binding present in the cookie,
+          Sec-Token-Binding header that matches the binding present in the cookie,
           thus successfully authenticating as the client, and gaining access to
           the client's data at the server. The Token Binding protocol, in this
           case, didn't successfully bind the cookie to the client.
         </t>
         <t>
-          Likewise, we need integrity protection of the Token-Binding header: A
-          client shouldn't be tricked into sending a Token-Binding header to a
+          Likewise, we need integrity protection of the Sec-Token-Binding header: A
+          client shouldn't be tricked into sending a Sec-Token-Binding header to a
           server that contains Token Binding messages about key pairs that the
           client doesn't control. Consider an attacker A that somehow has
           knowledge of the exported keying material (EKM) for a TLS connection
@@ -523,7 +665,7 @@
           function has been applied to the TLS master secret, making it
           impossible for someone knowing the EKM to recover the TLS master
           secret. Such considerations might lead some clients to not treat the
-          EKM as a secret.) Such an attacker A could craft a Token-Binding
+          EKM as a secret.) Such an attacker A could craft a Sec-Token-Binding
           header with A's key pair over C's EKM. If the attacker could now
           trick C to send such a header to S, it would appear to S as if C
           controls a certain key pair when in fact it doesn't (the attacker A
@@ -545,8 +687,8 @@
           history on S).
         </t>
         <t>
-          Therefore, we need to protect the integrity of the Token-Binding
-          header. One origin should not be able to set the Token-Binding header
+          Therefore, we need to protect the integrity of the Sec-Token-Binding
+          header. One origin should not be able to set the Sec-Token-Binding header
           (through a DOM API or otherwise) that the User Agent uses with
           another origin.
         </t>
@@ -596,9 +738,9 @@
           the origin of the Token Provider.) It is not, however, in possession
           of the client's Token Binding key. Therefore, it can either choose to
           replace the Token Binding key in requests from the client to the
-          Token Provider, and create a Token-Binding header that matches the
+          Token Provider, and create a Sec-Token-Binding header that matches the
           TLS connection between the man-in-the-middle and the Token Provider;
-          or it can choose to leave the Token-Binding header unchanged. If it
+          or it can choose to leave the Sec-Token-Binding header unchanged. If it
           chooses the latter, the signature in the Token Binding message
           (created by the original client on the exported keying material (EKM)
           for the connection between client and man-in-the-middle) will not
@@ -629,17 +771,50 @@
           must be communicated to the Token Producer in a manner that can not
           be affected by the man-in-the-middle (who, as we recall, can modify
           redirect URLs and Javascript at the client). Including the referred
-          Token Binding message in the Token-Binding header (as opposed to,
+          Token Binding message in the Sec-Token-Binding header (as opposed to,
           say, including the referred Token Binding key in an application-level
           message as part of the redirect URL) is one way to assure that the
           man-in-the-middle between client and Token Consumer cannot affect the
           communication of the referred Token Binding key to the Token Provider.
         </t>
         <t>
-          Therefore, the Token-Binding header in the federated sign-on use case
+          Therefore, the Sec-Token-Binding header in the federated sign-on use case
           contains both, a proof of possession of the provided Token Binding
           key, as well as a proof of possession of the referred Token Binding
           key.
+        </t>
+      </section>
+    </section>
+    <section title="Privacy Considerations">
+      <section title="Scoping of Token Binding Keys">
+        <t>Clients must use different Token Binding keys for different servers, so as 
+          to not allow Token Binding to become a tracking tool across different servers.
+          When Token Binding is used over HTTPS, this key scoping should in particular
+          happen at the granularity of "effective top-level domain (public suffix) + 1",
+          i.e., at the same granularity at which cookies can be set.
+        </t>        
+        <t>The reason for this is that servers may use Token Binding to secure their
+          cookies. These cookies can be attached to any 
+          sub-domain of public suffixes, and clients therefore should use the same 
+          Token Binding key across such subdomains. This will ensure that any server
+          capable of receiving the cookie will see the same Token Binding ID from 
+          the client, and thus be able to verify the token binding of the cookie.
+        </t>
+      </section>
+      <section title="Life Time of Token Binding Keys">
+        <t>Token Binding keys don't have an expiration time. This means that they 
+          can potentially be used by a server to track a user across an extended
+          period of time (similar to a long-lived cookie). HTTPS clients such as 
+          web user agents should therefore provide a user interface for discarding
+          Token Binding keys (similar to the affordances provided to delete cookies).
+        </t>
+        <t>If a user agent provides modes such as private browsing mode in which
+          the user is promised that browsing state such as cookies are discarded 
+          after the session is over, the user agent should also discard Token
+          Binding keys from such modes after the session is over. Generally speaking,
+          users should be given the same level of control over life time of Token
+          Binding keys as they have over cookies or other potential tracking 
+          mechanisms.
         </t>
       </section>
     </section>
@@ -664,12 +839,12 @@
     <references title="Normative References">
       &RFC2119;
       &RFC5246;
-      &RFC7301;
+      <!-- &RFC7301; -->
       &RFC2616;
       &RFC5705;
-      &RFC5929;
-      &RFC4492;
-      &RFC5226;
+      <!-- &RFC5929; -->
+      <!-- &RFC4492; -->
+      <!-- &RFC5226; -->
       <reference anchor="TBPROTO">
         <front>
           <title>The Token Binding Protocol Version 1.0</title>
