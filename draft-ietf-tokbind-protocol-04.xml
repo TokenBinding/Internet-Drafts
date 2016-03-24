@@ -343,7 +343,7 @@ struct {
       Token Binding when connecting to a server, and referred_token_binding used when requesting 
       tokens to be presented to a different server. Token Binding over HTTP 
       <xref target="I-D.ietf-tokbind-https"/> describes Token Binding between multiple 
-      communicating parties: User Agent, Identity Provider and Relying Party.</t>
+      communicating parties: User Agent, Identity Provider and Relying Party. See also <xref target="IANA-TBTypes"/></t>
 
       <t>When an rsa2048_pkcs1.5 or rsa2048_pss key is used, TokenBinding.signature contains the 
       signature generated using, respectively, the RSASSA-PKCS1-v1_5 or RSASSA-PSS signature scheme 
@@ -368,7 +368,7 @@ struct {
       </t>
 
       <t>An implementation MUST ignore any unknown extensions. Initially, no extension types are 
-      defined. One of the possible uses of extensions envisioned at the time of this writing is 
+      defined (see <xref target="IANA-TBExts"/>). One of the possible uses of extensions envisioned at the time of this writing is 
       attestation: cryptographic proof that allows the server to verify that the Token Binding key 
       is hardware-bound. The definitions of such Token Binding protocol extensions are outside the 
       scope of this specification.</t>
@@ -448,59 +448,77 @@ struct {
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
-      <t>This document establishes a registry for Token Binding type identifiers entitled "Token 
-      Binding Types" under the "Token Binding Protocol" heading.</t>
+    
+       <t>This section establishes two IANA registries: one for token binding types, another for token binding extensions. It also registers a new TLS exporter label in the TLS Exporter Label Registry.</t>
 
-      <t>Entries in this registry require the following fields:
-        <list style="symbols">
-          <t>Value: The octet value that identifies the Token Binding type (0-255).</t>
-          <t>Description: The description of the Token Binding type.</t>
-          <t>Specification: A reference to a specification that defines the Token Binding 
-          type.</t>
-        </list>
-      </t>
+    
+      <section anchor="IANA-TBTypes" title="Token Binding Types Registry">
+    
+        <t>This document establishes a registry for Token Binding type identifiers entitled "Token 
+        Binding Types" under the "Token Binding Protocol" heading.</t>
+  
+        <t>Entries in this registry require the following fields:
+          <list style="symbols">
+            <t>Value: The octet value that identifies the Token Binding type (0-255).</t>
+            <t>Description: The description of the Token Binding type.</t>
+            <t>Specification: A reference to a specification that defines the Token Binding 
+            type.</t>
+          </list>
+        </t>
+  
+        <t>This registry operates under the "Expert Review" policy as defined in 
+        <xref target="RFC5226"/>. The designated expert is advised to encourage the inclusion of a 
+        reference to a permanent and readily available specification that enables the creation of 
+        interoperable implementations using the identified Token Binding type.</t>
+  
+       <t>An initial set of registrations for this registry follows:
+         <list style="empty">
+           <t>Value: 0</t>
+           <t>Description: provided_token_binding</t>
+           <t>Specification: this document</t>
+         </list>
+  
+         <list style="empty">
+           <t>Value: 1</t>
+           <t>Description: referred_token_binding</t>
+           <t>Specification: this document</t>
+         </list>
+       </t>
+     </section>
+     
+     
+     <section anchor="IANA-TBExts" title="Token Binding Extensions Registry">
 
-      <t>This registry operates under the "Expert Review" policy as defined in 
-      <xref target="RFC5226"/>. The designated expert is advised to encourage the inclusion of a 
-      reference to a permanent and readily available specification that enables the creation of 
-      interoperable implementations using the identified Token Binding type.</t>
-
-     <t>An initial set of registrations for this registry follows:
-       <list style="empty">
-         <t>Value: 0</t>
-         <t>Description: provided_token_binding</t>
-         <t>Specification: this document</t>
-       </list>
-
-       <list style="empty">
-         <t>Value: 1</t>
-         <t>Description: referred_token_binding</t>
-         <t>Specification: this document</t>
-       </list>
-     </t>
-
-      <t>This document establishes a registry for Token Binding extensions entitled "Token 
-      Binding Extensions" under the "Token Binding Protocol" heading.</t>
-
-      <t>Entries in this registry require the following fields:
-        <list style="symbols">
-          <t>Value: The octet value that identifies the Token Binding extension (0-255).</t>
-          <t>Description: The description of the Token Binding extension.</t>
-          <t>Specification: A reference to a specification that defines the Token Binding 
-          extension.</t>
-        </list>
-      </t>
-
-      <t>This registry operates under the "Expert Review" policy as defined in 
-      <xref target="RFC5226"/>. The designated expert is advised to encourage the inclusion of a 
-      reference to a permanent and readily available specification that enables the creation of 
-      interoperable implementations using the identified Token Binding extension. This document 
-      creates no initial registrations in the "Token Binding Extensions" registry.</t>
-
-      <t>This document uses "Token Binding Key Parameters" registry originally created in 
-      <xref target="I-D.ietf-tokbind-negotiation"/>. This document creates no new registrations in 
-      this registry.</t>
-    </section>
+        <t>This document establishes a registry for Token Binding extensions entitled "Token 
+        Binding Extensions" under the "Token Binding Protocol" heading.</t>
+  
+        <t>Entries in this registry require the following fields:
+          <list style="symbols">
+            <t>Value: The octet value that identifies the Token Binding extension (0-255).</t>
+            <t>Description: The description of the Token Binding extension.</t>
+            <t>Specification: A reference to a specification that defines the Token Binding 
+            extension.</t>
+          </list>
+        </t>
+  
+        <t>This registry operates under the "Expert Review" policy as defined in 
+        <xref target="RFC5226"/>. The designated expert is advised to encourage the inclusion of a 
+        reference to a permanent and readily available specification that enables the creation of 
+        interoperable implementations using the identified Token Binding extension. This document 
+        creates no initial registrations in the "Token Binding Extensions" registry.</t>
+  
+        <t>This document uses "Token Binding Key Parameters" registry originally created in 
+        <xref target="I-D.ietf-tokbind-negotiation"/>. This document creates no new registrations in 
+        this registry.</t>
+      </section>
+      
+      
+      <section anchor="IANA-TBExpLab" title="Registration of Token Binding TLS Exporter Label">
+  
+         <t>IANA should register (has registered) the "EXPORTER-Token-Binding" value in the TLS
+         Exporter Label Registry to correspond to this specification. </t>
+      </section>
+    </section> <!-- IANA Considerations -->
 
     <section anchor="Security" title="Security Considerations">
       <section title="Security Token Replay">
