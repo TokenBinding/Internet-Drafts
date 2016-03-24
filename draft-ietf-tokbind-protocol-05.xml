@@ -42,7 +42,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-04" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-05" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -155,6 +155,31 @@
         </postal>
 
         <email>agl@google.com</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+    <author fullname="Jeff Hodges" initials="J."
+            surname="Hodges">
+      <organization>Paypal</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <!-- Reorder these if your country does things differently -->
+
+          <city></city>
+
+          <region></region>
+
+          <code></code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>Jeff.Hodges@paypal.com</email>
 
         <!-- uri and facsimile elements may also be added -->
       </address>
@@ -343,7 +368,8 @@ struct {
       Token Binding when connecting to a server, and referred_token_binding used when requesting 
       tokens to be presented to a different server. Token Binding over HTTP 
       <xref target="I-D.ietf-tokbind-https"/> describes Token Binding between multiple 
-      communicating parties: User Agent, Identity Provider and Relying Party. See also <xref target="IANA-TBTypes"/></t>
+      communicating parties: User Agent, Identity Provider and Relying Party. See also 
+      <xref target="IANA-TBTypes"/></t>
 
       <t>When an rsa2048_pkcs1.5 or rsa2048_pss key is used, TokenBinding.signature contains the 
       signature generated using, respectively, the RSASSA-PKCS1-v1_5 or RSASSA-PSS signature scheme 
@@ -368,10 +394,10 @@ struct {
       </t>
 
       <t>An implementation MUST ignore any unknown extensions. Initially, no extension types are 
-      defined (see <xref target="IANA-TBExts"/>). One of the possible uses of extensions envisioned at the time of this writing is 
-      attestation: cryptographic proof that allows the server to verify that the Token Binding key 
-      is hardware-bound. The definitions of such Token Binding protocol extensions are outside the 
-      scope of this specification.</t>
+      defined (see <xref target="IANA-TBExts"/>). One of the possible uses of extensions envisioned 
+      at the time of this writing is attestation: cryptographic proof that allows the server to 
+      verify that the Token Binding key is hardware-bound. The definitions of such Token Binding 
+      protocol extensions are outside the scope of this specification.</t>
 
       <t>At least one TokenBinding MUST be included in the Token Binding message. The signature 
       algorithm and key length used in the TokenBinding MUST match the parameters negotiated via 
@@ -448,15 +474,15 @@ struct {
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
-    
-       <t>This section establishes two IANA registries: one for token binding types, another for token binding extensions. It also registers a new TLS exporter label in the TLS Exporter Label Registry.</t>
 
-    
+      <t>This section establishes two IANA registries: one for token binding types, another for 
+      token binding extensions. It also registers a new TLS exporter label in the TLS Exporter 
+      Label Registry.</t>
+
       <section anchor="IANA-TBTypes" title="Token Binding Types Registry">
-    
         <t>This document establishes a registry for Token Binding type identifiers entitled "Token 
         Binding Types" under the "Token Binding Protocol" heading.</t>
-  
+
         <t>Entries in this registry require the following fields:
           <list style="symbols">
             <t>Value: The octet value that identifies the Token Binding type (0-255).</t>
@@ -465,33 +491,31 @@ struct {
             type.</t>
           </list>
         </t>
-  
+
         <t>This registry operates under the "Expert Review" policy as defined in 
         <xref target="RFC5226"/>. The designated expert is advised to encourage the inclusion of a 
         reference to a permanent and readily available specification that enables the creation of 
         interoperable implementations using the identified Token Binding type.</t>
-  
-       <t>An initial set of registrations for this registry follows:
-         <list style="empty">
-           <t>Value: 0</t>
-           <t>Description: provided_token_binding</t>
-           <t>Specification: this document</t>
-         </list>
-  
-         <list style="empty">
-           <t>Value: 1</t>
-           <t>Description: referred_token_binding</t>
-           <t>Specification: this document</t>
-         </list>
-       </t>
-     </section>
-     
-     
-     <section anchor="IANA-TBExts" title="Token Binding Extensions Registry">
 
+        <t>An initial set of registrations for this registry follows:
+          <list style="empty">
+            <t>Value: 0</t>
+            <t>Description: provided_token_binding</t>
+            <t>Specification: this document</t>
+          </list>
+
+          <list style="empty">
+            <t>Value: 1</t>
+            <t>Description: referred_token_binding</t>
+            <t>Specification: this document</t>
+          </list>
+        </t>
+      </section>
+     
+      <section anchor="IANA-TBExts" title="Token Binding Extensions Registry">
         <t>This document establishes a registry for Token Binding extensions entitled "Token 
         Binding Extensions" under the "Token Binding Protocol" heading.</t>
-  
+
         <t>Entries in this registry require the following fields:
           <list style="symbols">
             <t>Value: The octet value that identifies the Token Binding extension (0-255).</t>
@@ -500,23 +524,21 @@ struct {
             extension.</t>
           </list>
         </t>
-  
+
         <t>This registry operates under the "Expert Review" policy as defined in 
         <xref target="RFC5226"/>. The designated expert is advised to encourage the inclusion of a 
         reference to a permanent and readily available specification that enables the creation of 
         interoperable implementations using the identified Token Binding extension. This document 
         creates no initial registrations in the "Token Binding Extensions" registry.</t>
-  
+
         <t>This document uses "Token Binding Key Parameters" registry originally created in 
         <xref target="I-D.ietf-tokbind-negotiation"/>. This document creates no new registrations in 
         this registry.</t>
       </section>
-      
-      
+
       <section anchor="IANA-TBExpLab" title="Registration of Token Binding TLS Exporter Label">
-  
-         <t>IANA should register (has registered) the "EXPORTER-Token-Binding" value in the TLS
-         Exporter Label Registry to correspond to this specification. </t>
+        <t>This document adds a registration for the "EXPORTER-Token-Binding" value in the TLS
+        Exporter Label Registry to correspond to this specification.</t>
       </section>
     </section> <!-- IANA Considerations -->
 
@@ -664,6 +686,7 @@ struct {
       v01 2015-05-26  Andrei Popov   Replaced ALPN-based TB negotiation with TBNEGO
       v02 2015-09-11  Andrei Popov   Replaced TLS-UNIQUE with RFC5705 exporters, SignatureAndHashAlgorithm with 1-byte key parameters IDs from TBNEGO
       v03 2015-10-06  Andrei Popov   Removed ECDSAParams because NamedCurve is indicated by key_parameters
-      v04 2016-01-08  Andrei Popov   Moved TB type out of the TB ID, added requirement for Renegotiation Indication, specified public key and signature formats -->
+      v04 2016-01-08  Andrei Popov   Moved TB type out of the TB ID, added requirement for Renegotiation Indication, specified public key and signature formats
+      v05 2016-03-24  Andrei Popov   Merged Jeff's IANA PR and added him as a co-author -->
   </back>
 </rfc>
