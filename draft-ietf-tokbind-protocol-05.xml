@@ -551,6 +551,10 @@ struct {
         the attacker also needs to export the corresponding private key. Token Binding private 
         keys are therefore high-value assets and SHOULD be strongly protected, ideally by 
         generating them in a hardware security module that prevents key export.</t>
+        <t>The manner in which a token is bound to the TLS layer is application-defined and beyond 
+        the scope of this document. However, the resulting bound token needs to be 
+        integrity-protected, so that an attacker cannot remove the binding or substitute a Token 
+        Binding ID of their choice without detection.</t>
       </section>
       <section title="Downgrade Attacks">
         <t>The Token Binding protocol is only used when negotiated via 
