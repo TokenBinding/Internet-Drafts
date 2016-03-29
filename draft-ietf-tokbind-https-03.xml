@@ -455,11 +455,8 @@
 	codes. If the client supports the Token Binding Protocol, and
 	has negotiated the Token Binding Protocol with both the Token
 	Consumer and the Token Provider, it already sends the
-	following header to the Token Provider with each HTTP
-	request (see above):</t>
-	<figure><artwork><![CDATA[
- Sec-Token-Binding: EncodedTokenBindingMessage
-        ]]></artwork></figure>
+	following Sec-Token-Binding header field to the Token Provider with each HTTP
+	request (see above).
 
 	<t>The TokenBindingMessage SHOULD contain a TokenBinding with
 	TokenBindingType referred_token_binding. If included, this 
