@@ -7,12 +7,14 @@
      An alternate method (rfc include) is described in the references. -->
 
 <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC3864 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3864.xml">
 <!ENTITY RFC4492 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4492.xml">
 <!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
 <!ENTITY RFC5246 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml">
 <!ENTITY RFC5705 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5705.xml">
 <!ENTITY RFC5929 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5929.xml">
 <!ENTITY RFC7230 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7230.xml">
+<!ENTITY RFC7231 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7231.xml">
 <!ENTITY RFC7301 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7301.xml">
 
 ]>
@@ -291,13 +293,14 @@
       Protocol with HTTP/1.1 or HTTP/2 (see <xref
       target="TBPROTO">The Token Binding Protocol</xref>), clients
       MUST include the Sec-Token-Binding header in their HTTP requests. The ABNF 
-      of the Sec-Token-Binding header is:
+      of the Sec-Token-Binding header is (in <xref target="RFC7230"/> style, see also <xref target="RFC7230"/> Section 8.3):
       </t>
       <figure><artwork><![CDATA[
   Sec-Token-Binding = EncodedTokenBindingMessage
         ]]></artwork></figure>
 
-      <t>The header field name is "Sec-Token-Binding", and  EncodedTokenBindingMessage is a web-safe Base64-encoding 
+      <t>The header field name is "Sec-Token-Binding", and 
+      EncodedTokenBindingMessage is a web-safe Base64-encoding 
       of the TokenBindingMessage as defined in the <xref
       target="TBPROTO">TokenBindingProtocol</xref>.</t>
       
@@ -417,7 +420,7 @@
 	<t>When a Token Consumer redirects the client to a Token
 	Provider as a means to deliver the token request, it SHOULD
 	include a Include-Referer-Token-Binding-ID HTTP response header in its HTTP
-	response. The ABNF of the Include-Referer-Token-Binding-ID header is:</t> 
+	response. The ABNF of the Include-Referer-Token-Binding-ID header is (in <xref target="RFC7230"/> style, see also <xref target="RFC7230"/> Section 8.3):</t> 
 	<figure><artwork><![CDATA[
   Include-Referer-Token-Binding-ID = "true"	
         ]]></artwork></figure>
@@ -827,7 +830,37 @@
           mechanisms.
         </t>
       </section>
-    </section>
+    </section> <!-- priv cons -->
+    
+    <section title="IANA Considerations" anchor="iana-cons">
+      <t>
+        Below are the Internet Assigned Numbers Authority (IANA)
+        Permanent Message Header Field registration
+        information per <xref target="RFC3864" />.
+      </t>
+      <figure>
+        <artwork>
+  Header field name:           Sec-Token-Binding
+  Applicable protocol:         HTTP 
+  Status:                      standard
+  Author/Change controller:    IETF
+  Specification document(s):   this one
+        </artwork>
+      </figure>
+      <figure>
+        <artwork>
+  Header field name:           Include-Referer-Token-Binding-ID
+  Applicable protocol:         HTTP 
+  Status:                      standard
+  Author/Change controller:    IETF
+  Specification document(s):   this one
+        </artwork>
+      </figure>
+    <t>[[TODO: possibly add further considerations wrt the behavior of the above 
+    header fields, per &lt;https://tools.ietf.org/html/rfc7231#section-8.3&gt;]]
+    </t>
+
+    </section> <!-- IANA cons -->
   </middle>
 
   <!--  *****BACK MATTER ***** -->
@@ -848,13 +881,15 @@
 
     <references title="Normative References">
       &RFC2119;
-      &RFC5246;
-      <!-- &RFC7301; -->
-      &RFC2616;
-      &RFC5705;
-      <!-- &RFC5929; -->
+      &RFC3864;
       <!-- &RFC4492; -->
       <!-- &RFC5226; -->
+      &RFC5246;
+      &RFC5705;
+      <!-- &RFC5929; -->
+      &RFC7230;
+      &RFC7231;
+      <!-- &RFC7301; -->
       <reference anchor="TBPROTO">
         <front>
           <title>The Token Binding Protocol Version 1.0</title>
