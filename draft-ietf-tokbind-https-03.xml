@@ -259,7 +259,7 @@
       Token Binding ID, it doesn't specify how this message is
       embedded in higher-level protocols. The purpose of this
       specification is to define how TokenBindingMessages are embedded
-      in HTTP (both versions <xref target="RFC2616">1.1</xref> and
+      in HTTP (both versions <xref target="RFC7230">1.1</xref> and
       <xref target="I-D.ietf-httpbis-http2">2</xref>). Note that
       TokenBindingMessages are only defined if the underlying
       transport uses TLS. This means that Token Binding over HTTP is
@@ -456,7 +456,7 @@
 	has negotiated the Token Binding Protocol with both the Token
 	Consumer and the Token Provider, it already sends the
 	following Sec-Token-Binding header field to the Token Provider with each HTTP
-	request (see above).
+	request (see above).</t>
 
 	<t>The TokenBindingMessage SHOULD contain a TokenBinding with
 	TokenBindingType referred_token_binding. If included, this 
