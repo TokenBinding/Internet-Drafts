@@ -10,7 +10,7 @@
 <!ENTITY RFC5246 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml">
 <!ENTITY RFC7301 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7301.xml">
 <!ENTITY RFC5705 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5705.xml">
-<!ENTITY RFC2616 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml">
+<!ENTITY RFC7230 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7230.xml">
 <!ENTITY RFC5929 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5929.xml">
 <!ENTITY RFC4492 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4492.xml">
 <!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
@@ -293,13 +293,18 @@
       of the Sec-Token-Binding header is:
       </t>
       <figure><artwork><![CDATA[
-
- Sec-Token-Binding = "Sec-Token-Binding" ":" [CFWS] EncodedTokenBindingMessage
+  Sec-Token-Binding = EncodedTokenBindingMessage
         ]]></artwork></figure>
 
-      <t>The EncodedTokenBindingMessage is a web-safe Base64-encoding 
+      <t>The header field name is "Sec-Token-Binding", and  EncodedTokenBindingMessage is a web-safe Base64-encoding 
       of the TokenBindingMessage as defined in the <xref
       target="TBPROTO">TokenBindingProtocol</xref>.</t>
+      
+      <t>For example:
+      <figure><artwork><![CDATA[
+  Sec-Token-Binding: <web-safe Base64-encoded TokenBindingMessage>
+        ]]></artwork></figure>
+      </t>
 
       <t>The TokenBindingMessage MUST contain a TokenBinding with
       TokenBindingType provided_token_binding, which MUST be signed
@@ -413,10 +418,15 @@
 	include a Include-Referer-Token-Binding-ID HTTP response header in its HTTP
 	response. The ABNF of the Include-Referer-Token-Binding-ID header is:</t> 
 	<figure><artwork><![CDATA[
-
- Include-Referer-Token-Binding-ID = "Include-Referer-Token-Binding-ID" ":" 
-                                     [CFWS] %x74.72.75.65 ; "true", case-sensitive	
+  Include-Referer-Token-Binding-ID = "true"	
         ]]></artwork></figure>
+        
+
+      <t>Where the header field name is "Include-Referer-Token-Binding-ID". For example:
+      <figure><artwork><![CDATA[
+  Include-Referer-Token-Binding-ID: true
+        ]]></artwork></figure>
+      </t>
       
 	<t>Including this response header signals to the client that it
 	should reveal, to the Token Provider, the Token Binding ID used between itself and
@@ -444,7 +454,6 @@
 	following header to the Token Provider with each HTTP
 	request (see above):</t>
 	<figure><artwork><![CDATA[
-
  Sec-Token-Binding: EncodedTokenBindingMessage
         ]]></artwork></figure>
 
