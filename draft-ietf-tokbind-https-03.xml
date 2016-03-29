@@ -417,16 +417,17 @@
       </section>
       
       <section title="HTTP Redirects">
-	<t>When a Token Consumer redirects the client to a Token
-	Provider as a means to deliver the token request, it SHOULD
-	include a Include-Referer-Token-Binding-ID HTTP response header in its HTTP
-	response. The ABNF of the Include-Referer-Token-Binding-ID header is (in <xref target="RFC7230"/> style, see also <xref target="RFC7230"/> Section 8.3):</t> 
+	<t>When a Token Consumer redirects the client to a Token Provider as a means to deliver the token
+	request, it SHOULD include a Include-Referer-Token-Binding-ID HTTP response header in its HTTP
+	response. The ABNF of the Include-Referer-Token-Binding-ID header is (in <xref target="RFC7230"/>
+	style, see also <xref target="RFC7230"/> Section 8.3):</t> 
 	<figure><artwork><![CDATA[
   Include-Referer-Token-Binding-ID = "true"	
         ]]></artwork></figure>
         
 
-      <t>Where the header field name is "Include-Referer-Token-Binding-ID". For example:
+      <t>Where the header field name is "Include-Referer-Token-Binding-ID", and the 
+      field-value of "true" is case-insensitive. For example:
       <figure><artwork><![CDATA[
   Include-Referer-Token-Binding-ID: true
         ]]></artwork></figure>
