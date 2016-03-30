@@ -704,7 +704,9 @@
           Therefore, we need to protect the integrity of the Sec-Token-Binding
           header field. One origin should not be able to set the Sec-Token-Binding header field
           (through a DOM API or otherwise) that the User Agent uses with
-          another origin.
+          another origin. Employing the "Sec-" header field prefix helps to meet this 
+          requirement by denoting the header field name to be a "forbidden header name",
+          see <xref target="Fetch"/>. 
         </t>
       </section>
       <section title="Securing Federated Sign-On Protocols">
