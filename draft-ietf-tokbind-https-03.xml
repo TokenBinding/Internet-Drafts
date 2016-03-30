@@ -16,8 +16,9 @@
 <!ENTITY RFC7230 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7230.xml">
 <!ENTITY RFC7231 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7231.xml">
 <!ENTITY RFC7301 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7301.xml">
-<!ENTITY RFC7301 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7540.xml">
-<!ENTITY RFC7301 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7627.xml">
+<!ENTITY RFC7540 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7540.xml">
+<!ENTITY RFC7541 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7541.xml">
+<!ENTITY RFC7627 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7627.xml">
 
 ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
@@ -322,7 +323,7 @@
       ID</spanx></t>
 
       <t>In HTTP/2, the client SHOULD use <xref
-      target="I-D.ietf-httpbis-header-compression">Header
+      target="RFC7541">Header
       Compression</xref> to avoid the overhead of repeating the same
       header field in subsequent HTTP requests.</t>
     </section>
@@ -890,15 +891,17 @@
       &RFC7230;
       &RFC7231;
       <!-- &RFC7301; -->
+      &RFC7541;
       
-      <reference anchor="TBPROTO">
+      <reference anchor="fetch-spec" target="https://fetch.spec.whatwg.org/">
         <front>
           <title>Fetch</title>
           <author>
             <organization>WhatWG</organization>
           </author>
-          <date year="2014" />
+          <date />
         </front>
+        <seriesInfo name="Living Standard" value="" />
       </reference>
       
       
@@ -910,8 +913,11 @@
           </author>
           <date year="2014" />
         </front>
+        
       </reference>
-      <?rfc include="reference.I-D.ietf-httpbis-header-compression.xml"?>
+      
+      
+      
     </references>
 
     <references title="Informative References">
