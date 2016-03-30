@@ -706,7 +706,7 @@
           (through a DOM API or otherwise) that the User Agent uses with
           another origin. Employing the "Sec-" header field prefix helps to meet this 
           requirement by denoting the header field name to be a "forbidden header name",
-          see <xref target="Fetch"/>. 
+          see <xref target="fetch-spec"/>. 
         </t>
       </section>
       <section title="Securing Federated Sign-On Protocols">
