@@ -932,7 +932,14 @@
       v00 2014-08-21  Andrei Popov   Initial version
       v00 2015-03-27  Andrei Popov   Renamed as tokbind WG draft
       v01 2015-06-30  Dirk Balfanz   Added Sec- prefix to header
-      v02 2015-06-30  Dirk Balfanz   Removed Sec- prefix, added design rationalization in Security Considerations section
+      v02 2015-06-30  Dirk Balfanz   Removed Sec- prefix, added design rationalization in 
+                                     Security Considerations section
+      v03 2016-03-20  Dirk Balfanz   TB header field has Sec- prefix again;
+                                     Add figure of redirect flow for the federation case;
+                                     Expand priv considerations: eTLD+1, TB Keys lifetime;
+                                     Language tweaks to make it clearer how/when to use referred token bindings;
+     v03+ 2016-03-??  Jeff Hodges    Update header field presentation to match rfc7230 style, add
+                                     refs, add IANA considerations per BCP90/RFC3864.
     -->
   </back>
 </rfc>
