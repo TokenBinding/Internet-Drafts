@@ -293,7 +293,7 @@
       Protocol with HTTP/1.1 or HTTP/2 (see <xref
       target="TBPROTO">The Token Binding Protocol</xref>), clients
       MUST include the Sec-Token-Binding header field in their HTTP requests. The ABNF 
-      of the Sec-Token-Binding header field is (in <xref target="RFC7230"/> style, see also <xref target="RFC7230"/> Section 8.3):
+      of the Sec-Token-Binding header field is (in <xref target="RFC7230"/> style, see also <xref target="RFC7231"/> Section 8.3):
       </t>
       <figure><artwork><![CDATA[
   Sec-Token-Binding = EncodedTokenBindingMessage
@@ -420,7 +420,7 @@
 	<t>When a Token Consumer redirects the client to a Token Provider as a means to deliver the token
 	request, it SHOULD include a Include-Referer-Token-Binding-ID HTTP response header field in its
 	HTTP response. The ABNF of the Include-Referer-Token-Binding-ID header is (in <xref
-	target="RFC7230"/> style, see also <xref target="RFC7230"/> Section 8.3):</t>
+	target="RFC7230"/> style, see also <xref target="RFC7231"/> Section 8.3):</t>
 	<figure><artwork><![CDATA[
   Include-Referer-Token-Binding-ID = "true"	
         ]]></artwork></figure>
@@ -939,7 +939,7 @@
                                      Expand priv considerations: eTLD+1, TB Keys lifetime;
                                      Language tweaks to make it clearer how/when to use referred token bindings;
      v03+ 2016-03-??  Jeff Hodges    Update header field presentation to match rfc7230 style, add
-                                     refs, add IANA considerations per BCP90/RFC3864.
+                                     refs, add IANA considerations per BCP90/RFC3864,
     -->
   </back>
 </rfc>
