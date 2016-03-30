@@ -16,6 +16,8 @@
 <!ENTITY RFC7230 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7230.xml">
 <!ENTITY RFC7231 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7231.xml">
 <!ENTITY RFC7301 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7301.xml">
+<!ENTITY RFC7301 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7540.xml">
+<!ENTITY RFC7301 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7627.xml">
 
 ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
@@ -260,7 +262,7 @@
       embedded in higher-level protocols. The purpose of this
       specification is to define how TokenBindingMessages are embedded
       in HTTP (both versions <xref target="RFC7230">1.1</xref> and
-      <xref target="I-D.ietf-httpbis-http2">2</xref>). Note that
+      <xref target="RFC7540">2</xref>). Note that
       TokenBindingMessages are only defined if the underlying
       transport uses TLS. This means that Token Binding over HTTP is
       only defined when the HTTP protocol is layered on top of TLS
@@ -637,7 +639,7 @@
           connections. The attacker can then successfully replay bound tokens.
           For this reason, the Token Binding protocol MUST NOT be negotiated
           unless the Extended Master Secret TLS extension <xref
-          target="I-D.ietf-tls-session-hash"/> has also been negotiated.</t>
+          target="RFC7627"/> has also been negotiated.</t>
       </section>
       <section title="Sensitivity of the Sec-Token-Binding Header">
         <t>
@@ -888,6 +890,18 @@
       &RFC7230;
       &RFC7231;
       <!-- &RFC7301; -->
+      
+      <reference anchor="TBPROTO">
+        <front>
+          <title>Fetch</title>
+          <author>
+            <organization>WhatWG</organization>
+          </author>
+          <date year="2014" />
+        </front>
+      </reference>
+      
+      
       <reference anchor="TBPROTO">
         <front>
           <title>The Token Binding Protocol Version 1.0</title>
@@ -901,8 +915,9 @@
     </references>
 
     <references title="Informative References">
-      <?rfc include="reference.I-D.ietf-httpbis-http2.xml"?>
-      <?rfc include="reference.I-D.ietf-tls-session-hash.xml"?>
+      
+      &RFC7540;
+      &RFC7627;
 
       <reference anchor="TRIPLE-HS">
         <front>
