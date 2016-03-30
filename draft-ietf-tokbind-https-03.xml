@@ -425,7 +425,7 @@
 	HTTP response. The ABNF of the Include-Referer-Token-Binding-ID header is (in <xref
 	target="RFC7230"/> style, see also <xref target="RFC7231"/> Section 8.3):</t>
 	<figure><artwork><![CDATA[
-  Include-Referer-Token-Binding-ID = "true"	
+  Include-Referer-Token-Binding-ID = "true"
         ]]></artwork></figure>
         
 
