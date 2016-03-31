@@ -307,11 +307,11 @@
       of the TokenBindingMessage as defined in the <xref
       target="TBPROTO">TokenBindingProtocol</xref>.</t>
       
-      <t>For example:
+      <t>For example:</t>
       <figure><artwork><![CDATA[
   Sec-Token-Binding: <web-safe Base64-encoded TokenBindingMessage>
         ]]></artwork></figure>
-      </t>
+      
 
       <t>The TokenBindingMessage MUST contain a TokenBinding with
       TokenBindingType provided_token_binding, which MUST be signed
@@ -430,11 +430,11 @@
         
 
       <t>Where the header field name is "Include-Referer-Token-Binding-ID", and the 
-      field-value of "true" is case-insensitive. For example:
+      field-value of "true" is case-insensitive. For example:</t>
+      
       <figure><artwork><![CDATA[
   Include-Referer-Token-Binding-ID: true
         ]]></artwork></figure>
-      </t>
       
 	<t>Including this response header field signals to the client that it
 	should reveal, to the Token Provider, the Token Binding ID used between itself and
@@ -961,7 +961,7 @@
                                      Add figure of redirect flow for the federation case;
                                      Expand priv considerations: eTLD+1, TB Keys lifetime;
                                      Language tweaks to make it clearer how/when to use referred token bindings;
-     v03+ 2016-03-??  Jeff Hodges    Update header field presentation to match rfc7230 style, add
+      v03+ 2016-03-??  Jeff Hodges   Update header field presentation to match rfc7230 style, add
                                      refs, add IANA considerations per BCP90/RFC3864,
     -->
   </back>
