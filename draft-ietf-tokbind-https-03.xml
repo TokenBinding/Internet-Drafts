@@ -636,7 +636,7 @@
           value <xref target="RFC5705" /> to associate a TLS connection with a
           TLS Token Binding. The triple handshake attack <xref
           target="TRIPLE-HS" /> is a known TLS protocol vulnerability allowing
-          the attacker to synchronize keying manterial between TLS
+          the attacker to synchronize keying material between TLS
           connections. The attacker can then successfully replay bound tokens.
           For this reason, the Token Binding protocol MUST NOT be negotiated
           unless the Extended Master Secret TLS extension <xref
