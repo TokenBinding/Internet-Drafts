@@ -42,7 +42,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-05" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-06" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -364,19 +364,21 @@ struct {
         </postamble>
       </figure>
 
-
       <t>This document defines two token binding types: 
         <list style="symbols">
-          <t>provided_token_binding - used to establish a Token Binding for the TLS session with the
-          present server, and, </t>
-          <t>referred_token_binding - used to convey a Token Binding ID, that is established with
-          another server, to the present server. A companion specification, Token Binding over HTTP
-          <xref target="I-D.ietf-tokbind-https"/>, describes a use case for referred
-          Token Binding where Token Bindings are established between multiple communicating parties:
-          Client, Token Consumer, Token Provider.</t>
+          <t>provided_token_binding - used to establish a Token Binding for the TLS session with the present server, and, </t>
+          <t>referred_token_binding - used to convey a Token Binding ID, that is established with another server, to the present server. </t>
         </list>
-        See also 
-      <xref target="IANA-TBTypes"/>
+        A companion specification, Token Binding over HTTP
+        <xref target="I-D.ietf-tokbind-https"/>, describes a use case for referred
+        Token Binding where Token Bindings are established between multiple communicating
+        parties. 
+        See also <xref target="IANA-TBTypes"/>. 
+        <list style="hanging" hangIndent="7">
+            <t hangText="NOTE:">
+                An implementation MUST ignore any unknown token binding types.
+            </t>
+          </list>
       </t>
 
       <t>When an rsa2048_pkcs1.5 or rsa2048_pss key is used, TokenBinding.signature contains the 
@@ -726,6 +728,7 @@ struct {
       v02 2015-09-11  Andrei Popov   Replaced TLS-UNIQUE with RFC5705 exporters, SignatureAndHashAlgorithm with 1-byte key parameters IDs from TBNEGO
       v03 2015-10-06  Andrei Popov   Removed ECDSAParams because NamedCurve is indicated by key_parameters
       v04 2016-01-08  Andrei Popov   Moved TB type out of the TB ID, added requirement for Renegotiation Indication, specified public key and signature formats
-      v05 2016-03-24  Andrei Popov   Merged Jeff's IANA PR and added him as a co-author -->
+      v05 2016-03-24  Andrei Popov   Merged Jeff's IANA PR and added him as a co-author
+      v06 2016-04-11  Andrei Popov   Per IETF95 feedback, clarified that TB types should be skipped -->
   </back>
 </rfc>
