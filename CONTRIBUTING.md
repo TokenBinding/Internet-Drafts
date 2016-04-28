@@ -1,27 +1,20 @@
 # Contributing
 
-Before submitting feedback, please familiarize yourself with our current issues
-list and review the [working group
-documents](https://datatracker.ietf.org/wg/{WG_NAME}/documents/) and [mailing
-list discussion](https://mailarchive.ietf.org/arch/browse/{WG_NAME}/). If you're
-new to this, you may also want to read the [Tao of the
-IETF](https://www.ietf.org/tao.html).
+Before submitting feedback, please familiarize yourself with our current issues list and review the [working group documents](https://datatracker.ietf.org/wg/tokbind/documents/) and [mailing list discussion](https://www.ietf.org/mail-archive/web/unbearable/current/maillist.html). If you're new to this, you may also want to read the [Tao of the IETF](https://www.ietf.org/tao.html).
 
-Be aware that all contributions to the specification fall under the "NOTE WELL"
-terms outlined below.
+Be aware that all contributions to the specification fall under the ["NOTE WELL"](#note-well) terms outlined below.
 
 1. The best way to provide feedback (editorial or design) and ask questions is
-sending an e-mail to our mailing list
-([info](https://www.ietf.org/mailman/listinfo/{WG_NAME})). This will ensure that
-the entire Working Group sees your input in a timely fashion.
+sending an e-mail to our mailing list: ["unbearable"](https://www.ietf.org/mailman/listinfo/unbearable/). 
+This will ensure that the entire Working Group sees your input in a timely fashion.
 
 2. If you have **editorial** suggestions (i.e., those that do not change the
 meaning of the specification), you can either:
 
   a) Fork this repository and submit a pull request; this is the lowest
-  friction way to get editorial changes in.
+  friction way to submit editorial changes for consideration.
 
-  b) Submit a new issue to Github, and mention that you believe it is editorial
+  b) Submit a new issue using this Github repo, and mention that you believe it is editorial
   in the issue body. It is not necessary to notify the mailing list for
   editorial issues.
 
@@ -29,15 +22,15 @@ meaning of the specification), you can either:
   processed only with best effort by the editors, so it should only be used for
   quick editorial suggestions or questions.
 
-3. For non-editorial (i.e., **design**) issues, you can also create an issue on
-Github. However, you **must notify the mailing list** when creating such issues,
-providing a link to the issue in the message body.
+3. For non-editorial (i.e., **design** / **material**) feedback or contributions, 
+you can also create an issue on Github. However, you **must notify the mailing list** 
+when creating such issues, providing a link to the issue in the message body.
 
   Note that **github issues are not for substantial discussions**; the only
   appropriate place to discuss design issues is on the mailing list itself.
 
 
-## NOTE WELL
+## NOTE WELL 
 
 Any submission to the [IETF](https://www.ietf.org/) intended by the Contributor
 for publication as all or part of an IETF Internet-Draft or RFC and any
@@ -63,8 +56,7 @@ Statements made outside of an IETF session, mailing list or other function,
 that are clearly not intended to be input to an IETF activity, group or
 function, are not IETF Contributions in the context of this notice.
 
-Please consult [RFC 5378](https://tools.ietf.org/html/rfc5378) and [RFC
-3979](https://tools.ietf.org/html/rfc3979) for details.
+Please consult [RFC 5378](https://tools.ietf.org/html/rfc5378) and [RFC3979](https://tools.ietf.org/html/rfc3979) for details.
 
 A participant in any IETF activity is deemed to accept all IETF rules of
 process, as documented in Best Current Practices RFCs and IESG Statements.
