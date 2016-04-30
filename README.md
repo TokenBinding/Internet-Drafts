@@ -1,13 +1,11 @@
 README
 =======
 
-This repository contains _editors' drafts_ of the [IETF Tokbind Working Group](https://datatracker.ietf.org/wg/tokbind/documents/)'s Internet Drafts.
+This repository contains editors' copies of the Internet-Drafts discussed in the [IETF Tokbind Working Group](https://datatracker.ietf.org/wg/tokbind/charter/).
 
-These links yield rendered versions of these editors' drafts:
-
+The following links yield HTML versions of the editors' drafts:
 - [draft-ietf-tokbind-protocol-06](http://xml2rfc.ietf.org/cgi-bin/xml2rfc.cgi?modeAsFormat=html/ascii&url=https://raw.githubusercontent.com/TokenBinding/Internet-Drafts/master/draft-ietf-tokbind-protocol-06.xml)
 - [draft-ietf-tokbind-https-03](http://xml2rfc.ietf.org/cgi-bin/xml2rfc.cgi?modeAsFormat=html/ascii&url=https://raw.githubusercontent.com/TokenBinding/Internet-Drafts/master/draft-ietf-tokbind-https-03.xml)
 - [draft-ietf-tokbind-negotiation-02](http://xml2rfc.ietf.org/cgi-bin/xml2rfc.cgi?modeAsFormat=html/ascii&url=https://raw.githubusercontent.com/TokenBinding/Internet-Drafts/master/draft-ietf-tokbind-negotiation-02.xml)
 
-
-[Click here](https://datatracker.ietf.org/wg/tokbind/documents/) if you are looking for [the current "officially published" tokbind Internet-Drafts](https://datatracker.ietf.org/wg/tokbind/documents/).
+Internet-Drafts submitted to the IETF Tokbind Working Group can be found [here](https://datatracker.ietf.org/wg/tokbind/documents/).
