@@ -394,12 +394,13 @@ struct {
       contain the length-prefixed modulus and exponent of the RSA public key represented in 
       big-endian format.</t>
 
-      <t>When an ecdsap256 key is used, TokenBinding.signature contains a pair of integers, R 
-      followed by S, as defined in <xref target="ANSI.X9-62.2005"/>. R and S are encoded in 
-      big-endian format. ECPoint.point contains the X coordinate followed by the Y coordinate. The 
-      X and Y coordinates are unsigned integers encoded in big-endian format. Future specifications 
-      may define Token Binding keys using other elliptic curves with their corresponding signature 
-      and point formats.</t>
+      <t>When an ecdsap256 key is used, TokenBinding.signature contains a pair of 32-byte integers, 
+      R followed by S, generated using Curve P-256 as defined in <xref target="ANSI.X9-62.2005"/> 
+      and <xref target="FIPS.186-4.2013"/>. R and S are encoded in big-endian format, preserving any 
+      leading zero bytes. ECPoint.point contains the X coordinate followed by the Y coordinate. The 
+      X and Y coordinates are unsigned 32-byte integers encoded in big-endian format, preserving any 
+      leading zero bytes. Future specifications may define Token Binding keys using other elliptic 
+      curves with their corresponding signature and point formats.</t>
 
       <t>The EKM is obtained using the Keying Material Exporters for TLS defined in 
       <xref target="RFC5705" />, by supplying the following input values:
@@ -645,7 +646,8 @@ struct {
 
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>This document incorporates comments and suggestions offered by Eric Rescorla, Gabriel 
-      Montenegro, Martin Thomson, Vinod Anupam, Bill Cox, Nick Harper and others.</t>
+      Montenegro, Martin Thomson, Vinod Anupam, Bill Cox, Nick Harper, Brian Campbell and 
+      others.</t>
     </section>
   </middle>
 
@@ -699,6 +701,26 @@ struct {
 
       </reference>
 
+      <reference anchor="FIPS.186-4.2013">
+
+        <front>
+
+          <title>Digital Signature Standard (DSS)</title>
+
+          <author>
+
+            <organization>National Institute of Standards and Technology</organization>
+
+          </author>
+
+          <date year="2013" />
+
+        </front>
+
+        <seriesInfo name="FIPS" value="186-4" />
+
+      </reference>
+
     </references>
 
     <references title="Informative References">
@@ -735,6 +757,7 @@ struct {
       v04 2016-01-08  Andrei Popov   Moved TB type out of the TB ID, added requirement for Renegotiation Indication, specified public key and signature formats
       v05 2016-03-24  Andrei Popov   Merged Jeff's IANA PR and added him as a co-author
       v06 2016-04-11  Andrei Popov   Per IETF95 feedback, clarified that TB types should be skipped
-      v06 2016-05-19  Andrei Popov   Merged Jeff's PR on referred TB processing -->
+      v06 2016-05-19  Andrei Popov   Merged Jeff's PR on referred TB processing
+      v06 2016-05-20  Andrei Popov   Clarified ECDSAP256 parameters per Brian's feedback -->
   </back>
 </rfc>
