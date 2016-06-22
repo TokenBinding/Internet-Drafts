@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- This template is for creating an Internet Draft using xml2rfc,
      which is available here: http://xml.resource.org. -->
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
@@ -46,7 +46,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-https-03" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-https-04" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -270,7 +270,7 @@
       (commonly referred to as HTTPS).</t>
       <t>HTTP clients establish a Token Binding ID with a server by
       including a special HTTP header field in HTTP requests. The HTTP
-      header field value is a base64url encoded TokenBindingMessage.</t>
+      header field value is a base64url-encoded TokenBindingMessage.</t>
       <t>TokenBindingMessages allow clients to establish multiple
       Token Binding IDs with the server, by including multiple
       TokenBinding structures in the TokenBindingMessage. By default,
@@ -303,13 +303,13 @@
         ]]></artwork></figure>
 
       <t>The header field name is "Sec-Token-Binding", and 
-      EncodedTokenBindingMessage is a web-safe Base64-encoding 
+      EncodedTokenBindingMessage is a base64url encoding 
       of the TokenBindingMessage as defined in the <xref
       target="TBPROTO">TokenBindingProtocol</xref>.</t>
       
       <t>For example:</t>
       <figure><artwork><![CDATA[
-  Sec-Token-Binding: <web-safe Base64-encoded TokenBindingMessage>
+  Sec-Token-Binding: <web-safe base64url-encoded TokenBindingMessage>
         ]]></artwork></figure>
       
 
@@ -864,6 +864,12 @@
     </t>
 
     </section> <!-- IANA cons -->
+
+    <section anchor="Acknowledgements" title="Acknowledgements">
+      <t>This document incorporates comments and suggestions offered by Eric Rescorla, Gabriel 
+      Montenegro, Martin Thomson, Vinod Anupam, Bill Cox, Nick Harper, Brian Campbell and 
+      others.</t>
+    </section>
   </middle>
 
   <!--  *****BACK MATTER ***** -->
@@ -962,7 +968,8 @@
                                      Expand priv considerations: eTLD+1, TB Keys lifetime;
                                      Language tweaks to make it clearer how/when to use referred token bindings;
       v03+ 2016-03-??  Jeff Hodges   Update header field presentation to match rfc7230 style, add
-                                     refs, add IANA considerations per BCP90/RFC3864,
+                                     refs, add IANA considerations per BCP90/RFC3864;
+      v04 2016-06-22  Andrei Popov   Merged pull request to clarify that the TB messages are sent base64url-encoded;
     -->
   </back>
 </rfc>
