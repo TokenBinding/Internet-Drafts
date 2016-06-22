@@ -270,7 +270,7 @@
       (commonly referred to as HTTPS).</t>
       <t>HTTP clients establish a Token Binding ID with a server by
       including a special HTTP header field in HTTP requests. The HTTP
-      header field value is a TokenBindingMessage.</t>
+      header field value is a base64url encoded TokenBindingMessage.</t>
       <t>TokenBindingMessages allow clients to establish multiple
       Token Binding IDs with the server, by including multiple
       TokenBinding structures in the TokenBindingMessage. By default,
