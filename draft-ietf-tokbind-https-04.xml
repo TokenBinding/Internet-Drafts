@@ -9,6 +9,7 @@
 <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY RFC3864 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3864.xml">
 <!ENTITY RFC4492 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4492.xml">
+<!ENTITY RFC4648 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4648.xml">
 <!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
 <!ENTITY RFC5246 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml">
 <!ENTITY RFC5705 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5705.xml">
@@ -239,13 +240,13 @@
       issuing the token.</t>
 
       <t>This Internet-Draft is a companion document to <xref
-      target="TBPROTO">The Token Binding Protocol</xref></t>
+      target="I-D.ietf-tokbind-protocol">The Token Binding Protocol</xref></t>
     </abstract>
   </front>
 
   <middle>
     <section title="Introduction">
-      <t><xref target="TBPROTO">The Token Binding Protocol</xref>
+      <t><xref target="I-D.ietf-tokbind-protocol">The Token Binding Protocol</xref>
       defines a Token Binding ID for a TLS connection between a client
       and a server. The Token Binding ID of a TLS connection is
       related to a private key that the client proves possession of to
@@ -257,7 +258,7 @@
       token to TLS connections between that particular client and
       server, and inoculating the token against theft by
       attackers.</t>
-      <t>While the <xref target="TBPROTO">Token Binding
+      <t>While the <xref target="I-D.ietf-tokbind-protocol">Token Binding
       Protocol</xref> defines a message format for establishing a
       Token Binding ID, it doesn't specify how this message is
       embedded in higher-level protocols. The purpose of this
@@ -294,7 +295,7 @@
     <section title="The Sec-Token-Binding Header Field">
       <t>Once a client and server have negotiated the Token Binding
       Protocol with HTTP/1.1 or HTTP/2 (see <xref
-      target="TBPROTO">The Token Binding Protocol</xref>), clients
+      target="I-D.ietf-tokbind-protocol">The Token Binding Protocol</xref>), clients
       MUST include the Sec-Token-Binding header field in their HTTP requests. The ABNF 
       of the Sec-Token-Binding header field is (in <xref target="RFC7230"/> style, see also <xref target="RFC7231"/> Section 8.3):
       </t>
@@ -304,12 +305,13 @@
 
       <t>The header field name is "Sec-Token-Binding", and 
       EncodedTokenBindingMessage is a base64url encoding 
+      (see <xref target="RFC4648"/> Section 5) 
       of the TokenBindingMessage as defined in the <xref
-      target="TBPROTO">TokenBindingProtocol</xref>.</t>
+      target="I-D.ietf-tokbind-protocol">TokenBindingProtocol</xref>.</t>
       
       <t>For example:</t>
       <figure><artwork><![CDATA[
-  Sec-Token-Binding: <web-safe base64url-encoded TokenBindingMessage>
+  Sec-Token-Binding: <base64url-encoded TokenBindingMessage>
         ]]></artwork></figure>
       
 
@@ -351,7 +353,7 @@
 	Provider</spanx> in this document). Also common across the
 	mechanisms is how the Token Binding ID is revealed to the
 	Token Provider: The client uses the <xref
-	target="TBPROTO">Token Binding Protocol</xref>, and
+	target="I-D.ietf-tokbind-protocol">Token Binding Protocol</xref>, and
 	includes a TokenBinding structure in the Sec-Token-Binding HTTP
 	header field defined above.  What differs between the various
 	mechanisms is <spanx style="emph">how</spanx> the Token
@@ -396,7 +398,7 @@
     <spanx style="emph">binding</spanx> the token to client's Token-Binding
     keypair. The client
     proves possession of the private key when communicating with 
-    the Token Consumer through the <xref target="TBPROTO">Token
+    the Token Consumer through the <xref target="I-D.ietf-tokbind-protocol">Token
 	  Binding Protocol</xref>, and reveals the corresponding public key of this 
     keypair as part of the Token Binding ID. Comparing the public key from the
     token with the public key from the Token Binding ID allows the Token 
@@ -406,7 +408,7 @@
     the token, the Token Binding ID (between client and Token Consumer) must 
     therefore be communicated to the Token Provider along with the token
     request. Communicating a Token Binding ID involves proving possession of a 
-    private key and is described in the <xref target="TBPROTO">Token
+    private key and is described in the <xref target="I-D.ietf-tokbind-protocol">Token
 	  Binding Protocol</xref>.</t>
 	</list>
 	</t>
@@ -483,7 +485,7 @@
       </section>
       
       <section title="Negotiated Key Parameters">
-	<t>The <xref target="TBPROTO">Token Binding Protocol</xref>
+	<t>The <xref target="I-D.ietf-tokbind-protocol">Token Binding Protocol</xref>
 	allows the server and client to negotiate a signature algorithm
 	used in the TokenBindingMessage. It is possible that the Token
 	Binding ID used between the client and the Token Consumer, and
@@ -495,7 +497,7 @@
 	negotiated with the origin that the header field is sent to.</t>
 	<t>Token Providers SHOULD support all the
 	SignatureAndHashAlgorithms specified in the <xref
-	target="TBPROTO">Token Binding Protocol</xref>. If a token
+	target="I-D.ietf-tokbind-protocol">Token Binding Protocol</xref>. If a token
 	provider does not support the SignatureAndHashAlgorithm
 	specified in the referred_token_binding TokenBinding in the
 	TokenBindingMessage, it MUST issue an unbound token.</t>
@@ -892,6 +894,7 @@
       &RFC2119;
       &RFC3864;
       <!-- &RFC4492; -->
+      &RFC4648;
       <!-- &RFC5226; -->
       &RFC5246;
       &RFC5705;
@@ -911,21 +914,8 @@
         </front>
         <seriesInfo name="Living Standard" value="" />
       </reference>
-      
-      
-      <reference anchor="TBPROTO">
-        <front>
-          <title>The Token Binding Protocol Version 1.0</title>
-          <author initials="A." surname="Popov">
-            <organization>Microsoft</organization>
-          </author>
-          <date year="2014" />
-        </front>
-        
-      </reference>
-      
-      
-      
+
+      <?rfc include="reference.I-D.ietf-tokbind-protocol.xml"?>
     </references>
 
     <references title="Informative References">
