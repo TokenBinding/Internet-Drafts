@@ -13,6 +13,7 @@
 <!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
 <!ENTITY RFC5246 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml">
 <!ENTITY RFC5705 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5705.xml">
+<!ENTITY RFC5746 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5746.xml">
 <!ENTITY RFC5929 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5929.xml">
 <!ENTITY RFC7230 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7230.xml">
 <!ENTITY RFC7231 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7231.xml">
@@ -485,22 +486,22 @@
       </section>
       
       <section title="Negotiated Key Parameters">
-	<t>The <xref target="I-D.ietf-tokbind-protocol">Token Binding Protocol</xref>
-	allows the server and client to negotiate a signature algorithm
-	used in the TokenBindingMessage. It is possible that the Token
-	Binding ID used between the client and the Token Consumer, and
-	the Token Binding ID used between the client and Token Provider,
-	use different signature algorithms. The client MUST use the
-	signature algorithm negotiated with the Token Consumer in the
-	referred_token_binding TokenBinding of the TokenBindingMessage,
-	even if that signature algorithm is different from the one
-	negotiated with the origin that the header field is sent to.</t>
-	<t>Token Providers SHOULD support all the
-	SignatureAndHashAlgorithms specified in the <xref
-	target="I-D.ietf-tokbind-protocol">Token Binding Protocol</xref>. If a token
-	provider does not support the SignatureAndHashAlgorithm
-	specified in the referred_token_binding TokenBinding in the
-	TokenBindingMessage, it MUST issue an unbound token.</t>
+	<t>The <xref target="I-D.ietf-tokbind-negotiation">TLS Extension 
+        for Token Binding Protocol Negotiation</xref> allows the server and 
+        client to negotiate the parameters (signature algorithm, length) 
+        of the Token Binding key. It is possible that the Token
+        Binding ID used between the client and the Token Consumer, and
+        the Token Binding ID used between the client and Token Provider,
+        use different key parameters. The client MUST use the
+        key parameters negotiated with the Token Consumer in the
+        referred_token_binding TokenBinding of the TokenBindingMessage,
+        even if those key parameters are different from the ones 
+        negotiated with the origin that the header field is sent to.</t>
+        <t>Token Providers SHOULD support all the Token Binding key parameters
+        specified in the <xref target="I-D.ietf-tokbind-negotiation"/>. 
+        If a token provider does not support the key parameters
+        specified in the referred_token_binding TokenBinding in the
+        TokenBindingMessage, it MUST issue an unbound token.</t>
       </section>
       
       <section title="Federation Example">
@@ -633,16 +634,17 @@
         be strongly protected, ideally by generating it in a hardware
         security module that prevents key export.</t>
       </section>
-      <section title="Triple Handshake Vulnerability in TLS">
+      <section title="Triple Handshake Vulnerability in TLS 1.2 and Older TLS Versions">
         <t>The Token Binding protocol relies on the exported key material (EKM)
           value <xref target="RFC5705" /> to associate a TLS connection with a
-          TLS Token Binding. The triple handshake attack <xref
-          target="TRIPLE-HS" /> is a known TLS protocol vulnerability allowing
-          the attacker to synchronize keying material between TLS
-          connections. The attacker can then successfully replay bound tokens.
-          For this reason, the Token Binding protocol MUST NOT be negotiated
-          unless the Extended Master Secret TLS extension <xref
-          target="RFC7627"/> has also been negotiated.</t>
+          TLS Token Binding. The triple handshake attack <xref target="TRIPLE-HS" /> 
+          is a known vulnerability in TLS 1.2 and older TLS versions, allowing the 
+          attacker to synchronize keying material between TLS connections. The 
+          attacker can then successfully replay bound tokens. For this reason, the 
+          Token Binding protocol MUST NOT be negotiated with these TLS versions, 
+          unless the Extended Master Secret <xref target="RFC7627" /> and 
+          Renegotiation Indication <xref target="RFC5746" /> TLS extensions have 
+          also been negotiated.</t>
       </section>
       <section title="Sensitivity of the Sec-Token-Binding Header">
         <t>
@@ -903,6 +905,8 @@
       &RFC7231;
       <!-- &RFC7301; -->
       &RFC7541;
+      <?rfc include="reference.I-D.ietf-tokbind-negotiation.xml"?>
+      <?rfc include="reference.I-D.ietf-tokbind-protocol.xml"?>
       
       <reference anchor="fetch-spec" target="https://fetch.spec.whatwg.org/">
         <front>
@@ -914,12 +918,10 @@
         </front>
         <seriesInfo name="Living Standard" value="" />
       </reference>
-
-      <?rfc include="reference.I-D.ietf-tokbind-protocol.xml"?>
     </references>
 
     <references title="Informative References">
-      
+      &RFC5746;
       &RFC7540;
       &RFC7627;
 
@@ -960,6 +962,8 @@
       v03+ 2016-03-??  Jeff Hodges   Update header field presentation to match rfc7230 style, add
                                      refs, add IANA considerations per BCP90/RFC3864;
       v04 2016-06-22  Andrei Popov   Merged pull request to clarify that the TB messages are sent base64url-encoded;
+                                     Removed references to SignatureAndHashAlgorithm;
+                                     Added references to TBPROTO and TBNEGO;
     -->
   </back>
 </rfc>
