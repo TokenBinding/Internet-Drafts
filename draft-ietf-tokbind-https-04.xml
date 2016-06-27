@@ -424,19 +424,19 @@
       
       <section title="HTTP Redirects">
 	<t>When a Token Consumer redirects the client to a Token Provider as a means to deliver the token
-	request, it SHOULD include a Include-Referer-Token-Binding-ID HTTP response header field in its
-	HTTP response. The ABNF of the Include-Referer-Token-Binding-ID header is (in <xref
+	request, it SHOULD include a Include-Referred-Token-Binding-ID HTTP response header field in its
+	HTTP response. The ABNF of the Include-Referred-Token-Binding-ID header is (in <xref
 	target="RFC7230"/> style, see also <xref target="RFC7231"/> Section 8.3):</t>
 	<figure><artwork><![CDATA[
-  Include-Referer-Token-Binding-ID = "true"
+  Include-Referred-Token-Binding-ID = "true"
         ]]></artwork></figure>
         
 
-      <t>Where the header field name is "Include-Referer-Token-Binding-ID", and the 
+      <t>Where the header field name is "Include-Referred-Token-Binding-ID", and the 
       field-value of "true" is case-insensitive. For example:</t>
       
       <figure><artwork><![CDATA[
-  Include-Referer-Token-Binding-ID: true
+  Include-Referred-Token-Binding-ID: true
         ]]></artwork></figure>
       
 	<t>Including this response header field signals to the client that it
@@ -453,9 +453,9 @@
   includes one provided binding and one referred binding, the latter constructed
   from the binding between the client and the Token Consumer.</t>
   
-  <t>If the Include-Referer-Token-Binding-ID header field is received in response to a
+  <t>If the Include-Referred-Token-Binding-ID header field is received in response to a
   request that did not include the Token-Binding header field, the client MUST ignore
-  the Include-Referer-Token-Binding-ID header field.</t>
+  the Include-Referred-Token-Binding-ID header field.</t>
 	
 	<t>This header field has only meaning if the HTTP status code is 301,
 	302, 303, 307 or 308, and MUST be ignored by the client for any other status
@@ -470,7 +470,7 @@
         TokenBinding MUST be signed 
 	with the Token Binding key used by the client for connections
 	between itself and the Token Consumer (more specifically, the
-	web origin that issued the Include-Referer-Token-Binding-ID
+	web origin that issued the Include-Referred-Token-Binding-ID
 	response header field). The Token Binding ID established by this
 	TokenBinding is called a <spanx style="emph">Referred Token
 	Binding ID</spanx>.</t>
@@ -569,7 +569,7 @@
      | 1a. OIDC ID Token request, aka|                      |
      | "Authentication Request", conveyed with              |
      | HTTP response header field of:                       |
-     | Include-Referer-Token-Binding-ID:true                |
+     | Include-Referred-Token-Binding-ID:true               |
      | any security-relevant cookies |                      |
      | should contain TBID1          |                      |
    +<- - - - - - - - - - - - - - - - |                      |
@@ -856,7 +856,7 @@
       </figure>
       <figure>
         <artwork>
-  Header field name:           Include-Referer-Token-Binding-ID
+  Header field name:           Include-Referred-Token-Binding-ID
   Applicable protocol:         HTTP 
   Status:                      standard
   Author/Change controller:    IETF
