@@ -261,7 +261,7 @@
       attackers.</t>
       <t>While the <xref target="I-D.ietf-tokbind-protocol">Token Binding
       Protocol</xref> defines a message format for establishing a
-      Token Binding ID, it doesn't specify how this message is
+      Token Binding ID, it does not specify how this message is
       embedded in higher-level protocols. The purpose of this
       specification is to define how TokenBindingMessages are embedded
       in HTTP (both versions <xref target="RFC7230">1.1</xref> and
@@ -323,7 +323,7 @@
       (clients use different Token Binding keys for different
       servers). The Token Binding ID established by this TokenBinding
       is called a <spanx style="emph">Provided Token Binding
-      ID</spanx></t>
+      ID</spanx>.</t>
 
       <t>In HTTP/2, the client SHOULD use <xref
       target="RFC7541">Header
@@ -377,7 +377,7 @@
 	ensuring that only said client can use the identity token: The
 	Relying Party will compare the Token Binding ID in the identity
 	token with the Token Binding ID of the TLS connection between it
-	an the client.</t>
+	and the client.</t>
 	<t>This is an example of a federation scenario, which more
 	generally can be described as follows:
 	<list style="symbols">
@@ -418,7 +418,7 @@
 	ID between the client and the Token Consumer while delivering
 	the token request to the Token Provider) only if the Token
 	Consumer permits the client to do so.</t>
-	<t>Below, we specify how Token Consumers can grant this permission. during
+	<t>Below, we specify how Token Consumers can grant this permission in
   redirect-based federation protocols.</t>
       </section>
       
@@ -450,7 +450,7 @@
 	of the provided TokenBinding from the referrer and create a referred TokenBinding
 	with it to include in the TokenBindingMessage on the redirect request. In other
   words, the Token Binding message in the redirect request to the Token Provider
-  includes one provided binding and one referred binding, the latter constructed
+  now includes one provided binding and one referred binding, the latter constructed
   from the binding between the client and the Token Consumer.</t>
   
   <t>If the Include-Referred-Token-Binding-ID header field is received in response to a
@@ -480,8 +480,8 @@
 	TokenBinding structure with TokenBindingType
 	provided_token_binding, which MUST be signed with the Token
 	Binding key used by the client for connections between itself
-	and the Token Privider (more specifically, the web origin that
-	the token request sent to).
+	and the Token Provider (more specifically, the web origin that
+	the token request is being sent to).
 	</t>
       </section>
       
@@ -559,7 +559,7 @@
      |                               |                      |
      |                               |                      |
      |                               |                      |
-     | 0. Client interacts w/TC      |                      |
+     | 0. Client interacts w/ TC     |                      |
      | over HTTPS, establishes Ks1 & Kp1, TBID1             |
      | ETBMSG[[{EKM1}Ks1,TBID1,provided_token_binding]]     |
      |------------------------------>|                      |
@@ -581,7 +581,7 @@
      | establishes Ks2, Kp2, TBID2;                         |
      | sends GET or POST with                               |
      | ETBMSG[[{EKM2}Ks2,TBID2,provided_token_binding],     |
-     |       [{EKM2}Ks1,TBID1,referred_token_binding]]      |
+     |        [{EKM2}Ks1,TBID1,referred_token_binding]]     |
      | as well as the ID Token request                      |
      |                               |                      |
      |                               |                      |
@@ -669,16 +669,16 @@
           Sec-Token-Binding header field that matches the binding present in the cookie,
           thus successfully authenticating as the client, and gaining access to
           the client's data at the server. The Token Binding protocol, in this
-          case, didn't successfully bind the cookie to the client.
+          case, did not successfully bind the cookie to the client.
         </t>
         <t>
           Likewise, we need integrity protection of the Sec-Token-Binding header field: A
-          client shouldn't be tricked into sending a Sec-Token-Binding header field to a
+          client should not be tricked into sending a Sec-Token-Binding header field to a
           server that contains Token Binding messages about key pairs that the
-          client doesn't control. Consider an attacker A that somehow has
+          client does not control. Consider an attacker A that somehow has
           knowledge of the exported keying material (EKM) for a TLS connection
           between a client C and a server S. (While that is somewhat unlikely,
-          it's also not entirely out of the question, since the client might
+          it is also not entirely out of the question, since the client might
           not treat the EKM as a secret - after all, a pre-image-resistant hash
           function has been applied to the TLS master secret, making it
           impossible for someone knowing the EKM to recover the TLS master
@@ -686,13 +686,13 @@
           EKM as a secret.) Such an attacker A could craft a Sec-Token-Binding
           header field with A's key pair over C's EKM. If the attacker could now
           trick C to send such a header field to S, it would appear to S as if C
-          controls a certain key pair when in fact it doesn't (the attacker A
+          controls a certain key pair when in fact it does not (the attacker A
           controls the key pair).
         </t>
         <t>
           If A has a pre-existing relationship with S (perhaps has an account
           on S), it now appears to the server S as if A is connecting to it,
-          even though it is really C. (If the server S doesn't simply use Token
+          even though it is really C. (If the server S does not simply use Token
           Binding keys to identify clients, but also uses bound authentication
           cookies, then A would also have to trick C into sending one of A's
           cookies to S, which it can do through a variety of means - inserting
@@ -735,7 +735,7 @@
             <t>
               The client wants to establish a secure (i.e., free of
               men-in-the-middle) authenticated session with the Token Consumer,
-              but hasn't done so yet (in other words, we're about to run the
+              but has not done so yet (in other words, we are about to run the
               federated sign-on protocol).
             </t>
             <t>
@@ -822,7 +822,7 @@
         </t>
       </section>
       <section title="Life Time of Token Binding Keys">
-        <t>Token Binding keys don't have an expiration time. This means that they 
+        <t>Token Binding keys do not have an expiration time. This means that they 
           can potentially be used by a server to track a user across an extended
           period of time (similar to a long-lived cookie). HTTPS clients such as 
           web user agents should therefore provide a user interface for discarding
