@@ -559,7 +559,7 @@
      |                               |                      |
      |                               |                      |
      |                               |                      |
-     | 0. Client interacts w/ TC     |                      |
+     | 0. Client interacts w/TC      |                      |
      | over HTTPS, establishes Ks1 & Kp1, TBID1             |
      | ETBMSG[[{EKM1}Ks1,TBID1,provided_token_binding]]     |
      |------------------------------>|                      |
@@ -577,7 +577,7 @@
    . |  303, 307, or 308)            |                      |
    . |                               |                      |
    +------------------------------------------------------->|
-     | 1b. opens HTTPS w/ TP,                               |
+     | 1b. opens HTTPS w/TP,                                |
      | establishes Ks2, Kp2, TBID2;                         |
      | sends GET or POST with                               |
      | ETBMSG[[{EKM2}Ks2,TBID2,provided_token_binding],     |
