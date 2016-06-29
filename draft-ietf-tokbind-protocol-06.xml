@@ -42,7 +42,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-04" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-06" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -160,6 +160,31 @@
       </address>
     </author>
 
+    <author fullname="Jeff Hodges" initials="J."
+            surname="Hodges">
+      <organization>Paypal</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <!-- Reorder these if your country does things differently -->
+
+          <city></city>
+
+          <region></region>
+
+          <code></code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>Jeff.Hodges@paypal.com</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
     <date year="2016" />
 
     <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
@@ -272,18 +297,21 @@
     </section>
 
     <section title="Token Binding Protocol Message">
+      <t>The Token Binding message is sent by the client to prove possession of one or more private 
+      keys held by the client. This message MUST be sent if the client and server successfully 
+      negotiated the use of the Token Binding protocol via 
+      <xref target="I-D.ietf-tokbind-negotiation"/>, and MUST NOT be sent otherwise. This message 
+      MUST be sent in the client's first application protocol message. This message MAY also be 
+      sent in subsequent application protocol messages, proving possession of additional private 
+      keys held by the same client, which can be used to facilitate token binding between more than 
+      two communicating parties. For example, Token Binding over HTTP 
+      <xref target="I-D.ietf-tokbind-https"/> specifies an encapsulation of the Token Binding 
+      message in HTTP application protocol messages, as well as scenarios involving more than two 
+      communicating parties.</t>
+      
       <figure>
-        <preamble>The Token Binding message is sent by the client and proves possession of one or 
-        more private keys held by the client. This message MUST be sent if the client and server 
-        successfully negotiated the use of the Token Binding protocol via 
-        <xref target="I-D.ietf-tokbind-negotiation"/>, and MUST NOT be sent otherwise. This 
-        message MUST be sent in the client's first application protocol message. This message MAY 
-        also be sent in subsequent application protocol messages, proving possession of other keys 
-        by the same client, to facilitate token binding between more than two communicating 
-        parties. Token Binding over HTTP <xref target="I-D.ietf-tokbind-https"/> specifies the 
-        encapsulation of the Token Binding message in the application protocol messages, and the 
-        scenarios involving more than two communicating parties. The Token Binding message format 
-        is defined using TLS specification language:</preamble>
+        <preamble>The Token Binding message format is defined using TLS Presentation Language (see 
+        Section 4 of <xref target="RFC5246"/>):</preamble>
         <artwork><![CDATA[
 
 enum {
@@ -335,17 +363,32 @@ struct {
 } TokenBindingMessage;
 
         ]]></artwork>
-        <postamble>The Token Binding message consists of a series of TokenBinding structures 
-        containing the type of the token binding, the TokenBindingID, a signature over the exported 
+        <postamble>The Token Binding message consists of a series of TokenBinding structures, each 
+        containing the type of the token binding, the TokenBindingID, a signature over an exported 
         keying material (EKM) value, optionally followed by Extension structures.
         </postamble>
       </figure>
 
-      <t>This document defines two token binding types: provided_token_binding used to establish a 
-      Token Binding when connecting to a server, and referred_token_binding used when requesting 
-      tokens to be presented to a different server. Token Binding over HTTP 
-      <xref target="I-D.ietf-tokbind-https"/> describes Token Binding between multiple 
-      communicating parties: User Agent, Identity Provider and Relying Party.</t>
+      <t>This document defines two Token Binding types: 
+        <list style="symbols">
+          <t>provided_token_binding - used to establish a Token Binding when connecting to a 
+          server.</t>
+          <t>referred_token_binding - used when requesting tokens to be presented to a different 
+          server.</t>
+        </list>
+      </t>
+      <t>Token Binding over HTTP <xref target="I-D.ietf-tokbind-https"/> describes a use case for 
+      referred_token_binding where Token Bindings are established between multiple communicating 
+      parties: User Agent, Identity Provider and Relying Party. User Agent sends 
+      referred_token_binding to the Identity Provider in order to prove possession of the Token 
+      Binding key it uses with the Relying Party. The Identity Provider can then bind the token it 
+      is supplying (for presentation to the Relying Party) to the Token Binding ID contained in the 
+      referred_token_binding. Such bound token enjoys the protections discussed below in 
+      <xref target="Security"/> "<xref target="Security" format="title"/>".</t>
+
+      <t>This document establishes an IANA registry for Token Binding extensions in 
+      <xref target="IANA-TBTypes"/> "<xref target="IANA-TBTypes" format="title"/>". An 
+      implementation MUST ignore any unknown Token Binding types.</t>
 
       <t>When an rsa2048_pkcs1.5 or rsa2048_pss key is used, TokenBinding.signature contains the 
       signature generated using, respectively, the RSASSA-PKCS1-v1_5 or RSASSA-PSS signature scheme 
@@ -353,12 +396,13 @@ struct {
       contain the length-prefixed modulus and exponent of the RSA public key represented in 
       big-endian format.</t>
 
-      <t>When an ecdsap256 key is used, TokenBinding.signature contains a pair of integers, R 
-      followed by S, as defined in <xref target="ANSI.X9-62.2005"/>. R and S are encoded in 
-      big-endian format. ECPoint.point contains the X coordinate followed by the Y coordinate. The 
-      X and Y coordinates are unsigned integers encoded in big-endian format. Future specifications 
-      may define Token Binding keys using other elliptic curves with their corresponding signature 
-      and point formats.</t>
+      <t>When an ecdsap256 key is used, TokenBinding.signature contains a pair of 32-byte integers, 
+      R followed by S, generated using Curve P-256 as defined in <xref target="ANSI.X9-62.2005"/> 
+      and <xref target="FIPS.186-4.2013"/>. R and S are encoded in big-endian format, preserving any 
+      leading zero bytes. ECPoint.point contains the X coordinate followed by the Y coordinate. The 
+      X and Y coordinates are unsigned 32-byte integers encoded in big-endian format, preserving any 
+      leading zero bytes. Future specifications may define Token Binding keys using other elliptic 
+      curves with their corresponding signature and point formats.</t>
 
       <t>The EKM is obtained using the Keying Material Exporters for TLS defined in 
       <xref target="RFC5705" />, by supplying the following input values:
@@ -369,42 +413,68 @@ struct {
         </list>
       </t>
 
-      <t>An implementation MUST ignore any unknown extensions. Initially, no extension types are 
-      defined. One of the possible uses of extensions envisioned at the time of this writing is 
-      attestation: cryptographic proof that allows the server to verify that the Token Binding key 
-      is hardware-bound. The definitions of such Token Binding protocol extensions are outside the 
-      scope of this specification.</t>
-
-      <t>At least one TokenBinding MUST be included in the Token Binding message. The signature 
-      algorithm and key length used in the TokenBinding MUST match the parameters negotiated via 
-      <xref target="I-D.ietf-tokbind-negotiation"/>. The client SHOULD generate and store Token 
-      Binding keys in a secure manner that prevents key export. In order to prevent cooperating 
-      servers from linking user identities, different keys SHOULD be used by the client for 
-      connections to different servers, according to the token scoping rules of the application 
-      protocol.</t>
     </section>
-
+    
     <section title="Establishing a TLS Token Binding">
-      <t>The triple handshake vulnerability in TLS 1.2 and older TLS versions affects the security 
-      of the Token Binding protocol, as described in the "Security Considerations" section below. 
-      Therefore, the server MUST NOT negotiate the use of the Token Binding protocol with these TLS 
-      versions, unless the server also negotiates Extended Master Secret <xref target="RFC7627" /> 
-      and Renegotiation Indication <xref target="RFC5746" /> TLS extensions.</t>
+      <section title="Client Processing Rules">
+        <t>The client MUST include at least one TokenBinding structure in the Token Binding message. 
+        The key parameters used in the provided_token_binding MUST match those negotiated with the 
+        server via <xref target="I-D.ietf-tokbind-negotiation"/>.</t>
+        
+        <t>The client SHOULD generate and store Token Binding keys in a secure manner that prevents 
+        key export. In order to prevent cooperating servers from linking user identities, different 
+        keys SHOULD be used by the client for connections to different servers, according to the 
+        token scoping rules of the application protocol.</t>
 
-      <t>The server MUST terminate the connection if the use of the Token Binding protocol 
-      was not negotiated, but the client sends the Token Binding message. If the Token Binding 
-      type is "provided_token_binding", the server MUST verify that the signature algorithm 
-      (including elliptic curve in the case of ECDSA) and key length in the Token Binding message 
-      match those negotiated via <xref target="I-D.ietf-tokbind-negotiation"/>. In the case of a 
-      mismatch, the server MUST terminate the connection. As described in 
-      <xref target="I-D.ietf-tokbind-https"/>, Token Bindings of type "referred_token_binding" may 
-      have different key parameters than those negotiated via 
-      <xref target="I-D.ietf-tokbind-negotiation"/>.</t>
+        <t>When the client needs to send a referred_token_binding to the Identity Provider, the 
+        client SHALL construct the referred TokenBinding structure in the following manner: 
+          <list style="symbols">
+            <t>Set TokenBinding.tokenbinding_type to referred_token_binding.</t>
+            <t>Set TokenBinding.tokenbindingid to the Token Binding ID used with the Relying 
+            Party.</t>
+            <t>Set TokenBinding.signature to the result of signing the EKM value of the TLS 
+            connection to the Identity Provider, using the Token Binding key established with the 
+            Relying Party and the signature algorithm indicated by the associated key parameters. 
+            Note that these key parameters may differ from the key parameters negotiated with the 
+            Identity Provider.</t>
+          </list>
+        Conveying referred Token Bindings in this fashion allows the Identity Provider to verify 
+        that the client controls the Token Binding key used with the Relying Party.</t>
+      </section>
 
-      <t>If the Token Binding message does not contain at least one TokenBinding structure, 
-      or the signature contained in a TokenBinding structure is invalid, the server MUST 
-      terminate the connection. Otherwise, the TLS Token Binding is successfully established and 
-      its ID can be provided to the application for security token validation.</t>
+      <section title="Server Processing Rules">
+        <t>The triple handshake vulnerability in TLS 1.2 and older TLS versions affects the 
+        security of the Token Binding protocol, as described in <xref target="Security"/> 
+        "<xref target="Security" format="title"/>". Therefore, the server MUST NOT negotiate the 
+        use of the Token Binding protocol with these TLS versions, unless the server also 
+        negotiates Extended Master Secret <xref target="RFC7627"/> and Renegotiation Indication 
+        <xref target="RFC5746" /> TLS extensions.</t>
+
+        <t>The server MUST terminate the connection if the use of the Token Binding protocol was 
+        not negotiated, but the client sends the Token Binding message. If the Token Binding type 
+        is "provided_token_binding", the server MUST verify that the signature algorithm (including
+        elliptic curve in the case of ECDSA) and key length in the Token Binding message match 
+        those negotiated via <xref target="I-D.ietf-tokbind-negotiation"/>. In the case of a 
+        mismatch, the server MUST terminate the connection. Token Bindings of type 
+        "referred_token_binding" may use different key parameters than those negotiated with this 
+        client.</t>
+        
+        <t>If the Token Binding message does not contain at least one TokenBinding structure, 
+        or if a signature contained in any TokenBinding structure is invalid, the server MUST 
+        terminate the connection. </t>
+        
+        <t>Servers MUST ignore any unknown extensions. Initially, no extension types are defined 
+        (see <xref target="IANA-TBExts"/> "<xref target="IANA-TBExts" format="title"/>"). One of 
+        the possible uses of extensions envisioned at the time of this writing is attestation: 
+        cryptographic proof that allows the server to verify that the Token Binding key is 
+        hardware-bound. The definitions of such Token Binding protocol extensions are outside the 
+        scope of this specification.</t>
+        
+        <t>If all checks defined above have passed successfully, the TLS Token Binding between this 
+        client and server is established. The Token Binding ID(s) conveyed in the Token Binding 
+        Message can be provided to the server-side application. The application may then use the 
+        Token Binding IDs for bound security token creation and validation.</t>
+      </section>
     </section>
 
     <section title="TLS Token Binding ID Format">
@@ -428,7 +498,7 @@ struct {
         <postamble>TokenBindingID contains the key parameters negotiated via 
         <xref target="I-D.ietf-tokbind-negotiation"/>. TLS Token Binding ID can be obtained from 
         the TokenBinding structure described in the "Token Binding Protocol Message" section of 
-        this document by discarding the token binding type, signature and extensions. TLS Token 
+        this document by discarding the Token Binding type, signature and extensions. TLS Token 
         Binding ID will be available at the application layer and used by the server to generate 
         and verify bound tokens.</postamble>
       </figure>
@@ -450,59 +520,72 @@ struct {
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
-      <t>This document establishes a registry for Token Binding type identifiers entitled "Token 
-      Binding Types" under the "Token Binding Protocol" heading.</t>
+      <t>This section establishes two IANA registries: one for Token Binding types, another for 
+      Token Binding extensions. It also registers a new TLS exporter label in the TLS Exporter 
+      Label Registry.</t>
 
-      <t>Entries in this registry require the following fields:
-        <list style="symbols">
-          <t>Value: The octet value that identifies the Token Binding type (0-255).</t>
-          <t>Description: The description of the Token Binding type.</t>
-          <t>Specification: A reference to a specification that defines the Token Binding 
-          type.</t>
-        </list>
-      </t>
+      <section anchor="IANA-TBTypes" title="Token Binding Types Registry">
+        <t>This document establishes a registry for Token Binding type identifiers entitled "Token 
+        Binding Types" under the "Token Binding Protocol" heading.</t>
 
-      <t>This registry operates under the "Expert Review" policy as defined in 
-      <xref target="RFC5226"/>. The designated expert is advised to encourage the inclusion of a 
-      reference to a permanent and readily available specification that enables the creation of 
-      interoperable implementations using the identified Token Binding type.</t>
+        <t>Entries in this registry require the following fields:
+          <list style="symbols">
+            <t>Value: The octet value that identifies the Token Binding type (0-255).</t>
+            <t>Description: The description of the Token Binding type.</t>
+            <t>Specification: A reference to a specification that defines the Token Binding 
+            type.</t>
+          </list>
+        </t>
 
-     <t>An initial set of registrations for this registry follows:
-       <list style="empty">
-         <t>Value: 0</t>
-         <t>Description: provided_token_binding</t>
-         <t>Specification: this document</t>
-       </list>
+        <t>This registry operates under the "Expert Review" policy as defined in 
+        <xref target="RFC5226"/>. The designated expert is advised to encourage the inclusion of a 
+        reference to a permanent and readily available specification that enables the creation of 
+        interoperable implementations using the identified Token Binding type.</t>
 
-       <list style="empty">
-         <t>Value: 1</t>
-         <t>Description: referred_token_binding</t>
-         <t>Specification: this document</t>
-       </list>
-     </t>
+        <t>An initial set of registrations for this registry follows:
+          <list style="empty">
+            <t>Value: 0</t>
+            <t>Description: provided_token_binding</t>
+            <t>Specification: this document</t>
+          </list>
 
-      <t>This document establishes a registry for Token Binding extensions entitled "Token 
-      Binding Extensions" under the "Token Binding Protocol" heading.</t>
+          <list style="empty">
+            <t>Value: 1</t>
+            <t>Description: referred_token_binding</t>
+            <t>Specification: this document</t>
+          </list>
+        </t>
+      </section>
+     
+      <section anchor="IANA-TBExts" title="Token Binding Extensions Registry">
+        <t>This document establishes a registry for Token Binding extensions entitled "Token 
+        Binding Extensions" under the "Token Binding Protocol" heading.</t>
 
-      <t>Entries in this registry require the following fields:
-        <list style="symbols">
-          <t>Value: The octet value that identifies the Token Binding extension (0-255).</t>
-          <t>Description: The description of the Token Binding extension.</t>
-          <t>Specification: A reference to a specification that defines the Token Binding 
-          extension.</t>
-        </list>
-      </t>
+        <t>Entries in this registry require the following fields:
+          <list style="symbols">
+            <t>Value: The octet value that identifies the Token Binding extension (0-255).</t>
+            <t>Description: The description of the Token Binding extension.</t>
+            <t>Specification: A reference to a specification that defines the Token Binding 
+            extension.</t>
+          </list>
+        </t>
 
-      <t>This registry operates under the "Expert Review" policy as defined in 
-      <xref target="RFC5226"/>. The designated expert is advised to encourage the inclusion of a 
-      reference to a permanent and readily available specification that enables the creation of 
-      interoperable implementations using the identified Token Binding extension. This document 
-      creates no initial registrations in the "Token Binding Extensions" registry.</t>
+        <t>This registry operates under the "Expert Review" policy as defined in 
+        <xref target="RFC5226"/>. The designated expert is advised to encourage the inclusion of a 
+        reference to a permanent and readily available specification that enables the creation of 
+        interoperable implementations using the identified Token Binding extension. This document 
+        creates no initial registrations in the "Token Binding Extensions" registry.</t>
 
-      <t>This document uses "Token Binding Key Parameters" registry originally created in 
-      <xref target="I-D.ietf-tokbind-negotiation"/>. This document creates no new registrations in 
-      this registry.</t>
-    </section>
+        <t>This document uses "Token Binding Key Parameters" registry originally created in 
+        <xref target="I-D.ietf-tokbind-negotiation"/>. This document creates no new registrations in 
+        this registry.</t>
+      </section>
+
+      <section anchor="IANA-TBExpLab" title="Registration of Token Binding TLS Exporter Label">
+        <t>This document adds a registration for the "EXPORTER-Token-Binding" value in the TLS
+        Exporter Label Registry to correspond to this specification.</t>
+      </section>
+    </section> <!-- IANA Considerations -->
 
     <section anchor="Security" title="Security Considerations">
       <section title="Security Token Replay">
@@ -513,6 +596,10 @@ struct {
         the attacker also needs to export the corresponding private key. Token Binding private 
         keys are therefore high-value assets and SHOULD be strongly protected, ideally by 
         generating them in a hardware security module that prevents key export.</t>
+        <t>The manner in which a token is bound to the TLS layer is application-defined and beyond 
+        the scope of this document. However, the resulting bound token needs to be 
+        integrity-protected, so that an attacker cannot remove the binding or substitute a Token 
+        Binding ID of their choice without detection.</t>
       </section>
       <section title="Downgrade Attacks">
         <t>The Token Binding protocol is only used when negotiated via 
@@ -561,7 +648,8 @@ struct {
 
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>This document incorporates comments and suggestions offered by Eric Rescorla, Gabriel 
-      Montenegro, Martin Thomson, Vinod Anupam, Bill Cox, Nick Harper and others.</t>
+      Montenegro, Martin Thomson, Vinod Anupam, Bill Cox, Nick Harper, Brian Campbell and 
+      others.</t>
     </section>
   </middle>
 
@@ -615,6 +703,26 @@ struct {
 
       </reference>
 
+      <reference anchor="FIPS.186-4.2013">
+
+        <front>
+
+          <title>Digital Signature Standard (DSS)</title>
+
+          <author>
+
+            <organization>National Institute of Standards and Technology</organization>
+
+          </author>
+
+          <date year="2013" />
+
+        </front>
+
+        <seriesInfo name="FIPS" value="186-4" />
+
+      </reference>
+
     </references>
 
     <references title="Informative References">
@@ -648,6 +756,10 @@ struct {
       v01 2015-05-26  Andrei Popov   Replaced ALPN-based TB negotiation with TBNEGO
       v02 2015-09-11  Andrei Popov   Replaced TLS-UNIQUE with RFC5705 exporters, SignatureAndHashAlgorithm with 1-byte key parameters IDs from TBNEGO
       v03 2015-10-06  Andrei Popov   Removed ECDSAParams because NamedCurve is indicated by key_parameters
-      v04 2016-01-08  Andrei Popov   Moved TB type out of the TB ID, added requirement for Renegotiation Indication, specified public key and signature formats -->
+      v04 2016-01-08  Andrei Popov   Moved TB type out of the TB ID, added requirement for Renegotiation Indication, specified public key and signature formats
+      v05 2016-03-24  Andrei Popov   Merged Jeff's IANA PR and added him as a co-author
+      v06 2016-04-11  Andrei Popov   Per IETF95 feedback, clarified that TB types should be skipped
+      v06 2016-05-19  Andrei Popov   Merged Jeff's PR on referred TB processing
+      v06 2016-05-20  Andrei Popov   Clarified ECDSAP256 parameters per Brian's feedback -->
   </back>
 </rfc>
