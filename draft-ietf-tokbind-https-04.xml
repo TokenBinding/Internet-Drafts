@@ -286,15 +286,7 @@
       server than the one that the TokenBindingMessage is sent
       to. This is useful in federation scenarios.</t>
 
-      <section title="Terminology">
-        <t>The following terms are defined in 
-        <xref target="I-D.ietf-tokbind-protocol"/>: 
-        TokenBinding, 
-        TokenBindingID ("Token Binding ID"),
-        TokenBindingMessage, 
-        TokenBindingType
-        </t>
-
+      <section title="Requirements Language">
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
         "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
         document are to be interpreted as described in <xref target="RFC2119" />.</t>
