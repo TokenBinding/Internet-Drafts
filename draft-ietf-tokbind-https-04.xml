@@ -419,7 +419,10 @@
 	the token request to the Token Provider) only if the Token
 	Consumer permits the client to do so.</t>
 	<t>Below, we specify how Token Consumers can grant this permission in
-  redirect-based federation protocols.</t>
+    redirect-based federation protocols. Note that this assumes that the federated
+    sign-on flow starts at the Token Consumer, or at the very least include a redirect
+    from Token Consumer to Token Provider. It is outside the scope of this
+    document to specify similar mechanisms for flows that do not include such redirects.</t>
       </section>
       
       <section title="HTTP Redirects">
