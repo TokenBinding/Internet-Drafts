@@ -454,7 +454,9 @@
 	with it to include in the TokenBindingMessage on the redirect request. In other
   words, the Token Binding message in the redirect request to the Token Provider
   now includes one provided binding and one referred binding, the latter constructed
-  from the binding between the client and the Token Consumer.</t>
+  from the binding between the client and the Token Consumer. Note that that the 
+  referred token binding is sent only on the request resulting from the redirect 
+  and not on any subsequent requests to the Token Provider</t>
   
   <t>If the Include-Referred-Token-Binding-ID header field is received in response to a
   request that did not include the Token-Binding header field, the client MUST ignore
