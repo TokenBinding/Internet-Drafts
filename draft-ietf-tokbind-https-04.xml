@@ -286,7 +286,15 @@
       server than the one that the TokenBindingMessage is sent
       to. This is useful in federation scenarios.</t>
 
-      <section title="Requirements Language">
+      <section title="Terminology">
+        <t>The following terms are defined in 
+        <xref target="I-D.ietf-tokbind-protocol"/>: 
+        TokenBinding, 
+        TokenBindingID ("Token Binding ID"),
+        TokenBindingMessage, 
+        TokenBindingType
+        </t>
+
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
         "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
         document are to be interpreted as described in <xref target="RFC2119" />.</t>
@@ -296,7 +304,8 @@
     <section title="The Sec-Token-Binding Header Field">
       <t>Once a client and server have negotiated the Token Binding
       Protocol with HTTP/1.1 or HTTP/2 (see <xref
-      target="I-D.ietf-tokbind-protocol">The Token Binding Protocol</xref>), clients
+      target="I-D.ietf-tokbind-protocol"/> and <xref
+      target="I-D.ietf-tokbind-negotiation"/>), clients
       MUST include the Sec-Token-Binding header field in their HTTP requests. The ABNF 
       of the Sec-Token-Binding header field is (in <xref target="RFC7230"/> style, see also <xref target="RFC7231"/> Section 8.3):
       </t>
@@ -307,8 +316,8 @@
       <t>The header field name is "Sec-Token-Binding", and 
       EncodedTokenBindingMessage is a base64url encoding 
       (see <xref target="RFC4648"/> Section 5) 
-      of the TokenBindingMessage as defined in the <xref
-      target="I-D.ietf-tokbind-protocol">TokenBindingProtocol</xref>.</t>
+      of the TokenBindingMessage as defined in <xref
+      target="I-D.ietf-tokbind-protocol"/>.</t>
       
       <t>For example:</t>
       <figure><artwork><![CDATA[
@@ -318,9 +327,9 @@
 
       <t>The TokenBindingMessage MUST contain a TokenBinding with
       TokenBindingType provided_token_binding, which MUST be signed
-      with the Token Binding key used by the client for connections
+      with the Token Binding private key used by the client for connections
       between itself and the server that the HTTP request is sent to
-      (clients use different Token Binding keys for different
+      (clients use different Token Binding key pairs for different
       servers). The Token Binding ID established by this TokenBinding
       is called a <spanx style="emph">Provided Token Binding
       ID</spanx>.</t>
