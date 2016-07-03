@@ -348,7 +348,7 @@
 	<t>In this section we describe mechanisms to achieve this. The
 	common idea among these mechanisms is that a server (called
 	the <spanx style="emph">Token Consumer</spanx> in this
-	document) gives the client permission to reveal the Provided
+	document) signals to the client that it should reveal the Provided
 	Token Binding ID that is used between the client and itself,
 	to another server (called the <spanx style="emph">Token
 	Provider</spanx> in this document). Also common across the
@@ -358,7 +358,7 @@
 	includes a TokenBinding structure in the Sec-Token-Binding HTTP
 	header field defined above.  What differs between the various
 	mechanisms is <spanx style="emph">how</spanx> the Token
-	Consumer grants the permission to reveal the Token Binding ID
+	Consumer signals to the client that it should reveal the Token Binding ID
 	to the Token Provider. Below we specify one such mechanism, which is 
   suitable for redirect-based interactions between Token Consumers and
   Token Providers.</t>
@@ -417,8 +417,8 @@
 	possession of a private key that corresponds to a Token Binding
 	ID between the client and the Token Consumer while delivering
 	the token request to the Token Provider) only if the Token
-	Consumer permits the client to do so.</t>
-	<t>Below, we specify how Token Consumers can grant this permission in
+	Consumer requests the client to do so.</t>
+	<t>Below, we specify how Token Consumers can signal this request in
     redirect-based federation protocols. Note that this assumes that the federated
     sign-on flow starts at the Token Consumer, or at the very least include a redirect
     from Token Consumer to Token Provider. It is outside the scope of this
