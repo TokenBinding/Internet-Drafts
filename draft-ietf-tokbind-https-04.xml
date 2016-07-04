@@ -449,7 +449,8 @@
         about the Token Binding used between the client and the Token 
         Consumer to the Token Provider.</t>
 	
-	<t>When a client receives this header field, it should take the TokenBindingID
+	<t>As illustrated in <xref target="sctn-fed-example"/>, when a client 
+	receives this header field, it should take the TokenBindingID
 	of the provided TokenBinding from the referrer and create a referred TokenBinding
 	with it to include in the TokenBindingMessage on the redirect request. In other
   words, the Token Binding message in the redirect request to the Token Provider
@@ -467,7 +468,7 @@
 	codes. If the client supports the Token Binding Protocol, and
 	has negotiated the Token Binding Protocol with both the Token
 	Consumer and the Token Provider, it already sends the
-	following Sec-Token-Binding header field to the Token Provider with each HTTP
+ Sec-Token-Binding header field to the Token Provider with each HTTP
 	request (see above).</t>
 
 	<t>The TokenBindingMessage SHOULD contain a TokenBinding with
@@ -487,7 +488,33 @@
 	Binding key used by the client for connections between itself
 	and the Token Provider (more specifically, the web origin that
 	the token request is being sent to).
-	</t>
+ </t>
+	
+	<t>If for some deployment-specific reason the initial 
+	Token Provider ("TP1") needs to redirect the
+client to another Token Provider ("TP2"), rather than 
+directly back to the Token Consumer, it can be
+accomodated using the header fields defined in this 
+specification in the following fashion ("the
+redirect-chain approach"):</t>
+	
+	<list>
+	<t>Initially, the client is redirected to TP1 by the Token Consumer ("TC"), as described above.
+	Upon receiving the client's request, containing a TokenBindingMessage which contains both provided
+	and referred TokenBindings (for TP1 and TC, respectively), TP1 responds to the client with a
+	redirect response containing the Include-Referred-Token-Binding-ID header field and directing the
+	client to send a request to TP2. This causes the client to follow the same pattern and send a
+	request containing a TokenBindingMessage which contains both provided and referred TokenBindings
+	(for TP2 and TP1, respectively) to TP2. Note that this pattern can continue to further Token
+	Providers. In this case, TP2 issues a security token, bound to the client's TokenBinding with TP1,
+	and sends a redirect response to the client pointing to TP1. TP1 in turn constructs a security
+	token for the Token Consumer, bound to the TC's referred TokenBinding which had been conveyed
+	earlier, and sends a redirect response pointing to the TC, containing the bound security token, to
+	the client.</t>
+	</list>
+	
+	<t>The above is intended as only a non-normative example. Details are specific to deployment
+contexts. Other approaches are possible, but are outside the scope of this specification.</t>
       </section>
       
       <section title="Negotiated Key Parameters">
@@ -509,7 +536,7 @@
         TokenBindingMessage, it MUST issue an unbound token.</t>
       </section>
       
-      <section title="Federation Example">
+      <section title="Federation Example" anchor="sctn-fed-example">
         
         
         <t> The diagram below shows a 
