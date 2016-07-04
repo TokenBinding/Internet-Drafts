@@ -496,7 +496,7 @@ client to another Token Provider ("TP2"), rather than
 directly back to the Token Consumer, it can be
 accomodated using the header fields defined in this 
 specification in the following fashion ("the
-redirect-chain approach"):</t>
+redirect-chain approach"):
 	
 	<list>
 	<t>Initially, the client is redirected to TP1 by the Token Consumer ("TC"), as described above.
@@ -513,7 +513,7 @@ redirect-chain approach"):</t>
 	the client.</t>
 	</list>
 	
-	<t>The above is intended as only a non-normative example. Details are specific to deployment
+The above is intended as only a non-normative example. Details are specific to deployment
 contexts. Other approaches are possible, but are outside the scope of this specification.</t>
       </section>
       
