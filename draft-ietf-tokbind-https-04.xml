@@ -15,6 +15,9 @@
 <!ENTITY RFC5705 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5705.xml">
 <!ENTITY RFC5746 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5746.xml">
 <!ENTITY RFC5929 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5929.xml">
+<!ENTITY RFC6265 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6265.xml">
+<!ENTITY RFC6749 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6749.xml">
+<!ENTITY RFC6750 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6750.xml">
 <!ENTITY RFC7230 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7230.xml">
 <!ENTITY RFC7231 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7231.xml">
 <!ENTITY RFC7301 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7301.xml">
@@ -320,8 +323,9 @@
       with TokenBindingType of provided_token_binding, which MUST be signed
       with the Token Binding private key used by the client for connections
       between itself and the server that the HTTP request is sent to
-      (clients use different Token Binding key pairs for different
-      servers). The Token Binding ID established by this TokenBinding
+      (clients use different Token Binding keys for different
+      servers, see <xref target="sctn-keypair-scope"/> below). 
+      The Token Binding ID established by this TokenBinding
       is called a <spanx style="emph">Provided Token Binding
       ID</spanx>.</t>
       
@@ -337,6 +341,47 @@
       target="RFC7541">Header
       Compression</xref> to avoid the overhead of repeating the same
       header field in subsequent HTTP requests.</t>
+      
+      
+      
+      <section title="HTTPS Token Binding Key Pair Scoping" 
+        anchor="sctn-keypair-scope">
+        
+        <t>HTTPS is used in conjunction with various application 
+        protocols, and application contexts, in various ways. 
+        For example, general purpose Web browsing is one such HTTP-based 
+        application context. Within the latter context, HTTP cookies 
+        <xref target="RFC6265"/> are typically utilized for state management, 
+        including client authentication. 
+        A related, though distinct, example of other HTTP-based
+        application contexts is where OAuth tokens <xref target="RFC6749"/>
+        are utilized to manage 
+        authorization for third-party application access to resources. 
+        The token scoping rules of these two 
+        examples can differ: the scoping rules for cookies are concisely 
+        specified in <xref target="RFC6265"/>, whereas OAuth is 
+        a framework and defines various 
+        token types with various scopings, some of which are determined by
+        the encompassing application. 
+        </t>
+        
+        <t>The Token Binding key pair scoping for those key pairs generated in 
+        the context of the first-party and federation use cases defined in this 
+        specification (below), and to be used for binding HTTP cookies MUST be at the 
+        granularity of "effective top-level domain (public suffix) + 1" (eTLD+1), 
+          i.e., at the same granularity at which cookies can be set 
+          (see <xref target="RFC6265"/>).  Key pairs used to bind other application
+          tokens, such as OAuth tokens, SHOULD adhere to the above eTLD+1
+          scoping requirement for those tokens being employed in first-party
+          or federation scenarios as described below, e.g., OAuth refresh tokens 
+          or Open ID Connect "ID Tokens". See also <xref 
+          target="sctn-priv-tbkey-scoping"/>, below.</t>
+          
+        <t>Scoping rules for other HTTP-based application contexts are outside the scope of 
+        this specification.</t>
+        
+      </section>
+      
     </section>
 
     <section title="First-party Use Cases">
@@ -861,20 +906,20 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       </section>
     </section>
     <section title="Privacy Considerations">
-      <section title="Scoping of Token Binding Keys">
-        <t>Clients must use different Token Binding keys for different servers, so as 
+      <section title="Scoping of Token Binding Keys" anchor="sctn-priv-tbkey-scoping">
+        <t>Clients use different Token Binding key pairs for different servers, so as 
           to not allow Token Binding to become a tracking tool across different servers.
-          When Token Binding is used over HTTPS, this key scoping should in particular
-          happen at the granularity of "effective top-level domain (public suffix) + 1",
-          i.e., at the same granularity at which cookies can be set.
-        </t>        
-        <t>The reason for this is that servers may use Token Binding to secure their
-          cookies. These cookies can be attached to any 
-          sub-domain of public suffixes, and clients therefore should use the same 
+          However, the scoping of the Token Binding key pairs to servers varies according
+          to the scoping rules of the application protocol (<xref 
+          target="I-D.ietf-tokbind-protocol"/> section 4.1).</t>
+          
+          <t>In the case of HTTP cookies, servers may use Token Binding to secure their cookies. 
+          These cookies can be attached to any 
+          sub-domain of effective top-level domains, and clients therefore should use the same 
           Token Binding key across such subdomains. This will ensure that any server
           capable of receiving the cookie will see the same Token Binding ID from 
           the client, and thus be able to verify the token binding of the cookie.
-        </t>
+          See <xref target="sctn-keypair-scope"/>, above. </t>
       </section>
       <section title="Life Time of Token Binding Keys">
         <t>Token Binding keys do not have an expiration time. This means that they 
@@ -956,6 +1001,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       &RFC5246;
       &RFC5705;
       <!-- &RFC5929; -->
+      &RFC6265;
       &RFC7230;
       &RFC7231;
       <!-- &RFC7301; -->
@@ -977,6 +1023,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
 
     <references title="Informative References">
       &RFC5746;
+      &RFC6749;
+      &RFC6750;
       &RFC7540;
       &RFC7627;
 
@@ -1019,6 +1067,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       v04 2016-06-22  Andrei Popov   Merged pull request to clarify that the TB messages are sent base64url-encoded;
                                      Removed references to SignatureAndHashAlgorithm;
                                      Added references to TBPROTO and TBNEGO;
+      v04+ 2016-07-04  Jeff Hodges   Refined TB key pair scoping rules, issue #33.
+                                     
     -->
   </back>
 </rfc>
