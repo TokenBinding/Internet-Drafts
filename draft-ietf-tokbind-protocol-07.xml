@@ -42,7 +42,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-06" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-07" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -496,9 +496,10 @@ struct {
         <postamble>TokenBindingID contains the key parameters negotiated via 
         <xref target="I-D.ietf-tokbind-negotiation"/>. TLS Token Binding ID can be obtained from 
         the TokenBinding structure described in the "Token Binding Protocol Message" section of 
-        this document by discarding the Token Binding type, signature and extensions. TLS Token 
-        Binding ID will be available at the application layer and used by the server to generate 
-        and verify bound tokens.</postamble>
+        this document by discarding the Token Binding type, signature and extensions. Token Binding 
+        protocol implementations SHOULD make Token Binding IDs available to the application as 
+        opaque byte sequences. E.g. server applications will use Token Binding IDs when generating 
+        and verifying bound tokens.</postamble>
       </figure>
     </section>
 
@@ -518,9 +519,49 @@ struct {
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
-      <t>This section establishes two IANA registries: one for Token Binding types, another for 
-      Token Binding extensions. It also registers a new TLS exporter label in the TLS Exporter 
-      Label Registry.</t>
+      <t>This section establishes three IANA registries: "Token Binding Key Parameters", "Token 
+      Binding Types" and "Token Binding Extensions". It also registers a new TLS exporter label in 
+      the TLS Exporter Label Registry.</t>
+
+      <section anchor="IANA-TBKeyParams" title="Token Binding Key Parameters Registry">
+        <t>This document establishes a registry for identifiers of Token Binding key parameters 
+        entitled "Token Binding Key Parameters" under the "Token Binding Protocol" heading.</t>
+
+        <t>Entries in this registry require the following fields:
+          <list style="symbols">
+            <t>Value: The octet value that identifies a set of Token Binding key parameters 
+            (0-255).</t>
+            <t>Description: The description of the Token Binding key parameters.</t>
+            <t>Specification: A reference to a specification that defines the Token Binding key 
+            parameters.</t>
+          </list>
+        </t>
+
+        <t>This registry operates under the "Expert Review" policy as defined in 
+        <xref target="RFC5226"/>. The designated expert is advised to encourage the inclusion of a 
+        reference to a permanent and readily available specification that enables the creation of 
+        interoperable implementations using the identified set of Token Binding key parameters.</t>
+
+        <t>An initial set of registrations for this registry follows:
+          <list style="empty">
+            <t>Value: 0</t>
+            <t>Description: rsa2048_pkcs1.5</t>
+            <t>Specification: this document</t>
+          </list>
+
+          <list style="empty">
+            <t>Value: 1</t>
+            <t>Description: rsa2048_pss</t>
+            <t>Specification: this document</t>
+          </list>
+
+          <list style="empty">
+            <t>Value: 2</t>
+            <t>Description: ecdsap256</t>
+            <t>Specification: this document</t>
+          </list>
+        </t>
+      </section>
 
       <section anchor="IANA-TBTypes" title="Token Binding Types Registry">
         <t>This document establishes a registry for Token Binding type identifiers entitled "Token 
@@ -573,10 +614,6 @@ struct {
         reference to a permanent and readily available specification that enables the creation of 
         interoperable implementations using the identified Token Binding extension. This document 
         creates no initial registrations in the "Token Binding Extensions" registry.</t>
-
-        <t>This document uses "Token Binding Key Parameters" registry originally created in 
-        <xref target="I-D.ietf-tokbind-negotiation"/>. This document creates no new registrations in 
-        this registry.</t>
       </section>
 
       <section anchor="IANA-TBExpLab" title="Registration of Token Binding TLS Exporter Label">
@@ -646,8 +683,8 @@ struct {
 
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>This document incorporates comments and suggestions offered by Eric Rescorla, Gabriel 
-      Montenegro, Martin Thomson, Vinod Anupam, Bill Cox, Nick Harper, Brian Campbell and 
-      others.</t>
+      Montenegro, Martin Thomson, Vinod Anupam, Anthony Nadalin, Michael Jones, Bill Cox, Nick 
+      Harper, Brian Campbell and others.</t>
     </section>
   </middle>
 
@@ -758,6 +795,8 @@ struct {
       v05 2016-03-24  Andrei Popov   Merged Jeff's IANA PR and added him as a co-author
       v06 2016-04-11  Andrei Popov   Per IETF95 feedback, clarified that TB types should be skipped
       v06 2016-05-19  Andrei Popov   Merged Jeff's PR on referred TB processing
-      v06 2016-05-20  Andrei Popov   Clarified ECDSAP256 parameters per Brian's feedback -->
+      v06 2016-05-20  Andrei Popov   Clarified ECDSAP256 parameters per Brian's feedback
+      v07 2016-07-06  Andrei Popov   Noted that TB IDs should be presented to the application as opaque byte sequences
+      v07 2016-07-07  Andrei Popov   Moved the TB ID registry from TBNEGO to TBPROTO -->
   </back>
 </rfc>
