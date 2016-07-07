@@ -51,7 +51,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-https-04" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-https-05" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -1068,7 +1068,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
                                      Removed references to SignatureAndHashAlgorithm;
                                      Added references to TBPROTO and TBNEGO;
       v04+ 2016-07-04  Jeff Hodges   Refined TB key pair scoping rules, issue #33;
-      v04 2016-07-07  Andrei Popov   Moved TB key parameters IDs registration from TBNEGO to TBPROTO;
+      v05 2016-07-07  Andrei Popov   Moved TB key parameters IDs registration from TBNEGO to TBPROTO;
     -->
   </back>
 </rfc>
