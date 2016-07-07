@@ -598,7 +598,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         even if those key parameters are different from the ones 
         negotiated with the origin that the header field is sent to.</t>
         <t>Token Providers SHOULD support all the Token Binding key parameters
-        specified in the <xref target="I-D.ietf-tokbind-negotiation"/>. 
+        specified in the <xref target="I-D.ietf-tokbind-protocol"/>. 
         If a token provider does not support the key parameters
         specified in the referred_token_binding TokenBinding in the
         TokenBindingMessage, it MUST issue an unbound token.</t>
@@ -971,8 +971,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
 
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>This document incorporates comments and suggestions offered by Eric Rescorla, Gabriel 
-      Montenegro, Martin Thomson, Vinod Anupam, Bill Cox, Nick Harper, Brian Campbell and 
-      others.</t>
+      Montenegro, Martin Thomson, Vinod Anupam, Anthony Nadalin, Michael Jones, Bill Cox, Nick 
+      Harper, Brian Campbell and others.</t>
     </section>
   </middle>
 
@@ -1067,8 +1067,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       v04 2016-06-22  Andrei Popov   Merged pull request to clarify that the TB messages are sent base64url-encoded;
                                      Removed references to SignatureAndHashAlgorithm;
                                      Added references to TBPROTO and TBNEGO;
-      v04+ 2016-07-04  Jeff Hodges   Refined TB key pair scoping rules, issue #33.
-                                     
+      v04+ 2016-07-04  Jeff Hodges   Refined TB key pair scoping rules, issue #33;
+      v04 2016-07-07  Andrei Popov   Moved TB key parameters IDs registration from TBNEGO to TBPROTO;
     -->
   </back>
 </rfc>

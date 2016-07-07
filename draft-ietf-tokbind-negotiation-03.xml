@@ -38,7 +38,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-negotiation-02" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-negotiation-03" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -227,7 +227,7 @@ struct {
 } ProtocolVersion;
 
 enum {
-    rsa2048_pkcs1.5(0), rsa2048_pss(1), ecdsap256(2), (255)
+    (255)
 } TokenBindingKeyParameters;
 
 struct {
@@ -244,7 +244,9 @@ struct {
       specific draft version, e.g. {0, 1} or {0, 2}.</t>
 
       <t>"key_parameters_list" contains the list of identifiers of the Token Binding key 
-      parameters supported by the client, in descending order of preference.</t>
+      parameters supported by the client, in descending order of preference. 
+      <xref target="I-D.ietf-tokbind-protocol"/> defines an initial set of identifiers for Token 
+      Binding key parameters.</t>
     </section>
 
     <section title="Token Binding Negotiation Server Hello Extension">
@@ -318,43 +320,9 @@ struct {
       <t>This document defines a new TLS extension "token_binding", which needs to be added to the 
       IANA "Transport Layer Security (TLS) Extensions" registry.</t>
 
-      <t>This document establishes a registry for identifiers of Token Binding key parameters 
-      entitled "Token Binding Key Parameters" under the "Token Binding Protocol" heading.</t>
-
-      <t>Entries in this registry require the following fields:
-        <list style="symbols">
-          <t>Value: The octet value that identifies a set of Token Binding key parameters 
-          (0-255).</t>
-          <t>Description: The description of the Token Binding key parameters.</t>
-          <t>Specification: A reference to a specification that defines the Token Binding key 
-          parameters.</t>
-        </list>
-      </t>
-
-      <t>This registry operates under the "Expert Review" policy as defined in 
-      <xref target="RFC5226"/>. The designated expert is advised to encourage the inclusion of a 
-      reference to a permanent and readily available specification that enables the creation of 
-      interoperable implementations using the identified set of Token Binding key parameters.</t>
-
-     <t>An initial set of registrations for this registry follows:
-       <list style="empty">
-         <t>Value: 0</t>
-         <t>Description: rsa2048_pkcs1.5</t>
-         <t>Specification: this document</t>
-       </list>
-
-       <list style="empty">
-         <t>Value: 1</t>
-         <t>Description: rsa2048_pss</t>
-         <t>Specification: this document</t>
-       </list>
-
-       <list style="empty">
-         <t>Value: 2</t>
-         <t>Description: ecdsap256</t>
-         <t>Specification: this document</t>
-       </list>
-     </t>
+      <t>This document uses "Token Binding Key Parameters" registry originally created in 
+      <xref target="I-D.ietf-tokbind-protocol"/>. This document creates no new registrations in 
+      this registry.</t>
     </section>
 
     <section title="Security Considerations">
@@ -380,7 +348,8 @@ struct {
 
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>This document incorporates comments and suggestions offered by Eric Rescorla, Gabriel 
-      Montenegro, Martin Thomson, Vinod Anupam, Bill Cox, Nick Harper and others.</t>
+      Montenegro, Martin Thomson, Vinod Anupam, Anthony Nadalin, Michael Jones, Bill Cox, Nick 
+      Harper, Brian Campbell and others.</t>
     </section>
   </middle>
 
@@ -439,6 +408,7 @@ struct {
       v00 2015-05-07  Andrei Popov   Initial version
       v00 2015-09-09  Andrei Popov   Added TLS-style TB version negotiation, limited key parameters list to 1..2^8-1
       v01 2015-10-06  Andrei Popov   Removed _SHA256 suffixes from TB key parameters 
-      v02 2016-01-08  Andrei Popov   Added requirement for Renegotiation Indication -->
+      v02 2016-01-08  Andrei Popov   Added requirement for Renegotiation Indication 
+      v03 2016-07-07  Andrei Popov   Moved the TB ID registry to TBPROTO -->
   </back>
 </rfc>
