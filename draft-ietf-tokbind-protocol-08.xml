@@ -506,18 +506,25 @@ struct {
     </section>
 
     <section title="Bound Security Token Creation and Validation" anchor="BoundSecurityToken">
-      <t>Application security tokens can be bound to the TLS layer either by embedding the Token Binding ID 
-      in the token, or by maintaining a database mapping tokens to Token Binding IDs. The 
-      specific method of generating bound security tokens is application-defined and beyond the 
-      scope of this document. Note that applicable security considerations are outlined in <xref target="Security"/>.</t>
+      <t>Application security tokens can be bound to the TLS layer either by embedding the Token
+      Binding ID in the token, or by maintaining a database mapping tokens to Token Binding IDs. The
+      specific method of generating bound security tokens is application-defined and beyond the
+      scope of this document. Note that applicable security considerations are outlined in <xref
+      target="Security"/>.</t>
+      
+      <t>Either or both clients and servers MAY create bound security tokens. For example, HTTPS
+      servers employing Token Binding for securing their HTTP cookies will bind the cookies. In the
+      case of a server-initiated challenge-response protocol employing Token Binding and TLS, the
+      client can, for example, incorporate the Token Binding ID within the signed object it returns,
+      thus binding the object to the TLS connection with the server.</t>
 
-      <t>Upon receipt of a security token, the server attempts to retrieve TLS Token Binding ID 
-      information from the token and from the TLS connection with the client. 
-      Application-provided policy determines whether to honor non-bound (bearer) tokens. If the 
-      token is bound and a TLS Token Binding has not been established for the client connection, 
-      the server MUST discard the token. If the TLS Token Binding ID for the token does not 
-      match the TLS Token Binding ID established for the client connection, the server MUST 
-      discard the token.</t>
+      <t>Upon receipt of a bound security token, the server attempts to retrieve TLS Token Binding
+      ID information from the token and from the TLS connection with the client.
+      Application-provided policy determines whether to honor non-bound (bearer) tokens. If the
+      token is bound and a TLS Token Binding has not been established for the client connection, the
+      server MUST discard the token. If the TLS Token Binding ID for the token does not match the
+      TLS Token Binding ID established for the client connection, the server MUST discard the
+      token.</t>
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
@@ -804,7 +811,7 @@ struct {
                                      fixed line-length overrun in figure, indent figure,
                                      RFC4492 is not referenced from the text, retitle
                                      Sec Token Validation section to denote actual scope, 
-                                     xref to sec cons. 
+                                     xref to sec cons, and fix #22.
       -->
   </back>
 </rfc>
