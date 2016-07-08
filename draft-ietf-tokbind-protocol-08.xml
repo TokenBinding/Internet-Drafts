@@ -42,7 +42,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-07" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-08" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -310,57 +310,58 @@
       <figure>
         <preamble>The Token Binding message format is defined using TLS Presentation Language (see 
         Section 4 of <xref target="RFC5246"/>):</preamble>
+        
         <artwork><![CDATA[
-
-enum {
-    rsa2048_pkcs1.5(0), rsa2048_pss(1), ecdsap256(2), (255)
-} TokenBindingKeyParameters;
-
-struct {
-    opaque modulus<1..2^16-1>;
-    opaque publicexponent<1..2^8-1>;
-} RSAPublicKey;
-
-struct {
-    opaque point <1..2^8-1>;
-} ECPoint;
-
-enum {
-    provided_token_binding(0), referred_token_binding(1), (255)
-} TokenBindingType;
-
-struct {
-    TokenBindingKeyParameters key_parameters;
-    select (key_parameters) {
-        case rsa2048_pkcs1.5: 
-        case rsa2048_pss:
-            RSAPublicKey rsapubkey;
-        case ecdsap256: 
-            ECPoint point;
-    }
-} TokenBindingID;
-
-enum {
-    (255)                       // No initial ExtensionType registrations
-} ExtensionType;
-
-struct {
-    ExtensionType extension_type;
-    opaque extension_data<0..2^16-1>;
-} Extension;
-
-struct {
-    TokenBindingType tokenbinding_type;
-    TokenBindingID tokenbindingid;
-    opaque signature<0..2^16-1>;// Signature over the exported keying material value
-    Extension extensions<0..2^16-1>;
-} TokenBinding;
-
-struct {
-    TokenBinding tokenbindings<0..2^16-1>;
-} TokenBindingMessage;
-
+  enum {
+      rsa2048_pkcs1.5(0), rsa2048_pss(1), ecdsap256(2), (255)
+  } TokenBindingKeyParameters;
+  
+  struct {
+      opaque modulus<1..2^16-1>;
+      opaque publicexponent<1..2^8-1>;
+  } RSAPublicKey;
+  
+  struct {
+      opaque point <1..2^8-1>;
+  } ECPoint;
+  
+  enum {
+      provided_token_binding(0), referred_token_binding(1), (255)
+  } TokenBindingType;
+  
+  struct {
+      TokenBindingKeyParameters key_parameters;
+      select (key_parameters) {
+          case rsa2048_pkcs1.5: 
+          case rsa2048_pss:
+              RSAPublicKey rsapubkey;
+          case ecdsap256: 
+              ECPoint point;
+      }
+  } TokenBindingID;
+  
+  enum {
+      (255)        /* No initial ExtensionType registrations */
+  } ExtensionType;
+  
+  struct {
+      ExtensionType extension_type;
+      opaque extension_data<0..2^16-1>;
+  } Extension;
+  
+  struct {
+      TokenBindingType tokenbinding_type;
+      TokenBindingID tokenbindingid;
+      opaque signature<0..2^16-1>;  /* Signature over the exported 
+                                       keying material (EKM) value */
+      Extension extensions<0..2^16-1>;
+  } TokenBinding;
+  
+  struct {
+      TokenBinding tokenbindings<0..2^16-1>;
+  } TokenBindingMessage;
         ]]></artwork>
+        
         <postamble>The Token Binding message consists of a series of TokenBinding structures, each 
         containing the type of the token binding, the TokenBindingID, a signature over an exported 
         keying material (EKM) value, optionally followed by Extension structures.
@@ -471,7 +472,8 @@ struct {
         <t>If all checks defined above have passed successfully, the TLS Token Binding between this 
         client and server is established. The Token Binding ID(s) conveyed in the Token Binding 
         Message can be provided to the server-side application. The application may then use the 
-        Token Binding IDs for bound security token creation and validation.</t>
+        Token Binding IDs for bound security token creation and validation, see 
+        <xref target="BoundSecurityToken"/>.</t>
       </section>
     </section>
 
@@ -503,19 +505,26 @@ struct {
       </figure>
     </section>
 
-    <section title="Security Token Validation">
-      <t>Security tokens can be bound to the TLS layer either by embedding the Token Binding ID 
-      in the token, or by maintaining a database mapping tokens to Token Binding IDs. The 
-      specific method of generating bound security tokens is application-defined and beyond the 
-      scope of this document.</t>
+    <section title="Bound Security Token Creation and Validation" anchor="BoundSecurityToken">
+      <t>Application security tokens can be bound to the TLS layer either by embedding the Token
+      Binding ID in the token, or by maintaining a database mapping tokens to Token Binding IDs. The
+      specific method of generating bound security tokens is application-defined and beyond the
+      scope of this document. Note that applicable security considerations are outlined in <xref
+      target="Security"/>.</t>
+      
+      <t>Either or both clients and servers MAY create bound security tokens. For example, HTTPS
+      servers employing Token Binding for securing their HTTP cookies will bind the cookies. In the
+      case of a server-initiated challenge-response protocol employing Token Binding and TLS, the
+      client can, for example, incorporate the Token Binding ID within the signed object it returns,
+      thus binding the object to the TLS connection with the server.</t>
 
-      <t>Upon receipt of a security token, the server attempts to retrieve TLS Token Binding ID 
-      information from the token and from the TLS connection with the client. 
-      Application-provided policy determines whether to honor non-bound (bearer) tokens. If the 
-      token is bound and a TLS Token Binding has not been established for the client connection, 
-      the server MUST discard the token. If the TLS Token Binding ID for the token does not 
-      match the TLS Token Binding ID established for the client connection, the server MUST 
-      discard the token.</t>
+      <t>Upon receipt of a bound security token, the server attempts to retrieve TLS Token Binding
+      ID information from the token and from the TLS connection with the client.
+      Application-provided policy determines whether to honor non-bound (bearer) tokens. If the
+      token is bound and a TLS Token Binding has not been established for the client connection, the
+      server MUST discard the token. If the TLS Token Binding ID for the token does not match the
+      TLS Token Binding ID established for the client connection, the server MUST discard the
+      token.</t>
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
@@ -623,7 +632,7 @@ struct {
     </section> <!-- IANA Considerations -->
 
     <section anchor="Security" title="Security Considerations">
-      <section title="Security Token Replay">
+      <section anchor="Security-TokenReplay" title="Security Token Replay">
         <t>The goal of the Token Binding protocol is to prevent attackers from exporting and 
         replaying security tokens, thereby impersonating legitimate users and gaining access to 
         protected resources. Bound tokens can still be replayed by the malware present in the 
@@ -710,7 +719,7 @@ struct {
       &RFC7230;
       &RFC7540;
       &RFC5705;
-      &RFC4492;
+      <!-- &RFC4492; -->
       &RFC5226;
       &RFC3447;
       &RFC7627;
@@ -792,11 +801,17 @@ struct {
       v02 2015-09-11  Andrei Popov   Replaced TLS-UNIQUE with RFC5705 exporters, SignatureAndHashAlgorithm with 1-byte key parameters IDs from TBNEGO
       v03 2015-10-06  Andrei Popov   Removed ECDSAParams because NamedCurve is indicated by key_parameters
       v04 2016-01-08  Andrei Popov   Moved TB type out of the TB ID, added requirement for Renegotiation Indication, specified public key and signature formats
-      v05 2016-03-24  Andrei Popov   Merged Jeff's IANA PR and added him as a co-author
+      v05 2016-03-24  Andrei Popov   Merged =JeffH's IANA PR and added him as a co-author
       v06 2016-04-11  Andrei Popov   Per IETF95 feedback, clarified that TB types should be skipped
       v06 2016-05-19  Andrei Popov   Merged Jeff's PR on referred TB processing
       v06 2016-05-20  Andrei Popov   Clarified ECDSAP256 parameters per Brian's feedback
       v07 2016-07-06  Andrei Popov   Noted that TB IDs should be presented to the application as opaque byte sequences
-      v07 2016-07-07  Andrei Popov   Moved the TB ID registry from TBNEGO to TBPROTO -->
+      v07 2016-07-07  Andrei Popov   Moved the TB ID registry from TBNEGO to TBPROTO 
+      v08 2016-07-08  Jeff Hodges    comments in tls preso language are `/*...*/` not `//`
+                                     fixed line-length overrun in figure, indent figure,
+                                     RFC4492 is not referenced from the text, retitle
+                                     Sec Token Validation section to denote actual scope, 
+                                     xref to sec cons, and fix #22.
+      -->
   </back>
 </rfc>
