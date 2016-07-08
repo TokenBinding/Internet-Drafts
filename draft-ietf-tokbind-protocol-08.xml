@@ -11,7 +11,6 @@
 <!ENTITY RFC7230 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7230.xml">
 <!ENTITY RFC7540 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7540.xml">
 <!ENTITY RFC5705 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5705.xml">
-<!ENTITY RFC4492 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4492.xml">
 <!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
 <!ENTITY RFC3447 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3447.xml">
 <!ENTITY RFC7627 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7627.xml">
@@ -310,25 +309,25 @@
       <figure>
         <preamble>The Token Binding message format is defined using TLS Presentation Language (see 
         Section 4 of <xref target="RFC5246"/>):</preamble>
-        
+
         <artwork><![CDATA[
   enum {
       rsa2048_pkcs1.5(0), rsa2048_pss(1), ecdsap256(2), (255)
   } TokenBindingKeyParameters;
-  
+
   struct {
       opaque modulus<1..2^16-1>;
       opaque publicexponent<1..2^8-1>;
   } RSAPublicKey;
-  
+
   struct {
       opaque point <1..2^8-1>;
   } ECPoint;
-  
+
   enum {
       provided_token_binding(0), referred_token_binding(1), (255)
   } TokenBindingType;
-  
+
   struct {
       TokenBindingKeyParameters key_parameters;
       select (key_parameters) {
@@ -339,16 +338,16 @@
               ECPoint point;
       }
   } TokenBindingID;
-  
+
   enum {
       (255)        /* No initial ExtensionType registrations */
   } ExtensionType;
-  
+
   struct {
       ExtensionType extension_type;
       opaque extension_data<0..2^16-1>;
   } Extension;
-  
+
   struct {
       TokenBindingType tokenbinding_type;
       TokenBindingID tokenbindingid;
@@ -356,12 +355,12 @@
                                        keying material (EKM) value */
       Extension extensions<0..2^16-1>;
   } TokenBinding;
-  
+
   struct {
       TokenBinding tokenbindings<0..2^16-1>;
   } TokenBindingMessage;
         ]]></artwork>
-        
+
         <postamble>The Token Binding message consists of a series of TokenBinding structures, each 
         containing the type of the token binding, the TokenBindingID, a signature over an exported 
         keying material (EKM) value, optionally followed by Extension structures.
@@ -506,8 +505,8 @@ struct {
     </section>
 
     <section title="Bound Security Token Creation and Validation" anchor="BoundSecurityToken">
-      <t>Application security tokens can be bound to the TLS layer either by embedding the Token
-      Binding ID in the token, or by maintaining a database mapping tokens to Token Binding IDs. The
+      <t>Security tokens can be bound to the TLS layer either by embedding the Token Binding ID 
+      in the token, or by maintaining a database mapping tokens to Token Binding IDs. The
       specific method of generating bound security tokens is application-defined and beyond the
       scope of this document. Note that applicable security considerations are outlined in <xref
       target="Security"/>.</t>
@@ -515,15 +514,15 @@ struct {
       <t>Either or both clients and servers MAY create bound security tokens. For example, HTTPS
       servers employing Token Binding for securing their HTTP cookies will bind the cookies. In the
       case of a server-initiated challenge-response protocol employing Token Binding and TLS, the
-      client can, for example, incorporate the Token Binding ID within the signed object it returns,
-      thus binding the object to the TLS connection with the server.</t>
+      client can, for example, incorporate the Token Binding ID within the signed object it 
+      returns, thus binding the object.</t>
 
-      <t>Upon receipt of a bound security token, the server attempts to retrieve TLS Token Binding
-      ID information from the token and from the TLS connection with the client.
+      <t>Upon receipt of a security token, the server attempts to retrieve TLS Token Binding ID 
+      information from the token and from the TLS connection with the client.
       Application-provided policy determines whether to honor non-bound (bearer) tokens. If the
-      token is bound and a TLS Token Binding has not been established for the client connection, the
-      server MUST discard the token. If the TLS Token Binding ID for the token does not match the
-      TLS Token Binding ID established for the client connection, the server MUST discard the
+      token is bound and a TLS Token Binding has not been established for the client connection, 
+      the server MUST discard the token. If the TLS Token Binding ID for the token does not match 
+      the TLS Token Binding ID established for the client connection, the server MUST discard the
       token.</t>
     </section>
 
@@ -719,7 +718,6 @@ struct {
       &RFC7230;
       &RFC7540;
       &RFC5705;
-      <!-- &RFC4492; -->
       &RFC5226;
       &RFC3447;
       &RFC7627;
