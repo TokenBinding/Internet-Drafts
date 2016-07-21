@@ -41,7 +41,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-08" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-09" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -811,6 +811,8 @@ struct {
                                      Sec Token Validation section to denote actual scope, 
                                      xref to sec cons, and fix #22.
       v08 2016-07-08  Andrei Popov   Harminized terminology to address issues ## 50, 51.
+      v09 2016-07-21  Jeff Hodges    Initialize -09.
+                                     
       -->
   </back>
 </rfc>
