@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- This template is for creating an Internet Draft using xml2rfc,
      which is available here: http://xml.resource.org. -->
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
@@ -630,22 +630,6 @@ struct {
       </section>
     </section> <!-- IANA Considerations -->
     
-    <section title="Implementation Considerations" anchor="impl-cons">
-      <t>In addition to the functionality to use referred Token Binding IDs as defined in <xref target="I-D.ietf-tokbind-https"/>, 
-      the ability to provide referred and other Token Binding Types is also intended to be made available to 
-      applications not using <xref target="I-D.ietf-tokbind-https"/>.</t>
-      
-      <t>Thus, Token Binding implementations providing an Application Programming Interface (API) should 
-      provide means for applications to produce Token Binding messages containing Token Binding IDs for 
-      application-specified TLS connections. The application needs to be able to denote the 
-      Token Binding Type (e.g., provided, referred, etc.) of each specified connection as well as 
-      the TLS connection the application intends to send the Token Binding message over. The result 
-      should be a Token Binding message containing Token Binding IDs bound to an application-specified 
-      TLS connection over which the Token Binding message is sent. Additionally, see  
-      <xref target="privacy-cons"/> <xref target="privacy-cons" format="title"/>, which provides further 
-      guidance regarding the use of this functionality. </t>
-    </section>
-
     <section anchor="Security" title="Security Considerations">
       <section anchor="Security-TokenReplay" title="Security Token Replay">
         <t>The goal of the Token Binding protocol is to prevent attackers from exporting and 
@@ -686,13 +670,6 @@ struct {
         <t>A server can use tokens and Token Binding IDs to track clients. Client applications that 
         automatically limit the lifetime of tokens to maintain user privacy SHOULD apply the same 
         validity time limits to Token Binding keys.</t>
-        
-        <t>Additionally, the use of Token Binding IDs for other than the provided Token Binding Type gives communicating parties
-        infomation about additional TLS connections of the application. These additional Token Binding IDs
-        can serve as correlation handles for the endpoints of those connections. If the application 
-        is already aware of these other connections to these endpoints, then no additional 
-        information is being exposed. However, if not, then there is potential for exposing additional 
-        information and due caution should be exercised by the application.</t>
       </section>
 
       <section title="Token Binding Key Sharing Between Applications">
@@ -717,7 +694,7 @@ struct {
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>This document incorporates comments and suggestions offered by Eric Rescorla, Gabriel 
       Montenegro, Martin Thomson, Vinod Anupam, Anthony Nadalin, Michael B. Jones, Bill Cox, Nick 
-      Harper, Brian Campbell and others.</t>
+      Harper, Brian Campbell, and others.</t>
     </section>
   </middle>
 
@@ -836,9 +813,8 @@ struct {
                                      Sec Token Validation section to denote actual scope, 
                                      xref to sec cons, and fix #22.
       v08 2016-07-08  Andrei Popov   Harminized terminology to address issues ## 50, 51.
-      v09 2016-07-21  Jeff Hodges &  Initialize -09.
-                      Mike Jones     Add Impl Considerations section, enhance privacy 
-                                     considerations.
+      v09 2016-07-23  Jeff Hodges &  Initialize -09.
+                      Mike Jones     Michael Jones -> Michael B. Jones (there's too many of me!) ;-)
       -->
   </back>
 </rfc>
