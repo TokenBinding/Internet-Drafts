@@ -51,7 +51,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-https-05" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-https-06" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -307,12 +307,14 @@
   Sec-Token-Binding = EncodedTokenBindingMessage
         ]]></artwork></figure>
 
-      <t>The header field name is "Sec-Token-Binding", and 
-      EncodedTokenBindingMessage is a base64url encoding 
-      (see <xref target="RFC4648"/> Section 5) 
-      of the TokenBindingMessage as defined in <xref
-      target="I-D.ietf-tokbind-protocol"/>.</t>
-      
+      <t>The header field name is <spanx style="verb">Sec-Token-Binding</spanx>
+      and its value is a base64url encoding of the
+      TokenBindingMessage defined in <xref target="I-D.ietf-tokbind-protocol"/>
+      using the URL- and filename-safe character set described in
+      Section 5 of <xref target="RFC4648"/>, with all trailing pad characters
+      '=' omitted and without the inclusion of any line breaks, whitespace,
+      or other additional characters.</t>
+
       <t>For example:</t>
       <figure><artwork><![CDATA[
   Sec-Token-Binding: <base64url-encoded TokenBindingMessage>
