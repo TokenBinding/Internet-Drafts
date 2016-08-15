@@ -725,7 +725,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         HTTPS-based applications may have multi-party use 
         cases other than, or in addition to, the HTTP redirect-based 
         signaling-and-conveyance of referred token bindings, as 
-        presented above in <xref target="sctn-http-redir">.
+        presented above in <xref target="sctn-http-redir"/>.
       </t>
       <t>
         Thus, generic Token Binding implementations intended to support 
