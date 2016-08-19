@@ -739,7 +739,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         field. 
       </t>
       <t>
-        Such applications SHOULD only convey Token Binding IDs 
+        Such applications MUST only convey Token Binding IDs 
         to other servers if the server originating a Token Binding ID 
         explicitly signals to do so, e.g., by returning an
         Include-Referred-Token-Binding-ID HTTP response header field.
@@ -978,7 +978,10 @@ contexts. Other approaches are possible, but are outside the scope of this speci
             An application's various communicating endpoints, that receive 
             Token Binding IDs for TLS connections other than their own, 
             obtain information about the application's other TLS 
-            connections.
+            connections (in this context, "an application" is a combination
+            of client-side and server-side components, communicating 
+            over HTTPS, where the client side 
+            may be either or both web browser-based or native application-based).
             These other Token Binding IDs can 
             serve as correlation handles for
             the endpoints of the other connections.
@@ -995,7 +998,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
             In such cases, a privacy analysis of enabled correlations
             and their potential privacy impacts should be performed as 
             part of the application design decisions of how, and whether, 
-            to utilize Token Binding. 
+            to utilize Token Binding.  
           </t>
           <t>
             Also, care should be taken to ensure that unrelated 
