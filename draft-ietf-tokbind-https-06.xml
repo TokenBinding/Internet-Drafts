@@ -737,12 +737,18 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         application-specified HTTPS connection, i.e., within the 
         TokenBindingMessage conveyed by the Sec-Token-Binding header
         field. 
+      </t>
+      <t>
+        Such applications SHOULD only convey Token Binding IDs 
+        to other servers if the server originating a Token Binding ID 
+        explicitly signals to do so, e.g., by returning an
+        Include-Referred-Token-Binding-ID HTTP response header field.
         <list style="hanging" hangIndent="7">
           <t hangText="NOTE:">
             See <xref target="privacy-cons"/> 
             "<xref target="privacy-cons" format="title"/>",
             for privacy guidance regarding the use of 
-            this functionality.
+            this functionality. 
            </t>
         </list>
       </t>
@@ -939,15 +945,17 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           to not allow Token Binding to become a tracking tool across different servers.
           However, the scoping of the Token Binding key pairs to servers varies according
           to the scoping rules of the application protocol (<xref 
-          target="I-D.ietf-tokbind-protocol"/> section 4.1).</t>
+          target="I-D.ietf-tokbind-protocol"/> section 4.1).
+        </t>
           
-          <t>In the case of HTTP cookies, servers may use Token Binding to secure their cookies. 
+        <t>In the case of HTTP cookies, servers may use Token Binding to secure their cookies. 
           These cookies can be attached to any 
           sub-domain of effective top-level domains, and clients therefore should use the same 
           Token Binding key across such subdomains. This will ensure that any server
           capable of receiving the cookie will see the same Token Binding ID from 
           the client, and thus be able to verify the token binding of the cookie.
-          See <xref target="sctn-keypair-scope"/>, above. </t>
+          See <xref target="sctn-keypair-scope"/>, above. 
+        </t>
       </section>
       <section title="Life Time of Token Binding Keys">
         <t>Token Binding keys do not have an expiration time. This means that they 
@@ -967,37 +975,36 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       </section>
         <section title="Correlation" anchor="Correlation">
           <t>
-            An application's communicating parties, that receive 
-            Token Bindings for TLS connections other than their own, 
+            An application's various communicating endpoints, that receive 
+            Token Binding IDs for TLS connections other than their own, 
             obtain information about the application's other TLS 
             connections.
-            The Token Binding IDs in these other Token Bindings can 
+            These other Token Binding IDs can 
             serve as correlation handles for
             the endpoints of the other connections.
-            If the application is already aware of these other 
+            If the receiving endpoints are otherwise aware of these other 
             connections, then no additional information is being exposed. 
             For instance, if in a redirect-based federation protocol, 
-            the Identity Provider and Relying Party already have URLs 
-            for one another, also having Token Binding information 
+            the Identity Provider and Relying Party already possess URLs 
+            for one another, also having Token Binding IDs
             for these connections does not provide additional correlation 
             information.
-            If not, then by providing the other Token Bindings there 
-            is potential to expose additional information that can be 
-            used to correlate the endpoints the other 
-            parties are communicating with.
+            If not, then by providing the other Token Binding IDs
+            additional information is exposed that can be 
+            used to correlate the other endpoints.
             In such cases, a privacy analysis of enabled correlations
             and their potential privacy impacts should be performed as 
             part of the application design decisions of how, and whether, 
-            to utilize Token Bindings.
+            to utilize Token Binding. 
           </t>
           <t>
             Also, care should be taken to ensure that unrelated 
-            applications cannot obtain information about each other's Token 
+            applications do not obtain information about each other's Token 
             Bindings. 
             For instance, a Token Binding implementation shared between 
             multiple applications on a given system should prevent unrelated 
             applications from obtaining each other's Token Binding information. 
-            This may be accomplished by using  techniques such as application 
+            This may be accomplished by using techniques such as application 
             isolation and key segregation, depending upon system capabilities.
           </t>
       </section>
