@@ -38,7 +38,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-negotiation-03" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-negotiation-04" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -212,7 +212,7 @@
         <figure>
         <artwork align="left"><![CDATA[
 enum {
-    token_binding(TBD), (65535)
+    token_binding(24), (65535)
 } ExtensionType;
         ]]></artwork>
         </figure>
@@ -317,8 +317,10 @@ struct {
     </section>
 
     <section title="IANA Considerations">
-      <t>This document defines a new TLS extension "token_binding", which needs to be added to the 
-      IANA "Transport Layer Security (TLS) Extensions" registry.</t>
+      <t>IANA has added the extension code point 24 (0x0018), which has been
+      used by prototype implementations, for the "token_binding"
+      extension to the "ExtensionType Values" registry specified in the TLS
+      specification <xref target="RFC5246"/>.</t>
 
       <t>This document uses "Token Binding Key Parameters" registry originally created in 
       <xref target="I-D.ietf-tokbind-protocol"/>. This document creates no new registrations in 
