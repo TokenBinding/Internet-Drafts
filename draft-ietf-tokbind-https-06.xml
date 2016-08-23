@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- This template is for creating an Internet Draft using xml2rfc,
      which is available here: http://xml.resource.org. -->
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
@@ -51,7 +51,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-https-05" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-https-06" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -720,6 +720,40 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       
     </section>
 
+    <section title="Implementation Considerations" anchor="impl-cons">
+      <t>
+        HTTPS-based applications may have multi-party use 
+        cases other than, or in addition to, the HTTP redirect-based 
+        signaling-and-conveyance of referred token bindings, as 
+        presented above in <xref target="sctn-http-redir"/>.
+      </t>
+      <t>
+        Thus, generic Token Binding implementations intended to support 
+        any HTTPS-based client-side application (e.g., so-called "native 
+        applications"), should provide means for applications to have 
+        Token Binding messages, containing Token Binding IDs of various 
+        application-specified Token Binding types and 
+        for application-specified TLS connections, conveyed over an
+        application-specified HTTPS connection, i.e., within the 
+        TokenBindingMessage conveyed by the Sec-Token-Binding header
+        field. 
+      </t>
+      <t>
+        However, such applications MUST only convey Token Binding IDs 
+        to other servers if the server associated with a Token Binding ID 
+        explicitly signals to do so, e.g., by returning an
+        Include-Referred-Token-Binding-ID HTTP response header field.
+        <list style="hanging" hangIndent="7">
+          <t hangText="NOTE:">
+            See <xref target="privacy-cons"/> 
+            "<xref target="privacy-cons" format="title"/>",
+            for privacy guidance regarding the use of 
+            this functionality. 
+           </t>
+        </list>
+      </t>
+    </section>
+
     <section anchor="Security" title="Security Considerations">
       <section title="Security Token Replay">
         <t>The goal of the Federated Token Binding mechanisms is to
@@ -905,21 +939,23 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         </t>
       </section>
     </section>
-    <section title="Privacy Considerations">
+    <section title="Privacy Considerations" anchor="privacy-cons">
       <section title="Scoping of Token Binding Keys" anchor="sctn-priv-tbkey-scoping">
         <t>Clients use different Token Binding key pairs for different servers, so as 
           to not allow Token Binding to become a tracking tool across different servers.
           However, the scoping of the Token Binding key pairs to servers varies according
           to the scoping rules of the application protocol (<xref 
-          target="I-D.ietf-tokbind-protocol"/> section 4.1).</t>
+          target="I-D.ietf-tokbind-protocol"/> section 4.1).
+        </t>
           
-          <t>In the case of HTTP cookies, servers may use Token Binding to secure their cookies. 
+        <t>In the case of HTTP cookies, servers may use Token Binding to secure their cookies. 
           These cookies can be attached to any 
           sub-domain of effective top-level domains, and clients therefore should use the same 
           Token Binding key across such subdomains. This will ensure that any server
           capable of receiving the cookie will see the same Token Binding ID from 
           the client, and thus be able to verify the token binding of the cookie.
-          See <xref target="sctn-keypair-scope"/>, above. </t>
+          See <xref target="sctn-keypair-scope"/>, above. 
+        </t>
       </section>
       <section title="Life Time of Token Binding Keys">
         <t>Token Binding keys do not have an expiration time. This means that they 
@@ -935,6 +971,50 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           users should be given the same level of control over life time of Token
           Binding keys as they have over cookies or other potential tracking 
           mechanisms.
+        </t>
+      </section>
+      <section title="Correlation" anchor="Correlation">
+        <t>
+          An application's various communicating endpoints, that receive 
+          Token Binding IDs for TLS connections other than their own, 
+          obtain information about the application's other TLS 
+          connections (in this context, "an application" is a combination
+          of client-side and server-side components, communicating 
+          over HTTPS, where the client side 
+          may be either or both web browser-based or native application-based).
+          These other Token Binding IDs can 
+          serve as correlation handles for
+          the endpoints of the other connections.
+          If the receiving endpoints are otherwise aware of these other 
+          connections, then no additional information is being exposed. 
+          For instance, if in a redirect-based federation protocol, 
+          the Identity Provider and Relying Party already possess URLs 
+          for one another, also having Token Binding IDs
+          for these connections does not provide additional correlation 
+          information.
+          If not, then by providing the other Token Binding IDs
+          additional information is exposed that can be 
+          used to correlate the other endpoints.
+          In such cases, a privacy analysis of enabled correlations
+          and their potential privacy impacts should be performed as 
+          part of the application design decisions of how, and whether, 
+          to utilize Token Binding.  
+        </t>
+        <t>
+          Also, applications must take care to only reveal Token Binding IDs to 
+          other endpoints if the server associated with a Token Binding ID 
+          explicitly signals to do so, see <xref target="impl-cons"/> 
+            "<xref target="impl-cons" format="title"/>".
+        </t>
+        <t>
+          Finally, care should be taken to ensure that unrelated 
+          applications do not obtain information about each other's Token 
+          Bindings. 
+          For instance, a Token Binding implementation shared between 
+          multiple applications on a given system should prevent unrelated 
+          applications from obtaining each other's Token Binding information. 
+          This may be accomplished by using techniques such as application 
+          isolation and key segregation, depending upon system capabilities.
         </t>
       </section>
     </section> <!-- priv cons -->
@@ -971,8 +1051,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
 
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>This document incorporates comments and suggestions offered by Eric Rescorla, Gabriel 
-      Montenegro, Martin Thomson, Vinod Anupam, Anthony Nadalin, Michael Jones, Bill Cox, Nick 
-      Harper, Brian Campbell and others.</t>
+      Montenegro, Martin Thomson, Vinod Anupam, Anthony Nadalin, Michael B. Jones, Bill Cox, Nick 
+      Harper, Brian Campbell, and others.</t>
     </section>
   </middle>
 
@@ -1064,11 +1144,17 @@ contexts. Other approaches are possible, but are outside the scope of this speci
                                      Language tweaks to make it clearer how/when to use referred token bindings;
       v03+ 2016-03-??  Jeff Hodges   Update header field presentation to match rfc7230 style, add
                                      refs, add IANA considerations per BCP90/RFC3864;
-      v04 2016-06-22  Andrei Popov   Merged pull request to clarify that the TB messages are sent base64url-encoded;
+      v04 2016-06-22  Andrei Popov   Merged pull request to clarify that the TB messages are sent 
+                                     base64url-encoded;
                                      Removed references to SignatureAndHashAlgorithm;
                                      Added references to TBPROTO and TBNEGO;
       v04+ 2016-07-04  Jeff Hodges   Refined TB key pair scoping rules, issue #33;
-      v05 2016-07-07  Andrei Popov   Moved TB key parameters IDs registration from TBNEGO to TBPROTO;
+      v05 2016-07-07  Andrei Popov   Moved TB key parameters IDs registration from TBNEGO to 
+                                     TBPROTO;
+      v06 206-07-23   Mike Jones &   Added Implementation Considerations and additional 
+                      Jeff Hodges    Privacy Considerations.
+                                     [ Mike jones -> Michael Jones -> Michael B. Jones 
+                                      (there's too many of me!) ;-)   ]
     -->
   </back>
 </rfc>
