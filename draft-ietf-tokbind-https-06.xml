@@ -307,13 +307,13 @@
   Sec-Token-Binding = EncodedTokenBindingMessage
         ]]></artwork></figure>
 
-      <t>The header field name is <spanx style="verb">Sec-Token-Binding</spanx>
-      and its value is a base64url encoding of the
-      TokenBindingMessage defined in <xref target="I-D.ietf-tokbind-protocol"/>
-      using the URL- and filename-safe character set described in
-      Section 5 of <xref target="RFC4648"/>, with all trailing pad characters
-      '=' omitted and without the inclusion of any line breaks, whitespace,
-      or other additional characters.</t>
+      <t>The header field name is <spanx style="verb">Sec-Token-Binding</spanx> 
+      and its value is a base64url encoding of the TokenBindingMessage defined 
+      in <xref target="I-D.ietf-tokbind-protocol"/> using the URL- and 
+      filename-safe character set described in Section 5 of 
+      <xref target="RFC4648"/>, with all trailing pad characters '=' omitted 
+      and without the inclusion of any line breaks, whitespace, or other 
+      additional characters.</t>
 
       <t>For example:</t>
       <figure><artwork><![CDATA[
@@ -1146,7 +1146,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
                       Jeff Hodges    Privacy Considerations.
                                      [ Mike jones -> Michael Jones -> Michael B. Jones 
                                      (there's too many of me!) ;-) ]
-      v06 2016-08-23  Andrei Popov   Merged PR #54.
+      v06 2016-08-23  Andrei Popov   Merged PRs #54, #57.
     -->
   </back>
 </rfc>
