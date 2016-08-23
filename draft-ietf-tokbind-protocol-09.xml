@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- This template is for creating an Internet Draft using xml2rfc,
      which is available here: http://xml.resource.org. -->
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
@@ -815,6 +815,7 @@ struct {
       v08 2016-07-08  Andrei Popov   Harminized terminology to address issues ## 50, 51.
       v09 2016-07-23  Jeff Hodges &  Initialize -09.
                       Mike Jones     Michael Jones -> Michael B. Jones (there's too many of me!) ;-)
-      -->
+      v09 2016-08-23  Andrei Popov   Merged PR #54.
+    -->
   </back>
 </rfc>

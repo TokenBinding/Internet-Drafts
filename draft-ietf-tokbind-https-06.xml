@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- This template is for creating an Internet Draft using xml2rfc,
      which is available here: http://xml.resource.org. -->
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
@@ -732,24 +732,23 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         any HTTPS-based client-side application (e.g., so-called "native 
         applications"), should provide means for applications to have 
         Token Binding messages, containing Token Binding IDs of various 
-        application-specified Token Binding types and 
-        for application-specified TLS connections, conveyed over an
+        application-specified Token Binding types and for 
+        application-specified TLS connections, conveyed over an 
         application-specified HTTPS connection, i.e., within the 
-        TokenBindingMessage conveyed by the Sec-Token-Binding header
-        field. 
+        TokenBindingMessage conveyed by the Sec-Token-Binding header 
+        field.
       </t>
       <t>
         However, such applications MUST only convey Token Binding IDs 
         to other servers if the server associated with a Token Binding ID 
-        explicitly signals to do so, e.g., by returning an
+        explicitly signals to do so, e.g., by returning an 
         Include-Referred-Token-Binding-ID HTTP response header field.
         <list style="hanging" hangIndent="7">
           <t hangText="NOTE:">
             See <xref target="privacy-cons"/> 
             "<xref target="privacy-cons" format="title"/>",
-            for privacy guidance regarding the use of 
-            this functionality. 
-           </t>
+            for privacy guidance regarding the use of this functionality. 
+          </t>
         </list>
       </t>
     </section>
@@ -975,45 +974,35 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       </section>
       <section title="Correlation" anchor="Correlation">
         <t>
-          An application's various communicating endpoints, that receive 
-          Token Binding IDs for TLS connections other than their own, 
-          obtain information about the application's other TLS 
-          connections (in this context, "an application" is a combination
-          of client-side and server-side components, communicating 
-          over HTTPS, where the client side 
-          may be either or both web browser-based or native application-based).
-          These other Token Binding IDs can 
-          serve as correlation handles for
-          the endpoints of the other connections.
-          If the receiving endpoints are otherwise aware of these other 
-          connections, then no additional information is being exposed. 
-          For instance, if in a redirect-based federation protocol, 
-          the Identity Provider and Relying Party already possess URLs 
-          for one another, also having Token Binding IDs
-          for these connections does not provide additional correlation 
-          information.
-          If not, then by providing the other Token Binding IDs
-          additional information is exposed that can be 
-          used to correlate the other endpoints.
-          In such cases, a privacy analysis of enabled correlations
-          and their potential privacy impacts should be performed as 
-          part of the application design decisions of how, and whether, 
-          to utilize Token Binding.  
+          An application's various communicating endpoints, that receive Token Binding 
+          IDs for TLS connections other than their own, obtain information about the 
+          application's other TLS connections (in this context, "an application" is a 
+          combination of client-side and server-side components, communicating over 
+          HTTPS, where the client side may be either or both web browser-based or native 
+          application-based). These other Token Binding IDs can serve as correlation 
+          handles for the endpoints of the other connections. If the receiving endpoints 
+          are otherwise aware of these other connections, then no additional information 
+          is being exposed. For instance, if in a redirect-based federation protocol, 
+          the Identity Provider and Relying Party already possess URLs for one another, 
+          also having Token Binding IDs for these connections does not provide additional 
+          correlation information. If not, then, by providing the other Token Binding 
+          IDs, additional information is exposed that can be used to correlate the other 
+          endpoints. In such cases, a privacy analysis of enabled correlations and their 
+          potential privacy impacts should be performed as part of the application design 
+          decisions of how, and whether, to utilize Token Binding.
         </t>
         <t>
-          Also, applications must take care to only reveal Token Binding IDs to 
-          other endpoints if the server associated with a Token Binding ID 
-          explicitly signals to do so, see <xref target="impl-cons"/> 
-            "<xref target="impl-cons" format="title"/>".
+          Also, applications must take care to only reveal Token Binding IDs to other 
+          endpoints if the server associated with a Token Binding ID explicitly signals 
+          to do so, see <xref target="impl-cons"/> 
+          "<xref target="impl-cons" format="title"/>".
         </t>
         <t>
-          Finally, care should be taken to ensure that unrelated 
-          applications do not obtain information about each other's Token 
-          Bindings. 
-          For instance, a Token Binding implementation shared between 
-          multiple applications on a given system should prevent unrelated 
-          applications from obtaining each other's Token Binding information. 
-          This may be accomplished by using techniques such as application 
+          Finally, care should be taken to ensure that unrelated applications do not 
+          obtain information about each other's Token Bindings. For instance, a Token 
+          Binding implementation shared between multiple applications on a given system 
+          should prevent unrelated applications from obtaining each other's Token Binding 
+          information. This may be accomplished by using techniques such as application 
           isolation and key segregation, depending upon system capabilities.
         </t>
       </section>
@@ -1142,19 +1131,20 @@ contexts. Other approaches are possible, but are outside the scope of this speci
                                      Add figure of redirect flow for the federation case;
                                      Expand priv considerations: eTLD+1, TB Keys lifetime;
                                      Language tweaks to make it clearer how/when to use referred token bindings;
-      v03+ 2016-03-??  Jeff Hodges   Update header field presentation to match rfc7230 style, add
+      v03+ 2016-03-?? Jeff Hodges    Update header field presentation to match rfc7230 style, add
                                      refs, add IANA considerations per BCP90/RFC3864;
       v04 2016-06-22  Andrei Popov   Merged pull request to clarify that the TB messages are sent 
                                      base64url-encoded;
                                      Removed references to SignatureAndHashAlgorithm;
                                      Added references to TBPROTO and TBNEGO;
-      v04+ 2016-07-04  Jeff Hodges   Refined TB key pair scoping rules, issue #33;
+      v04+ 2016-07-04 Jeff Hodges    Refined TB key pair scoping rules, issue #33;
       v05 2016-07-07  Andrei Popov   Moved TB key parameters IDs registration from TBNEGO to 
                                      TBPROTO;
-      v06 206-07-23   Mike Jones &   Added Implementation Considerations and additional 
+      v06 2016-07-23  Mike Jones &   Added Implementation Considerations and additional 
                       Jeff Hodges    Privacy Considerations.
                                      [ Mike jones -> Michael Jones -> Michael B. Jones 
-                                      (there's too many of me!) ;-)   ]
+                                     (there's too many of me!) ;-) ]
+      v06 2016-08-23  Andrei Popov   Merged PR #54.
     -->
   </back>
 </rfc>
