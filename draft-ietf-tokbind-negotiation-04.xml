@@ -7,6 +7,7 @@
      An alternate method (rfc include) is described in the references. -->
 
 <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC4366 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4366.xml">
 <!ENTITY RFC5246 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml">
 <!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
 <!ENTITY RFC5705 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5705.xml">
@@ -317,10 +318,17 @@ struct {
     </section>
 
     <section title="IANA Considerations">
-      <t>IANA has added the extension code point 24 (0x0018), which has been
-      used by prototype implementations, for the "token_binding"
-      extension to the "ExtensionType Values" registry specified in the TLS
-      specification <xref target="RFC5246"/>.</t>
+      <t>This document updates the TLS "ExtensionType Values" registry originally created in 
+      <xref target="RFC4366"/>. IANA has provided the following temporary registration for the 
+      "token_binding" TLS extension:
+        <list style="empty">
+          <t>Value: 24</t>
+          <t>Extension name: token_binding</t>
+          <t>Reference: this document</t>
+        </list>
+        IANA is requested to make this registration permanent, keeping the value of 24, which has 
+        been used by the prototype implementations of the Token Binding protocol.
+      </t>
 
       <t>This document uses "Token Binding Key Parameters" registry originally created in 
       <xref target="I-D.ietf-tokbind-protocol"/>. This document creates no new registrations in 
@@ -373,6 +381,7 @@ struct {
 
     <references title="Normative References">
       &RFC2119;
+      &RFC4366;
       &RFC5246;
       &RFC5226;
       &RFC5705;
@@ -407,10 +416,12 @@ struct {
     </references>
 
     <!-- Change Log
-      v00 2015-05-07  Andrei Popov   Initial version
-      v00 2015-09-09  Andrei Popov   Added TLS-style TB version negotiation, limited key parameters list to 1..2^8-1
-      v01 2015-10-06  Andrei Popov   Removed _SHA256 suffixes from TB key parameters 
-      v02 2016-01-08  Andrei Popov   Added requirement for Renegotiation Indication 
-      v03 2016-07-07  Andrei Popov   Moved the TB ID registry to TBPROTO -->
+      v00 2015-05-07  Andrei Popov   Initial version.
+      v00 2015-09-09  Andrei Popov   Added TLS-style TB version negotiation, limited key parameters list to 1..2^8-1.
+      v01 2015-10-06  Andrei Popov   Removed _SHA256 suffixes from TB key parameters.
+      v02 2016-01-08  Andrei Popov   Added requirement for Renegotiation Indication.
+      v03 2016-07-07  Andrei Popov   Moved the TB ID registry to TBPROTO.
+      v04 2016-08-23  Andrei Popov   Merged PR #58.
+    -->
   </back>
 </rfc>
