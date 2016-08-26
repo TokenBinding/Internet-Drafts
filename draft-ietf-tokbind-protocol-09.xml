@@ -329,19 +329,17 @@
       opaque point <1..2^8-1>;
   } ECPoint;
 
-  enum {
-      provided_token_binding(0), referred_token_binding(1), (255)
-  } TokenBindingType;
-
   struct {
       TokenBindingKeyParameters key_parameters;
+      uint16 key_length;  /* Length (in bytes) of the following 
+                             TokenBindingID.TokenBindingPublicKey */
       select (key_parameters) {
           case rsa2048_pkcs1.5: 
           case rsa2048_pss:
               RSAPublicKey rsapubkey;
           case ecdsap256: 
               ECPoint point;
-      }
+      } TokenBindingPublicKey;
   } TokenBindingID;
 
   enum {
@@ -353,12 +351,16 @@
       opaque extension_data<0..2^16-1>;
   } Extension;
 
+  enum {
+      provided_token_binding(0), referred_token_binding(1), (255)
+  } TokenBindingType;
+
   struct {
       TokenBindingType tokenbinding_type;
       TokenBindingID tokenbindingid;
       opaque signature<0..2^16-1>;  /* Signature over the SHA256 hash of 
                                        (ASCII "Token Binding" + ProtocolVersion + 
-                                       tokenbinding_type + EKM value) */
+                                       tokenbinding_type + key_parameters + EKM) */
       Extension extensions<0..2^16-1>;
   } TokenBinding;
 
@@ -396,13 +398,14 @@
       <section anchor="TBMessage-TBID" title="TokenBinding.tokenbindingid">
         <t>The ID of the Token Binding established as a result of Token Binding message processing 
         contains the identifier of the key parameters negotiated via 
-        <xref target="I-D.ietf-tokbind-negotiation"/> followed by the public portion of the Token 
-        Binding key. Token Binding ID can be obtained from the TokenBinding structure by discarding 
-        the Token Binding type, signature and extensions.</t>
+        <xref target="I-D.ietf-tokbind-negotiation"/>, the length (in bytes) of the Token Binding 
+        public key, and the Token Binding public key itself. Token Binding ID can be obtained from 
+        the TokenBinding structure by discarding the Token Binding type, signature and extensions.
+        </t>
 
         <t>When an rsa2048_pkcs1.5 or rsa2048_pss key is used, RSAPublicKey.modulus and 
-        RSAPublicKey.publicexponent contain the length-prefixed modulus and exponent of the RSA 
-        public key represented in big-endian format, with leading zero bytes omitted.</t>
+        RSAPublicKey.publicexponent contain the modulus and exponent of the RSA public key 
+        represented in big-endian format, with leading zero bytes omitted.</t>
 
         <t>When an ecdsap256 key is used, ECPoint.point contains the X coordinate followed by the Y 
         coordinate. The X and Y coordinates are unsigned 32-byte integers encoded in big-endian 
@@ -433,6 +436,8 @@
             <t>A ProtocolVersion structure representing the negotiated version of the Token Binding 
             protocol, e.g. 0x01 0x00 for Token Binding 1.0;</t>
             <t>TokenBindingType value contained in the TokenBinding.tokenbinding_type field;</t>
+            <t>TokenBindingKeyParameters value contained in the TokenBindingID.key_parameters 
+            field;</t>
             <t>Exported keying material (EKM) value obtained from the current TLS connection.</t>
           </list>
         </t>
@@ -448,9 +453,9 @@
       </section>
 
       <section title="TokenBinding.extensions">
-        <t>A Token Binding message may optionally contain a sequence of Extension structures, each 
-        consisting of an extension_type and length-prefixed extension_data. The structure and 
-        meaning of extension_data depends on the specific extension_type.</t>
+        <t>A Token Binding message may optionally contain a series of Extension structures, each 
+        consisting of an extension_type and extension_data. The structure and meaning of 
+        extension_data depends on the specific extension_type.</t>
 
         <t>Initially, no extension types are defined (see <xref target="IANA-TBExts"/> 
         "<xref target="IANA-TBExts" format="title"/>"). One of the possible uses of extensions 
@@ -495,8 +500,9 @@
         security of the Token Binding protocol, as described in <xref target="Security"/> 
         "<xref target="Security" format="title"/>". Therefore, the server MUST NOT negotiate the 
         use of the Token Binding protocol with these TLS versions, unless the server also 
-        negotiates Extended Master Secret <xref target="RFC7627"/> and Renegotiation Indication 
-        <xref target="RFC5746" /> TLS extensions.</t>
+        negotiates Extended Master Secret <xref target="RFC7627"/> TLS extension. In addition, 
+        the server MUST NOT initiate or allow TLS renegotiation, unless Renegotiation Indication 
+        <xref target="RFC5746" /> TLS extension has been negotiated.</t>
 
         <t>The server MUST terminate the connection if the use of the Token Binding protocol was 
         not negotiated, but the client sends the Token Binding message. If the Token Binding type 
@@ -673,21 +679,21 @@
       </section>
       
       <section title="Privacy Considerations" anchor="privacy-cons">
-        <t>The Token Binding protocol uses persistent, long-lived Token Binding IDs. To 
-        protect privacy, Token Binding IDs are never transmitted in clear text and can be 
-        reset by the user at any time, e.g. when clearing browser cookies. Some applications offer 
-        a special privacy mode where they don't store or use tokens supplied by the server, e.g. 
-        "in private" browsing. When operating in this special privacy mode, applications SHOULD use 
-        newly generated Token Binding keys and delete them when exiting this mode, or else SHOULD 
+        <t>The Token Binding protocol uses persistent, long-lived Token Binding IDs. To protect 
+        privacy, Token Binding IDs are never transmitted in clear text and can be reset by the user 
+        at any time, e.g. when clearing browser cookies. Some applications offer a special privacy 
+        mode where they don't store or use tokens supplied by the server, e.g. "in private" 
+        browsing. When operating in this special privacy mode, applications SHOULD use newly 
+        generated Token Binding keys and delete them when exiting this mode, or else SHOULD 
         NOT negotiate Token Binding at all.</t>
 
         <t>In order to prevent cooperating servers from linking user identities, different keys 
-        SHOULD be used by the client for connections to different servers, according to the token 
+        MUST be used by the client for connections to different servers, according to the token 
         scoping rules of the application protocol.</t>
 
         <t>A server can use tokens and Token Binding IDs to track clients. Client applications that 
-        automatically limit the lifetime of tokens to maintain user privacy SHOULD apply the same 
-        validity time limits to Token Binding keys.</t>
+        automatically limit the lifetime or scope of tokens to maintain user privacy SHOULD apply 
+        the same validity time and scope limits to Token Binding keys.</t>
       </section>
 
       <section title="Token Binding Key Sharing Between Applications">
@@ -704,8 +710,9 @@
         allowing the attacker to synchronize keying material between TLS connections. The attacker 
         can then successfully replay bound tokens. For this reason, the Token Binding protocol MUST 
         NOT be negotiated with these TLS versions, unless the Extended Master Secret 
-        <xref target="RFC7627" /> and Renegotiation Indication <xref target="RFC5746" /> TLS 
-        extensions have also been negotiated.</t>
+        <xref target="RFC7627" /> TLS extension has also been negotiated. In addition, TLS 
+        renegotiation MUST NOT be initiated or allowed, unless Renegotiation Indication 
+        <xref target="RFC5746" /> TLS extension has been negotiated.</t>
       </section>
     </section>
 
@@ -835,6 +842,7 @@
                       Mike Jones     Michael Jones -> Michael B. Jones (there's too many of me!) ;-)
       v09 2016-08-23  Andrei Popov   Merged PR #54.
       v09 2016-08-25  Andrei Popov   Clarified PKCS and PSS parameters, changed signature to cover protocol version and TB type to prevent cross-protocol attacks.
+      v09 2016-08-26  Andrei Popov   Added Token Binding public key length field in the TokenBindingID struct, addressed editorial comments.
     -->
   </back>
 </rfc>

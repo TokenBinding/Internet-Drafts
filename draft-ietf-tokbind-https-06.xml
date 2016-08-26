@@ -525,9 +525,13 @@
 	with it to include in the TokenBindingMessage on the redirect request. In other
   words, the Token Binding message in the redirect request to the Token Provider
   now includes one provided binding and one referred binding, the latter constructed
-  from the binding between the client and the Token Consumer. Note that that the 
-  referred token binding is sent only on the request resulting from the redirect 
-  and not on any subsequent requests to the Token Provider</t>
+  from the binding between the client and the Token Consumer.</t>
+
+  <t>When a client receives the Include-Referred-Token-Binding-ID header, it includes the 
+  referred token binding even if both the Token Provider and the Token Consumer fall 
+  under the same eTLD+1 and the provided and referred token binding IDs are the same. 
+  Note that the referred token binding is sent only on the request resulting from the 
+  redirect and not on any subsequent requests to the Token Provider.</t>
   
   <t>If the Include-Referred-Token-Binding-ID header field is received in response to a
   request that did not include the Token-Binding header field, the client MUST ignore
@@ -603,7 +607,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         specified in the <xref target="I-D.ietf-tokbind-protocol"/>. 
         If a token provider does not support the key parameters
         specified in the referred_token_binding TokenBinding in the
-        TokenBindingMessage, it MUST issue an unbound token.</t>
+        TokenBindingMessage, it MUST NOT issue a bound token.</t>
       </section>
       
       <section title="Federation Example" anchor="sctn-fed-example">
@@ -775,11 +779,12 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           TLS Token Binding. The triple handshake attack <xref target="TRIPLE-HS" /> 
           is a known vulnerability in TLS 1.2 and older TLS versions, allowing the 
           attacker to synchronize keying material between TLS connections. The 
-          attacker can then successfully replay bound tokens. For this reason, the 
-          Token Binding protocol MUST NOT be negotiated with these TLS versions, 
-          unless the Extended Master Secret <xref target="RFC7627" /> and 
-          Renegotiation Indication <xref target="RFC5746" /> TLS extensions have 
-          also been negotiated.</t>
+          attacker can then successfully replay bound tokens. For this reason, the Token 
+          Binding protocol MUST NOT be negotiated with these TLS versions, unless the 
+          Extended Master Secret <xref target="RFC7627" /> TLS extension has also been 
+          negotiated. In addition, TLS renegotiation MUST NOT be initiated or allowed, 
+          unless Renegotiation Indication <xref target="RFC5746" /> TLS extension has 
+          been negotiated.</t>
       </section>
       <section title="Sensitivity of the Sec-Token-Binding Header">
         <t>
@@ -1147,6 +1152,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
                                      [ Mike jones -> Michael Jones -> Michael B. Jones 
                                      (there's too many of me!) ;-) ]
       v06 2016-08-23  Andrei Popov   Merged PRs #54, #57.
+      v06 2016-08-26  Andrei Popov   Clarified that renegotiation indication ext. is only needed when renegotiation is enabled.
     -->
   </back>
 </rfc>
