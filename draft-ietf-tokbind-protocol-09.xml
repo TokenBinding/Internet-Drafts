@@ -500,9 +500,9 @@
         security of the Token Binding protocol, as described in <xref target="Security"/> 
         "<xref target="Security" format="title"/>". Therefore, the server MUST NOT negotiate the 
         use of the Token Binding protocol with these TLS versions, unless the server also 
-        negotiates Extended Master Secret <xref target="RFC7627"/> TLS extension. In addition, 
-        the server MUST NOT initiate or allow TLS renegotiation, unless Renegotiation Indication 
-        <xref target="RFC5746" /> TLS extension has been negotiated.</t>
+        negotiates the Extended Master Secret <xref target="RFC7627"/> TLS extension. In addition, 
+        the server MUST NOT initiate or allow TLS renegotiation, unless the Renegotiation 
+        Indication <xref target="RFC5746" /> TLS extension has been negotiated.</t>
 
         <t>The server MUST terminate the connection if the use of the Token Binding protocol was 
         not negotiated, but the client sends the Token Binding message. If the Token Binding type 
@@ -711,7 +711,7 @@
         can then successfully replay bound tokens. For this reason, the Token Binding protocol MUST 
         NOT be negotiated with these TLS versions, unless the Extended Master Secret 
         <xref target="RFC7627" /> TLS extension has also been negotiated. In addition, TLS 
-        renegotiation MUST NOT be initiated or allowed, unless Renegotiation Indication 
+        renegotiation MUST NOT be initiated or allowed, unless the Renegotiation Indication 
         <xref target="RFC5746" /> TLS extension has been negotiated.</t>
       </section>
     </section>

@@ -783,8 +783,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           Binding protocol MUST NOT be negotiated with these TLS versions, unless the 
           Extended Master Secret <xref target="RFC7627" /> TLS extension has also been 
           negotiated. In addition, TLS renegotiation MUST NOT be initiated or allowed, 
-          unless Renegotiation Indication <xref target="RFC5746" /> TLS extension has 
-          been negotiated.</t>
+          unless the Renegotiation Indication <xref target="RFC5746" /> TLS extension 
+          has been negotiated.</t>
       </section>
       <section title="Sensitivity of the Sec-Token-Binding Header">
         <t>
