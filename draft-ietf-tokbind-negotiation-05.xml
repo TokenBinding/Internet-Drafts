@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- This template is for creating an Internet Draft using xml2rfc,
      which is available here: http://xml.resource.org. -->
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
@@ -39,7 +39,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-negotiation-04" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-negotiation-05" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -427,6 +427,7 @@ struct {
       v03 2016-07-07  Andrei Popov   Moved the TB ID registry to TBPROTO.
       v04 2016-08-23  Andrei Popov   Merged PR #58.
       v04 2016-08-26  Andrei Popov   Clarified that renegotiation indication ext. is only needed when renegotiation is enabled.
+      v05 2016-09-02  Andrei Popov   Corrected acknowledgements (it's Michael B. Jones).
     -->
   </back>
 </rfc>

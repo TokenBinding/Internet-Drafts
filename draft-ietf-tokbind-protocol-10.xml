@@ -41,7 +41,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-09" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-10" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -311,11 +311,6 @@
         Section 4 of <xref target="RFC5246"/>):</preamble>
 
         <artwork><![CDATA[
-  struct {
-      uint8 major;
-      uint8 minor;
-  } ProtocolVersion;
-
   enum {
       rsa2048_pkcs1.5(0), rsa2048_pss(1), ecdsap256(2), (255)
   } TokenBindingKeyParameters;
@@ -358,9 +353,9 @@
   struct {
       TokenBindingType tokenbinding_type;
       TokenBindingID tokenbindingid;
-      opaque signature<0..2^16-1>;  /* Signature over the SHA256 hash of 
-                                       (ASCII "Token Binding" + ProtocolVersion + 
-                                       tokenbinding_type + key_parameters + EKM) */
+      opaque signature<0..2^16-1>;  /* Signature over the concatenation of 
+                                       tokenbinding_type, key_parameters and 
+                                       exported keying material (EKM) */
       Extension extensions<0..2^16-1>;
   } TokenBinding;
 
@@ -403,14 +398,15 @@
         the TokenBinding structure by discarding the Token Binding type, signature and extensions.
         </t>
 
-        <t>When an rsa2048_pkcs1.5 or rsa2048_pss key is used, RSAPublicKey.modulus and 
-        RSAPublicKey.publicexponent contain the modulus and exponent of the RSA public key 
+        <t>When rsa2048_pkcs1.5 or rsa2048_pss is used, RSAPublicKey.modulus and 
+        RSAPublicKey.publicexponent contain the modulus and exponent of the 2048-bit RSA public key 
         represented in big-endian format, with leading zero bytes omitted.</t>
 
-        <t>When an ecdsap256 key is used, ECPoint.point contains the X coordinate followed by the Y 
-        coordinate. The X and Y coordinates are unsigned 32-byte integers encoded in big-endian 
-        format, preserving any leading zero bytes. Future specifications may define Token Binding 
-        keys using other elliptic curves with their corresponding signature and point formats.</t>
+        <t>When ecdsap256 is used, ECPoint.point contains the X coordinate followed by the Y 
+        coordinate of the Curve P-256 key. The X and Y coordinates are unsigned 32-byte integers 
+        encoded in big-endian format, preserving any leading zero bytes. Future specifications may 
+        define Token Binding keys using other elliptic curves with their corresponding signature 
+        and point formats.</t>
 
         <t>Token Binding protocol implementations SHOULD make Token Binding IDs available to the 
         application as opaque byte sequences. E.g. server applications will use Token Binding IDs 
@@ -418,23 +414,22 @@
       </section>
 
       <section title="TokenBinding.signature">
-        <t>When an rsa2048_pkcs1.5 or rsa2048_pss key is used, TokenBinding.signature contains the 
-        signature generated using, respectively, the RSASSA-PKCS1-v1_5 or RSASSA-PSS signature scheme 
-        defined in <xref target="RFC3447"/>. Both RSASSA-PKCS1-v1_5 and RSASSA-PSS signature schemes 
-        MUST use the SHA256 hash algorithm. For RSASSA-PSS, MGF1 with SHA256 MUST be used as the mask 
-        generation function, and the salt length MUST equal 32 bytes.</t>
+        <t>When rsa2048_pkcs1.5 is used, TokenBinding.signature contains the signature generated 
+        using the RSASSA-PKCS1-v1_5 signature scheme defined in <xref target="RFC3447"/> with 
+        SHA256 as the hash function.</t>
 
-        <t>When an ecdsap256 key is used, TokenBinding.signature contains a pair of 32-byte integers, 
-        R followed by S, generated using Curve P-256 as defined in <xref target="ANSI.X9-62.2005"/> 
-        and <xref target="FIPS.186-4.2013"/>. R and S are encoded in big-endian format, preserving any 
-        leading zero bytes.</t>
+        <t>When rsa2048_pss is used, TokenBinding.signature contains the signature generated using 
+        the RSASSA-PSS signature scheme defined in <xref target="RFC3447"/> with SHA256 as the hash 
+        function. MGF1 with SHA256 MUST be used as the mask generation function, and the salt 
+        length MUST equal 32 bytes.</t>
 
-        <t>The signature is computed over the SHA256 hash of the byte string representing the 
-        concatenation of:
+        <t>When ecdsap256 is used, TokenBinding.signature contains a pair of 32-byte integers, R 
+        followed by S, generated with ECDSA using Curve P-256 and SHA256 as defined in 
+        <xref target="ANSI.X9-62.2005"/> and <xref target="FIPS.186-4.2013"/>. R and S are encoded 
+        in big-endian format, preserving any leading zero bytes.</t>
+
+        <t>The signature is computed over the byte string representing the concatenation of:
           <list style="symbols">
-            <t>The ASCII string "Token Binding" with no terminating NUL;</t>
-            <t>A ProtocolVersion structure representing the negotiated version of the Token Binding 
-            protocol, e.g. 0x01 0x00 for Token Binding 1.0;</t>
             <t>TokenBindingType value contained in the TokenBinding.tokenbinding_type field;</t>
             <t>TokenBindingKeyParameters value contained in the TokenBindingID.key_parameters 
             field;</t>
@@ -843,6 +838,7 @@
       v09 2016-08-23  Andrei Popov   Merged PR #54.
       v09 2016-08-25  Andrei Popov   Clarified PKCS and PSS parameters, changed signature to cover protocol version and TB type to prevent cross-protocol attacks.
       v09 2016-08-26  Andrei Popov   Added Token Binding public key length field in the TokenBindingID struct, addressed editorial comments.
+      v10 2016-09-02  Andrei Popov   Clarified the language describing the hash and signature operations, per Brian's comments.
     -->
   </back>
 </rfc>
