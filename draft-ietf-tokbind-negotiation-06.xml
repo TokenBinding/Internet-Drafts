@@ -305,7 +305,9 @@ struct {
       <t>If the "token_binding" extension is included in the server hello and the client supports 
       the Token Binding protocol version selected by the server, it means that the version and key 
       parameters have been negotiated between the client and the server and SHALL be definitive for 
-      the TLS connection. In this case, the client MUST use the negotiated key parameters in the 
+      the TLS connection. Please note that TLS 1.2 and earlier versions support renegotiation, 
+      allowing the client and server to renegotiate the Token Binding protocol version and key 
+      parameters on the same connection. The client MUST use the negotiated key parameters in the 
       "provided_token_binding" as described in <xref target="I-D.ietf-tokbind-protocol"/>.</t>
 
       <t>If the client does not support the Token Binding protocol version selected by the server, 
