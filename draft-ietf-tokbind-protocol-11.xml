@@ -41,7 +41,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-10" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-11" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -495,9 +495,8 @@
         security of the Token Binding protocol, as described in <xref target="Security"/> 
         "<xref target="Security" format="title"/>". Therefore, the server MUST NOT negotiate the 
         use of the Token Binding protocol with these TLS versions, unless the server also 
-        negotiates the Extended Master Secret <xref target="RFC7627"/> TLS extension. In addition, 
-        the server MUST NOT initiate or allow TLS renegotiation, unless the Renegotiation 
-        Indication <xref target="RFC5746" /> TLS extension has been negotiated.</t>
+        negotiates the Extended Master Secret <xref target="RFC7627"/> and Renegotiation Indication 
+        <xref target="RFC5746" /> TLS extensions.</t>
 
         <t>The server MUST terminate the connection if the use of the Token Binding protocol was 
         not negotiated, but the client sends the Token Binding message. If the Token Binding type 
@@ -705,9 +704,8 @@
         allowing the attacker to synchronize keying material between TLS connections. The attacker 
         can then successfully replay bound tokens. For this reason, the Token Binding protocol MUST 
         NOT be negotiated with these TLS versions, unless the Extended Master Secret 
-        <xref target="RFC7627" /> TLS extension has also been negotiated. In addition, TLS 
-        renegotiation MUST NOT be initiated or allowed, unless the Renegotiation Indication 
-        <xref target="RFC5746" /> TLS extension has been negotiated.</t>
+        <xref target="RFC7627" /> and Renegotiation Indication <xref target="RFC5746" /> TLS 
+        extensions have also been negotiated.</t>
       </section>
     </section>
 
@@ -839,6 +837,7 @@
       v09 2016-08-25  Andrei Popov   Clarified PKCS and PSS parameters, changed signature to cover protocol version and TB type to prevent cross-protocol attacks.
       v09 2016-08-26  Andrei Popov   Added Token Binding public key length field in the TokenBindingID struct, addressed editorial comments.
       v10 2016-09-02  Andrei Popov   Clarified the language describing the hash and signature operations, per Brian's comments.
+      v11 2016-11-16  Andrei Popov   Renegotiation indication is always needed.
     -->
   </back>
 </rfc>

@@ -39,7 +39,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-negotiation-05" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-negotiation-06" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -261,12 +261,10 @@ struct {
         <t>The server supports the Token Binding protocol version offered by the client or a lower 
         version.</t>
         <t>The server finds acceptable Token Binding key parameters on the client's list.</t>
-        <t>The server is also negotiating the Extended Master Secret <xref target="RFC7627" /> TLS 
-        extension. This requirement only applies when TLS 1.2 or an older TLS version is used (see 
-        security considerations section below for more details).</t>
-        <t>The server is also negotiating the Renegotiation Indication <xref target="RFC5746" /> 
-        TLS extension. This requirement only applies if the TLS server is configured to initiate or 
-        allow renegotiation.</t>
+        <t>The server is also negotiating the Extended Master Secret <xref target="RFC7627" /> and 
+        Renegotiation Indication <xref target="RFC5746" /> TLS extensions. This requirement only 
+        applies when TLS 1.2 or an older TLS version is used (see security considerations section 
+        below for more details).</t>
       </list></t>
 
       <t>The server will ignore any key parameters that it does not recognize. The 
@@ -299,10 +297,9 @@ struct {
         identifier.</t>
         <t>"key_parameters_list" includes an identifier that was not advertised by the client.</t>
         <t>TLS 1.2 or an older TLS version is used, but the Extended Master Secret 
-        <xref target="RFC7627" /> TLS extension is not negotiated (see security considerations 
-        section below for more details).</t>
-        <t>The client is configured to initiate or allow renegotiation, but the Renegotiation 
-        Indication <xref target="RFC5746" /> TLS extension is not negotiated.</t>
+        <xref target="RFC7627" /> and TLS Renegotiation Indication <xref target="RFC5746" /> 
+        extensions are not negotiated (see security considerations section below for more 
+        details).</t>
       </list></t>
 
       <t>If the "token_binding" extension is included in the server hello and the client supports 
@@ -354,9 +351,8 @@ struct {
         to synchronize exported keying material between TLS connections. The attacker can then 
         successfully replay bound tokens. For this reason, the Token Binding protocol MUST NOT be 
         negotiated with these TLS versions, unless the Extended Master Secret 
-        <xref target="RFC7627" /> TLS extension has also been negotiated. In addition, TLS 
-        renegotiation MUST NOT be initiated or allowed, unless the Renegotiation Indication 
-        <xref target="RFC5746" /> TLS extension has been negotiated.</t>
+        <xref target="RFC7627" /> and Renegotiation Indication <xref target="RFC5746" /> TLS 
+        extensions have also been negotiated.</t>
       </section>
     </section>
 
@@ -428,6 +424,7 @@ struct {
       v04 2016-08-23  Andrei Popov   Merged PR #58.
       v04 2016-08-26  Andrei Popov   Clarified that renegotiation indication ext. is only needed when renegotiation is enabled.
       v05 2016-09-02  Andrei Popov   Corrected acknowledgements (it's Michael B. Jones).
+      v06 2016-11-16  Andrei Popov   Undid the change from 2016-08-26 above. Renegotiation indication is always needed.
     -->
   </back>
 </rfc>

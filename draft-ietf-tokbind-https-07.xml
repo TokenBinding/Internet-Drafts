@@ -51,7 +51,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-https-06" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-https-07" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -781,10 +781,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           attacker to synchronize keying material between TLS connections. The 
           attacker can then successfully replay bound tokens. For this reason, the Token 
           Binding protocol MUST NOT be negotiated with these TLS versions, unless the 
-          Extended Master Secret <xref target="RFC7627" /> TLS extension has also been 
-          negotiated. In addition, TLS renegotiation MUST NOT be initiated or allowed, 
-          unless the Renegotiation Indication <xref target="RFC5746" /> TLS extension 
-          has been negotiated.</t>
+          Extended Master Secret <xref target="RFC7627" /> and Renegotiation Indication 
+          <xref target="RFC5746" /> TLS extensions have also been negotiated.</t>
       </section>
       <section title="Sensitivity of the Sec-Token-Binding Header">
         <t>
@@ -1153,6 +1151,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
                                      (there's too many of me!) ;-) ]
       v06 2016-08-23  Andrei Popov   Merged PRs #54, #57.
       v06 2016-08-26  Andrei Popov   Clarified that renegotiation indication ext. is only needed when renegotiation is enabled.
+      v07 2016-11-16  Andrei Popov   Undid the change from 2016-08-26 above. Renegotiation indication is always needed.
     -->
   </back>
 </rfc>
