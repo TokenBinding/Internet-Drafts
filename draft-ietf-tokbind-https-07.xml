@@ -339,6 +339,15 @@
       and such use cases are outside the scope of this
       specification.</t>
 
+      <t>A TokenBindingMessage is validated by the server as described in Section 
+      4.2. "Server Processing Rules" of <xref target="I-D.ietf-tokbind-protocol"/>.
+      If validaion fails and a Token Binding is rejected, any associated bound 
+      tokens MUST also be rejected by the server. HTTP requests containing invalid 
+      tokens MUST be rejected. In this case, the server application may return HTTP 
+      status code 400 (Bad Request) or proceed with an application-specific invalid 
+      token response (e.g. directing the client to re-authenticate and present a 
+      different token), or terminate the connection.</t>
+
       <t>In HTTP/2, the client SHOULD use <xref
       target="RFC7541">Header
       Compression</xref> to avoid the overhead of repeating the same
