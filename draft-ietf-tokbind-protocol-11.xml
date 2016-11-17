@@ -273,9 +273,9 @@
       <t>A server receiving the Token Binding message verifies that the key parameters in the 
       message match the Token Binding parameters negotiated via 
       <xref target="I-D.ietf-tokbind-negotiation"/>, and then validates the signatures contained 
-      in the Token Binding message. If either of these checks fails, the server terminates the 
-      connection, otherwise the Token Binding is successfully established with the ID 
-      contained in the Token Binding message.</t>
+      in the Token Binding message. If either of these checks fails, the server rejects the 
+      binding, along with all associeted bound tokens. Otherwise the Token Binding is successfully 
+      established with the ID contained in the Token Binding message.</t>
 
       <t>When a server supporting the Token Binding protocol receives a bound token, the server 
       compares the Token Binding ID in the security token with the Token Binding ID 
@@ -498,18 +498,18 @@
         negotiates the Extended Master Secret <xref target="RFC7627"/> and Renegotiation Indication 
         <xref target="RFC5746" /> TLS extensions.</t>
 
-        <t>The server MUST terminate the connection if the use of the Token Binding protocol was 
-        not negotiated, but the client sends the Token Binding message. If the Token Binding type 
-        is "provided_token_binding", the server MUST verify that the signature algorithm (including
-        elliptic curve in the case of ECDSA) and key length in the Token Binding message match 
-        those negotiated via <xref target="I-D.ietf-tokbind-negotiation"/>. In the case of a 
-        mismatch, the server MUST terminate the connection. Token Bindings of type 
+        <t>If the use of the Token Binding protocol was not negotiated, but the client sends the 
+        Token Binding message, the server MUST reject any contained bindings. If the Token Binding 
+        type is "provided_token_binding", the server MUST verify that the signature algorithm 
+        (including elliptic curve in the case of ECDSA) and key length in the Token Binding message 
+        match those negotiated via <xref target="I-D.ietf-tokbind-negotiation"/>. In the case of a 
+        mismatch, the server MUST reject the binding. Token Bindings of type 
         "referred_token_binding" may use different key parameters than those negotiated with this 
         client.</t>
         
         <t>If the Token Binding message does not contain at least one TokenBinding structure, 
         or if a signature contained in any TokenBinding structure is invalid, the server MUST 
-        terminate the connection. </t>
+        reject the binding. </t>
         
         <t>Servers MUST ignore any unknown extensions. Initially, no extension types are defined 
         (see <xref target="IANA-TBExts"/> "<xref target="IANA-TBExts" format="title"/>").</t>
@@ -519,6 +519,11 @@
         Message can be provided to the server-side application. The application may then use the 
         Token Binding IDs for bound security token creation and validation, see 
         <xref target="BoundSecurityToken"/>.</t>
+
+        <t> If a Token Binding is rejected, any associated bound tokens MUST also be rejected by 
+        the server. The effect of this is application-specific, e.g. failing requests, a 
+        requirement for the client to re-authenticate and present a different token, or connection 
+        termination.</t>
       </section>
     </section>
 
@@ -838,6 +843,7 @@
       v09 2016-08-26  Andrei Popov   Added Token Binding public key length field in the TokenBindingID struct, addressed editorial comments.
       v10 2016-09-02  Andrei Popov   Clarified the language describing the hash and signature operations, per Brian's comments.
       v11 2016-11-16  Andrei Popov   Renegotiation indication is always needed.
+      v11 2016-11-17  Andrei Popov   TB verification failure results in TB and associated bound tokens rejection, not necessarily connection termination.
     -->
   </back>
 </rfc>
