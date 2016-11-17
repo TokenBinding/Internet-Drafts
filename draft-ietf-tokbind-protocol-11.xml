@@ -453,7 +453,8 @@
           <list style="symbols">
             <t>Label: The ASCII string "EXPORTER-Token-Binding" with no terminating NUL.</t>
             <t>Context value: NULL (no application context supplied).</t>
-            <t>Length: 32 bytes.</t>
+            <t>Length: 32 bytes, for the signature schemes defined in this document. Other 
+            signature schemes may require a longer exporter output.</t>
           </list>
         </t>
       </section>
@@ -855,6 +856,7 @@
       v10 2016-09-02  Andrei Popov   Clarified the language describing the hash and signature operations, per Brian's comments.
       v11 2016-11-16  Andrei Popov   Renegotiation indication is always needed.
       v11 2016-11-17  Andrei Popov   TB verification failure results in TB and associated bound tokens rejection, not necessarily connection termination.
+      v11 2016-11-17  Andrei Popov   Clarified the use of TB with renegotiation and the fact that new signature schemes may require longer exporter output.
     -->
   </back>
 </rfc>
