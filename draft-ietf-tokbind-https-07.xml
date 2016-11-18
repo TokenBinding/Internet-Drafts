@@ -755,10 +755,15 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         field.
       </t>
       <t>
-        However, such applications MUST only convey Token Binding IDs 
-        to other servers if the server associated with a Token Binding ID 
-        explicitly signals to do so, e.g., by returning an 
-        Include-Referred-Token-Binding-ID HTTP response header field.
+        However, such implementations MUST only convey Token Binding IDs 
+        to servers if signaled to do so by an application. For example, a server
+        can return an 
+        Include-Referred-Token-Binding-ID HTTP response header field to a Web browser,
+        thus signaling to the Token Binding implementation in the Web browser
+        that the Web application associated with the server's origin
+        intents to convey the Web browser's Token Binding ID to another server.
+        Other signaling mechanisms are possible, but are outside the scope of this
+        specification.
         <list style="hanging" hangIndent="7">
           <t hangText="NOTE:">
             See <xref target="privacy-cons"/> 
@@ -1017,9 +1022,9 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           decisions of how, and whether, to utilize Token Binding.
         </t>
         <t>
-          Also, applications must take care to only reveal Token Binding IDs to other 
-          endpoints if the server associated with a Token Binding ID explicitly signals 
-          to do so, see <xref target="impl-cons"/> 
+          Also, Token Binding implementations must take care to only reveal Token 
+          Binding IDs to other endpoints if the application associated with a Token 
+          Binding ID signals to do so, see <xref target="impl-cons"/> 
           "<xref target="impl-cons" format="title"/>".
         </t>
         <t>
