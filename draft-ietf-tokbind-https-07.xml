@@ -396,6 +396,17 @@
       
     </section>
 
+    <section title="TLS Renegotiation">
+      <t>Token Binding over HTTP/1.1 <xref target="RFC7230"/> can be done with TLS renegotiation.
+      This requires that renegotiation only happens between a client's HTTP request and the server's
+      response, the client does not send any pipelined requests, and the client does not initiate
+      a renegotiation (i.e. the client only sends a renegotiation ClientHello in response to the
+      server's HelloRequest). These conditions ensure that both the client and server can clearly
+      identify whether a TokenBindingMessage encoded in the Sec-Token-Binding header was sent before
+      or after the renegotiation occurred. This also prevents a TokenBindingMessage from being split
+      across the renegotiation.</t>
+    </section>
+
     <section title="First-party Use Cases">
       <t>In a first-party use case, an HTTP server issues a security token
       such as a cookie (or similar) to a client, and expects the client to return

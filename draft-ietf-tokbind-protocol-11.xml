@@ -443,10 +443,16 @@
         produced the session keys encrypting the application_data record containing this 
         TokenBinding. Such use of the current EKM for the TLS connection prevents the replay of 
         bound tokens within renegotiated TLS sessions, but requires the application to synchronize 
-        Token Binding message generation and verification with the TLS handshake state. 
-        Specifications defining the use of Token Binding with various application protocols, such 
-        as Token Binding over HTTP <xref target="I-D.ietf-tokbind-https"/>, may restrict or 
-        prohibit the use of TLS renegotiation in combination with Token Binding.</t>
+        Token Binding message generation and verification with the TLS handshake state.</t>
+
+        <t>If an application protocol wishes to use Token Binding in combination with TLS
+        renegotiation, a specification defining the use of Token Binding with that application
+        protocol (sugh as Token Binding over HTTP <xref target="I-D.ietf.tokbind-https"/>) must
+        define how to interpret whether a TokenBindingMessage received in application data is before
+        or after the change in EKM value due to renegotiation. It must also specify how to prevent a
+        TokenBindingMessage from being split across the renegotiation boundary.  Such a
+        specification may restrict or prohibit the use of TLS renegotiation in combination with
+        Token Binding.</t>
 
         <t>The EKM is obtained using the Keying Material Exporters for TLS defined in 
         <xref target="RFC5705" />, by supplying the following input values:
