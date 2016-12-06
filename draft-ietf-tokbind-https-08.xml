@@ -1082,9 +1082,17 @@ contexts. Other approaches are possible, but are outside the scope of this speci
     </section> <!-- IANA cons -->
 
     <section anchor="Acknowledgements" title="Acknowledgements">
-      <t>This document incorporates comments and suggestions offered by Eric Rescorla, Gabriel 
-      Montenegro, Martin Thomson, Vinod Anupam, Anthony Nadalin, Michael B. Jones, Bill Cox, Nick 
-      Harper, Brian Campbell, and others.</t>
+      <t>This document incorporates comments and suggestions offered by 
+      Vinod Anupam, 
+      Brian Campbell, 
+      Bill Cox, 
+      Nick Harper, 
+      Michael B. Jones, 
+      Gabriel Montenegro, 
+      Anthony Nadalin, 
+      Eric Rescorla, 
+      Martin Thomson, 
+      and others.</t>
     </section>
   </middle>
 
@@ -1193,6 +1201,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       v07 2016-11-22  Andrei Popov   Merged PR #81: renegotiation requirements.
       v08 2016-12-06  Jeff Hodges    init -08
       v08 2016-12-06  Jeff Hodges    add explanation of splitting across renego boundaries
+      v08 2016-12-06  Jeff Hodges    alphabetize acks.
     -->
   </back>
 </rfc>
