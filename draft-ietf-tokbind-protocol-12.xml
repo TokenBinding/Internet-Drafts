@@ -440,11 +440,11 @@
         <t>Please note that TLS 1.2 and earlier versions support renegotiation, which produces a new
         TLS master secret for the same connection, with associated session keys and EKM value.
         TokenBinding.signature MUST be a signature of the EKM value derived from the TLS master
-        secret that produced the session keys encrypting the TLS application_data record containing
-        this TokenBinding. Such use of the current EKM for the TLS connection makes replay of bound
-        tokens within renegotiated TLS sessions detectable, but requires the application to
-        synchronize Token Binding message generation and verification with the TLS handshake
-        state.</t>
+        secret that produced the session keys encrypting the TLS application_data record(s)
+        containing this TokenBinding. Such use of the current EKM for the TLS connection makes
+        replay of bound tokens within renegotiated TLS sessions detectable, but requires the
+        application to synchronize Token Binding message generation and verification with the TLS
+        handshake state.</t>
 
         <t>Specifications defining the use of Token Binding with application protocols, such as
         Token Binding over HTTP <xref target="I-D.ietf-tokbind-https"/>, MAY prohibit the use of TLS
@@ -453,7 +453,8 @@
         EKM value corresponds to a given TokenBindingMessage, and a mechanism preventing a
         TokenBindingMessage from being split across TLS renegotiation boundaries (i.e., due to TLS
         record layer fragmentation of "client messages" -- see Section 6.2.1 of <xref
-        target="RFC5246"/>).</t>
+        target="RFC5246"/>). Note that application layer messages conveying a TokenBindingMessage
+        may cross renegotiation boundaries in ways that make processing difficult.</t>
 
         <t>The EKM is obtained using the Keying Material Exporters for TLS defined in 
         <xref target="RFC5705" />, by supplying the following input values:
