@@ -353,9 +353,9 @@
   struct {
       TokenBindingType tokenbinding_type;
       TokenBindingID tokenbindingid;
-      opaque signature<0..2^16-1>;  /* Signature over the concatenation of 
-                                       tokenbinding_type, key_parameters and 
-                                       exported keying material (EKM) */
+      opaque signature<0..2^16-1>; /* Signature over the concatenation
+                                    of tokenbinding_type, key_parameters
+                                    and exported keying material (EKM)*/
       Extension extensions<0..2^16-1>;
   } TokenBinding;
 
