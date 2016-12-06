@@ -447,7 +447,7 @@
         state.</t>
 
         <t>Specifications defining the use of Token Binding with application protocols, such as
-        Token Binding over HTTP <xref target="I-D.ietf-tokbind-https"/>, may prohibit the use of TLS
+        Token Binding over HTTP <xref target="I-D.ietf-tokbind-https"/>, MAY prohibit the use of TLS
         renegotiation in combination with Token Binding, obviating the need for such
         synchronization. Alternatively, such specifications need to define a way to determine which
         EKM value corresponds to a given TokenBindingMessage, and a mechanism preventing a
