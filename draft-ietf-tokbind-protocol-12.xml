@@ -734,9 +734,17 @@
     </section>
 
     <section anchor="Acknowledgements" title="Acknowledgements">
-      <t>This document incorporates comments and suggestions offered by Eric Rescorla, Gabriel 
-      Montenegro, Martin Thomson, Vinod Anupam, Anthony Nadalin, Michael B. Jones, Bill Cox, Nick 
-      Harper, Brian Campbell, and others.</t>
+      <t>This document incorporates comments and suggestions offered by 
+      Vinod Anupam, 
+      Brian Campbell, 
+      Bill Cox, 
+      Nick Harper, 
+      Michael B. Jones, 
+      Gabriel Montenegro, 
+      Anthony Nadalin, 
+      Eric Rescorla, 
+      Martin Thomson, 
+      and others.</t>
     </section>
   </middle>
 
@@ -865,6 +873,10 @@
       v11 2016-11-17  Andrei Popov   TB verification failure results in TB and associated bound tokens rejection, not necessarily connection termination.
       v11 2016-11-17  Andrei Popov   Clarified the use of TB with renegotiation and the fact that new signature schemes may require longer exporter output.
       v11 2016-11-22  Andrei Popov   Merged PR #81: renegotiation requirements.
+      v12 2016-11-29  Jeff Hodges    Init -12. 
+      v12 2016-12-06  Jeff Hodges    Polish renegotiation requirements. Fixup figure. 
+      v12 2016-12-06  Jeff Hodges    alphabetize acks. 
+
     -->
   </back>
 </rfc>
