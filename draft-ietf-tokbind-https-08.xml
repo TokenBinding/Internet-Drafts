@@ -1189,6 +1189,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       v06 2016-08-26  Andrei Popov   Clarified that renegotiation indication ext. is only needed when renegotiation is enabled.
       v07 2016-11-16  Andrei Popov   Undid the change from 2016-08-26 above. Renegotiation indication is always needed.
       v07 2016-11-22  Andrei Popov   Merged PR #81: renegotiation requirements.
+      v08 2016-12-06  Jeff Hodges    init -08
     -->
   </back>
 </rfc>
