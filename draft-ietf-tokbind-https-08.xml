@@ -1136,7 +1136,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
     <references title="Informative References">
       &RFC5746;
       &RFC6749;
-      &RFC6750;
+      <!-- &RFC6750; -->
       &RFC7540;
       &RFC7627;
 
