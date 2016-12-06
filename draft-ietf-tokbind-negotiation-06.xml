@@ -7,6 +7,7 @@
      An alternate method (rfc include) is described in the references. -->
 
 <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC4366 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4366.xml">
 <!ENTITY RFC5246 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml">
 <!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
 <!ENTITY RFC5705 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5705.xml">
@@ -38,7 +39,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-negotiation-02" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-negotiation-06" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -212,7 +213,7 @@
         <figure>
         <artwork align="left"><![CDATA[
 enum {
-    token_binding(TBD), (65535)
+    token_binding(24), (65535)
 } ExtensionType;
         ]]></artwork>
         </figure>
@@ -227,7 +228,7 @@ struct {
 } ProtocolVersion;
 
 enum {
-    rsa2048_pkcs1.5(0), rsa2048_pss(1), ecdsap256(2), (255)
+    (255)
 } TokenBindingKeyParameters;
 
 struct {
@@ -244,7 +245,9 @@ struct {
       specific draft version, e.g. {0, 1} or {0, 2}.</t>
 
       <t>"key_parameters_list" contains the list of identifiers of the Token Binding key 
-      parameters supported by the client, in descending order of preference.</t>
+      parameters supported by the client, in descending order of preference. 
+      <xref target="I-D.ietf-tokbind-protocol"/> defines an initial set of identifiers for Token 
+      Binding key parameters.</t>
     </section>
 
     <section title="Token Binding Negotiation Server Hello Extension">
@@ -258,7 +261,7 @@ struct {
         <t>The server supports the Token Binding protocol version offered by the client or a lower 
         version.</t>
         <t>The server finds acceptable Token Binding key parameters on the client's list.</t>
-        <t>The server is also negotiating Extended Master Secret <xref target="RFC7627" /> and 
+        <t>The server is also negotiating the Extended Master Secret <xref target="RFC7627" /> and 
         Renegotiation Indication <xref target="RFC5746" /> TLS extensions. This requirement only 
         applies when TLS 1.2 or an older TLS version is used (see security considerations section 
         below for more details).</t>
@@ -293,8 +296,8 @@ struct {
         <t>"key_parameters_list" includes more than one Token Binding key parameters 
         identifier.</t>
         <t>"key_parameters_list" includes an identifier that was not advertised by the client.</t>
-        <t>TLS 1.2 or an older TLS version is used, but Extended Master Secret 
-        <xref target="RFC7627" /> and Renegotiation Indication <xref target="RFC5746" /> TLS 
+        <t>TLS 1.2 or an older TLS version is used, but the Extended Master Secret 
+        <xref target="RFC7627" /> and TLS Renegotiation Indication <xref target="RFC5746" /> 
         extensions are not negotiated (see security considerations section below for more 
         details).</t>
       </list></t>
@@ -302,7 +305,9 @@ struct {
       <t>If the "token_binding" extension is included in the server hello and the client supports 
       the Token Binding protocol version selected by the server, it means that the version and key 
       parameters have been negotiated between the client and the server and SHALL be definitive for 
-      the TLS connection. In this case, the client MUST use the negotiated key parameters in the 
+      the TLS connection. Please note that TLS 1.2 and earlier versions support renegotiation, 
+      allowing the client and server to renegotiate the Token Binding protocol version and key 
+      parameters on the same connection. The client MUST use the negotiated key parameters in the 
       "provided_token_binding" as described in <xref target="I-D.ietf-tokbind-protocol"/>.</t>
 
       <t>If the client does not support the Token Binding protocol version selected by the server, 
@@ -315,46 +320,21 @@ struct {
     </section>
 
     <section title="IANA Considerations">
-      <t>This document defines a new TLS extension "token_binding", which needs to be added to the 
-      IANA "Transport Layer Security (TLS) Extensions" registry.</t>
-
-      <t>This document establishes a registry for identifiers of Token Binding key parameters 
-      entitled "Token Binding Key Parameters" under the "Token Binding Protocol" heading.</t>
-
-      <t>Entries in this registry require the following fields:
-        <list style="symbols">
-          <t>Value: The octet value that identifies a set of Token Binding key parameters 
-          (0-255).</t>
-          <t>Description: The description of the Token Binding key parameters.</t>
-          <t>Specification: A reference to a specification that defines the Token Binding key 
-          parameters.</t>
+      <t>This document updates the TLS "ExtensionType Values" registry originally created in 
+      <xref target="RFC4366"/>. IANA has provided the following temporary registration for the 
+      "token_binding" TLS extension:
+        <list style="empty">
+          <t>Value: 24</t>
+          <t>Extension name: token_binding</t>
+          <t>Reference: this document</t>
         </list>
+        IANA is requested to make this registration permanent, keeping the value of 24, which has 
+        been used by the prototype implementations of the Token Binding protocol.
       </t>
 
-      <t>This registry operates under the "Expert Review" policy as defined in 
-      <xref target="RFC5226"/>. The designated expert is advised to encourage the inclusion of a 
-      reference to a permanent and readily available specification that enables the creation of 
-      interoperable implementations using the identified set of Token Binding key parameters.</t>
-
-     <t>An initial set of registrations for this registry follows:
-       <list style="empty">
-         <t>Value: 0</t>
-         <t>Description: rsa2048_pkcs1.5</t>
-         <t>Specification: this document</t>
-       </list>
-
-       <list style="empty">
-         <t>Value: 1</t>
-         <t>Description: rsa2048_pss</t>
-         <t>Specification: this document</t>
-       </list>
-
-       <list style="empty">
-         <t>Value: 2</t>
-         <t>Description: ecdsap256</t>
-         <t>Specification: this document</t>
-       </list>
-     </t>
+      <t>This document uses "Token Binding Key Parameters" registry originally created in 
+      <xref target="I-D.ietf-tokbind-protocol"/>. This document creates no new registrations in 
+      this registry.</t>
     </section>
 
     <section title="Security Considerations">
@@ -380,7 +360,8 @@ struct {
 
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>This document incorporates comments and suggestions offered by Eric Rescorla, Gabriel 
-      Montenegro, Martin Thomson, Vinod Anupam, Bill Cox, Nick Harper and others.</t>
+      Montenegro, Martin Thomson, Vinod Anupam, Anthony Nadalin, Michael B. Jones, Bill Cox, Nick 
+      Harper, Brian Campbell and others.</t>
     </section>
   </middle>
 
@@ -402,6 +383,7 @@ struct {
 
     <references title="Normative References">
       &RFC2119;
+      &RFC4366;
       &RFC5246;
       &RFC5226;
       &RFC5705;
@@ -436,9 +418,15 @@ struct {
     </references>
 
     <!-- Change Log
-      v00 2015-05-07  Andrei Popov   Initial version
-      v00 2015-09-09  Andrei Popov   Added TLS-style TB version negotiation, limited key parameters list to 1..2^8-1
-      v01 2015-10-06  Andrei Popov   Removed _SHA256 suffixes from TB key parameters 
-      v02 2016-01-08  Andrei Popov   Added requirement for Renegotiation Indication -->
+      v00 2015-05-07  Andrei Popov   Initial version.
+      v00 2015-09-09  Andrei Popov   Added TLS-style TB version negotiation, limited key parameters list to 1..2^8-1.
+      v01 2015-10-06  Andrei Popov   Removed _SHA256 suffixes from TB key parameters.
+      v02 2016-01-08  Andrei Popov   Added requirement for Renegotiation Indication.
+      v03 2016-07-07  Andrei Popov   Moved the TB ID registry to TBPROTO.
+      v04 2016-08-23  Andrei Popov   Merged PR #58.
+      v04 2016-08-26  Andrei Popov   Clarified that renegotiation indication ext. is only needed when renegotiation is enabled.
+      v05 2016-09-02  Andrei Popov   Corrected acknowledgements (it's Michael B. Jones).
+      v06 2016-11-16  Andrei Popov   Undid the change from 2016-08-26 above. Renegotiation indication is always needed.
+    -->
   </back>
 </rfc>
