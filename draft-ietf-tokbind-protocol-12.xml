@@ -223,35 +223,35 @@
 
   <middle>
     <section title="Introduction">
-      <t>Servers generate various security tokens (e.g. HTTP cookies, OAuth tokens) for 
-      applications to access protected resources. In general, any party in possession of such
-      "bearer" security tokens
-      gain access to protected resource(s). Attackers obtain bearer security tokens from users' 
-      application connections or machines, present them to application servers, and
-      impersonate authenticated users. The idea of 
-      Token Binding is to prevent such attacks by cryptographically binding security tokens to 
-      the TLS layer.</t>
+      <t>Often, servers generate various "bearer" security tokens (e.g. HTTP cookies, OAuth tokens)
+      for applications to present when accessing protected resources. In general, any party in
+      possession of bearer security tokens gain access to the resource(s) they protect. As a result,
+      attackers in part target bearer security tokens, obtaining them from users' application
+      connections or machines, and present them to application servers, thus impersonating
+      authenticated users. The idea of Token Binding is to render such attacks detectable by
+      cryptographically binding application security tokens to the underlying TLS layer.</t>
 
-      <t>A Token Binding is established by the user agent generating a private-public key 
-      pair (possibly within a secure hardware module, such as TPM) per target server, and 
-      proving possession of the private key on every TLS connection to the target server. The 
-      proof of possession involves signing the exported keying material <xref target="RFC5705" /> 
-      for the TLS connection with the private key. The corresponding public key is included in the 
-      Token Binding identifier structure (described in the <xref target="TBMessage-TBID"/> 
-      "<xref target="TBMessage-TBID" format="title"/>"). Token Bindings are long-lived, i.e. they 
-      encompass multiple TLS connections and TLS sessions between a given client and server. To 
-      protect privacy, Token Binding IDs are never transmitted in clear text and can be reset by 
-      the user at any time, e.g. when clearing browser cookies.</t>
+      <t>A Token Binding is established by the user agent generating a private-public key pair
+      (possibly within a secure hardware module, such as TPM) per target server, and providing the
+      public key, as well as proving possession of the private key, on every TLS connection to the
+      target server. The proof of possession involves signing exported keying material (EKM) <xref
+      target="RFC5705" /> from the TLS connection with the private key. The corresponding public key
+      is the defining component of the Token Binding ID structure (described in the <xref
+      target="TBMessage-TBID"/> "<xref target="TBMessage-TBID" format="title"/>"). Token Bindings
+      are long-lived, i.e., they encompass multiple TLS connections and TLS sessions between a given
+      client and server. To protect privacy, Token Binding IDs are not conveyed over insecure
+      connections (by design), and are intended to be resetable by users on-demand, e.g., when
+      clearing browser cookies.</t>
 
       <t>When issuing a security token to a client that supports Token Binding, a server 
       includes the client’s Token Binding ID in the token. Later on, when a client presents 
-      a security token containing a Token Binding ID, the server makes sure the ID in the 
+      a security token containing a Token Binding ID, the server ensures the ID in the 
       token matches the ID of the Token Binding established with the client. In the case of 
-      a mismatch, the server discards the token.</t>
+      a mismatch, the server does not accept the token (details are application-specific).</t>
 
-      <t>In order to successfully export and replay a bound security token, the attacker needs 
-      to also be able to export the client’s private key, which is hard to do in the case of the 
-      key generated in a secure hardware module.</t>
+      <t>In order to successfully export and replay a bound security token, an attacker needs to
+      also be able to export the client’s private key, which may be specially protected, e.g., in
+      the case of private keys housed in a secure hardware module.</t>
 
       <section title="Requirements Language">
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
