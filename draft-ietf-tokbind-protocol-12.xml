@@ -674,18 +674,21 @@
     
     <section anchor="Security" title="Security Considerations">
       <section anchor="Security-TokenReplay" title="Security Token Replay">
-        <t>The goal of the Token Binding protocol is to prevent attackers from exporting and 
-        replaying security tokens, thereby impersonating legitimate users and gaining access to 
-        protected resources. Bound tokens can still be replayed by the malware present in the 
-        User Agent. In order to export the token to another machine and successfully replay it, 
-        the attacker also needs to export the corresponding private key. Token Binding private 
-        keys are therefore high-value assets and SHOULD be strongly protected, ideally by 
-        generating them in a hardware security module that prevents key export.</t>
+        <t>The goal of the Token Binding protocol is to prevent attackers from sucessfully exporting
+        and replaying security tokens, thereby impersonating legitimate users and gaining access to
+        protected resources. Although bound tokens can be replayed by any malware present in User
+        Agents (which may be undetectable by a server), in order to export bound tokens to other
+        machines and successfully replay them, attackers also need to export corresponding Token
+        Binding private keys. Token Binding private keys are therefore high-value assets and SHOULD
+        be strongly protected, ideally by generating them in a hardware security module that
+        prevents key export.</t>
+
         <t>The manner in which a token is bound to the TLS layer is application-defined and beyond 
         the scope of this document. However, the resulting bound token needs to be 
         integrity-protected, so that an attacker cannot remove the binding or substitute a Token 
         Binding ID of their choice without detection.</t>
       </section>
+
       <section title="Downgrade Attacks">
         <t>The Token Binding protocol is only used when negotiated via 
         <xref target="I-D.ietf-tokbind-negotiation"/> within the TLS handshake. TLS prevents 
@@ -695,7 +698,7 @@
         and key length used in the TokenBinding of type "provided_token_binding" MUST match the 
         parameters negotiated via <xref target="I-D.ietf-tokbind-negotiation"/>.</t>
       </section>
-      
+
       <section title="Privacy Considerations" anchor="privacy-cons">
         <t>The Token Binding protocol uses persistent, long-lived Token Binding IDs. To protect 
         privacy, Token Binding IDs are never transmitted in clear text and can be reset by the user 
