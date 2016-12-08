@@ -394,25 +394,25 @@
       </section>
 
       <section anchor="TBMessage-TBID" title="TokenBinding.tokenbindingid">
-        <t>The ID of the Token Binding established as a result of Token Binding message processing 
+        <t>The Token Binding ID established as a result of Token Binding message processing 
         contains the identifier of the key parameters negotiated via 
         <xref target="I-D.ietf-tokbind-negotiation"/>, the length (in bytes) of the Token Binding 
         public key, and the Token Binding public key itself. Token Binding ID can be obtained from 
         the TokenBinding structure by discarding the Token Binding type, signature and extensions.
         </t>
 
-        <t>When rsa2048_pkcs1.5 or rsa2048_pss is used, RSAPublicKey.modulus and 
-        RSAPublicKey.publicexponent contain the modulus and exponent of the 2048-bit RSA public key 
+        <t>When a key parameter of rsa2048_pkcs1.5 or rsa2048_pss is used, RSAPublicKey.modulus and
+        RSAPublicKey.publicexponent contain the modulus and exponent of a 2048-bit RSA public key
         represented in big-endian format, with leading zero bytes omitted.</t>
 
-        <t>When ecdsap256 is used, ECPoint.point contains the X coordinate followed by the Y 
-        coordinate of the Curve P-256 key. The X and Y coordinates are unsigned 32-byte integers 
-        encoded in big-endian format, preserving any leading zero bytes. Future specifications may 
-        define Token Binding keys using other elliptic curves with their corresponding signature 
-        and point formats.</t>
+        <t>When a key parameter of ecdsap256 is used, ECPoint.point contains the X coordinate
+        followed by the Y coordinate of a Curve P-256 key <xref target="FIPS.186-4.2013"/>. The X
+        and Y coordinates are unsigned 32-byte integers encoded in big-endian format, preserving any
+        leading zero bytes. Future specifications may define Token Binding keys using other elliptic
+        curves with their corresponding signature and point formats.</t>
 
         <t>Token Binding protocol implementations SHOULD make Token Binding IDs available to the 
-        application as opaque byte sequences. E.g. server applications will use Token Binding IDs 
+        application as opaque byte sequences. E.g., server applications will use Token Binding IDs 
         when generating and verifying bound tokens.</t>
       </section>
 
