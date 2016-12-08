@@ -868,7 +868,7 @@
       v11 2016-11-17  Andrei Popov   TB verification failure results in TB and associated bound tokens rejection, not necessarily connection termination.
       v11 2016-11-17  Andrei Popov   Clarified the use of TB with renegotiation and the fact that new signature schemes may require longer exporter output.
       v11 2016-11-22  Andrei Popov   Merged PR #81: renegotiation requirements.
-      v12 2016-12-08  Jeff Hodges    Editotial polishing of Abstract, Intro, Overview.
+      v12 2016-12-08  Jeff Hodges    Editotial polishing of Abstract, Intro, Overview, Security-TokenReplay
     -->
   </back>
 </rfc>
