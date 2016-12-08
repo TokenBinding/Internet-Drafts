@@ -383,14 +383,14 @@
           </list>
         </t>
 
-        <t>Token Binding over HTTP <xref target="I-D.ietf-tokbind-https"/> describes a use case for 
-        referred_token_binding where Token Bindings are established between multiple communicating 
-        parties: User Agent, Identity Provider and Relying Party. User Agent sends 
-        referred_token_binding to the Identity Provider in order to prove possession of the Token 
-        Binding key it uses with the Relying Party. The Identity Provider can then bind the token it 
-        is supplying (for presentation to the Relying Party) to the Token Binding ID contained in the 
-        referred_token_binding. Such bound token enjoys the protections discussed below in 
-        <xref target="Security"/> "<xref target="Security" format="title"/>".</t>
+        <t>Token Binding over HTTP <xref target="I-D.ietf-tokbind-https"/> describes a use case for
+        referred_token_binding where Token Bindings are established between multiple communicating
+        parties: User Agent, Identity Provider and Relying Party. User Agent sends
+        referred_token_binding to the Identity Provider in order to prove possession of the Token
+        Binding key it uses with the Relying Party. The Identity Provider can then bind the token it
+        is supplying (for presentation to the Relying Party) to the Token Binding ID contained in
+        the referred_token_binding. Such a bound token enjoys the protections discussed below in <xref
+        target="Security"/> "<xref target="Security" format="title"/>".</t>
       </section>
 
       <section anchor="TBMessage-TBID" title="TokenBinding.tokenbindingid">
@@ -536,7 +536,7 @@
         <t>If all checks defined above have passed successfully, the Token Binding between this 
         client and server is established. The Token Binding ID(s) conveyed in the Token Binding 
         Message can be provided to the server-side application. The application may then use the 
-        Token Binding IDs for bound security token creation and validation, see 
+        Token Binding IDs for bound token creation and validation, see 
         <xref target="BoundSecurityToken"/>.</t>
 
         <t> If a Token Binding is rejected, any associated bound tokens MUST also be rejected by 
@@ -865,6 +865,7 @@
       v11 2016-11-17  Andrei Popov   TB verification failure results in TB and associated bound tokens rejection, not necessarily connection termination.
       v11 2016-11-17  Andrei Popov   Clarified the use of TB with renegotiation and the fact that new signature schemes may require longer exporter output.
       v11 2016-11-22  Andrei Popov   Merged PR #81: renegotiation requirements.
+      v12 2016-12-08  Jeff Hodges    Editotial polishing of Abstract, Intro, Overview.
     -->
   </back>
 </rfc>
