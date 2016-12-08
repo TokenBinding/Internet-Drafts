@@ -212,12 +212,12 @@
          keywords will be used for the search engine. -->
 
     <abstract>
-      <t>This document specifies Version 1.0 of the Token Binding protocol. The Token Binding 
+      <t>The Token Binding 
       protocol allows client/server applications to create long-lived, uniquely identifiable TLS 
       <xref target="RFC5246" /> bindings spanning multiple TLS sessions and connections. 
       Applications are then enabled to cryptographically bind security tokens to the TLS layer, 
-      preventing token export and replay attacks. To protect privacy, the Token Binding 
-      identifiers are only transmitted encrypted and can be reset by the user at any time.</t>
+      making token replay attacks detectable. To protect privacy, the Token Binding 
+      identifiers are only conveyed over TLS and can be reset by applications at any time.</t>
     </abstract>
   </front>
 
