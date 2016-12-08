@@ -231,7 +231,7 @@
       authenticated users. The idea of Token Binding is to render such attacks detectable by
       cryptographically binding application security tokens to the underlying TLS layer.</t>
 
-      <t>A Token Binding is established by the user agent generating a private-public key pair
+      <t>A Token Binding is established by a user agent generating a private-public key pair
       (possibly within a secure hardware module, such as TPM) per target server, and providing the
       public key, as well as proving possession of the private key, on every TLS connection to the
       target server. The proof of possession involves signing exported keying material (EKM) <xref
@@ -261,32 +261,33 @@
     </section>
 
     <section title="Token Binding Protocol Overview">
-      <t>The client and server use the Token Binding Negotiation TLS Extension 
-      <xref target="I-D.ietf-tokbind-negotiation"/> to negotiate the Token Binding protocol 
-      version and the parameters (signature algorithm, length) of the Token Binding key. This 
-      negotiation does not require additional round-trips.</t>
+      <t>Upon TLS connection establishment, a client and server use the Token Binding Negotiation
+      TLS Extension <xref target="I-D.ietf-tokbind-negotiation"/> to negotiate the Token Binding
+      protocol version and the parameters (signature algorithm, length) of the Token Binding key.
+      This negotiation does not require additional round-trips.</t>
 
-      <t>The Token Binding protocol consists of one message sent by the client to the server, 
-      proving possession of one or more client-generated asymmetric keys. This message is 
-      only sent if the client and server agree on the use of the Token Binding protocol and the 
-      key parameters. The Token Binding message is sent with the application protocol data in TLS 
-      application_data records.</t>
+      <t>Upon successful Token Binding Negotiation during the TLS handshake, Token Binding protocol
+      (at the application layer) consists of one message, the Token Binding message, sent by the
+      client to the server, and proving possession of one or more client-generated asymmetric
+      private keys. This message is not sent if the Token Binding Negotiation was unsuccessful. The
+      Token Binding message is sent with the application protocol data over TLS.</t>
 
-      <t>A server receiving the Token Binding message verifies that the key parameters in the 
-      message match the Token Binding parameters negotiated via 
-      <xref target="I-D.ietf-tokbind-negotiation"/>, and then validates the signatures contained 
-      in the Token Binding message. If either of these checks fails, the server rejects the 
-      binding, along with all associeted bound tokens. Otherwise the Token Binding is successfully 
-      established with the ID contained in the Token Binding message.</t>
+      <t>A server receiving the Token Binding message verifies that the key parameters in the
+      message match the Token Binding key parameters negotiated via <xref
+      target="I-D.ietf-tokbind-negotiation"/>, and then validates the signatures contained in the
+      Token Binding message. If either of these checks fails, the server does not accept the
+      binding, and neither does it accept any of the associated bound tokens. Otherwise the Token
+      Binding is successfully established with the Token Binding ID contained in the Token Binding
+      message.</t>
 
       <t>When a server supporting the Token Binding protocol receives a bound token, the server 
-      compares the Token Binding ID in the security token with the Token Binding ID 
+      compares the Token Binding ID in the bound token with the Token Binding ID 
       established with the client. If the bound token came from a TLS connection without a Token 
-      Binding, or if the IDs don't match, the token is discarded.</t>
+      Binding, or if the Token Binding IDs do not match, the token is not accepted.</t>
 
       <t>This document defines the format of the Token Binding protocol message, the process of 
       establishing a Token Binding, the format of the Token Binding ID, and the process of 
-      validating a security token. Token Binding Negotiation TLS Extension 
+      validating a bound token. Token Binding Negotiation TLS Extension 
       <xref target="I-D.ietf-tokbind-negotiation"/> describes the negotiation of the Token 
       Binding protocol and key parameters. Token Binding over HTTP 
       <xref target="I-D.ietf-tokbind-https"/> explains how the Token Binding message is 
