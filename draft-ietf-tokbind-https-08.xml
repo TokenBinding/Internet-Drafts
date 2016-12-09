@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- This template is for creating an Internet Draft using xml2rfc,
      which is available here: http://xml.resource.org. -->
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
@@ -341,7 +341,7 @@
 
       <t>A TokenBindingMessage is validated by the server as described in Section 
       4.2. "Server Processing Rules" of <xref target="I-D.ietf-tokbind-protocol"/>.
-      If validaion fails and a Token Binding is rejected, any associated bound 
+      If validation fails and a Token Binding is rejected, any associated bound 
       tokens MUST also be rejected by the server. HTTP requests containing invalid 
       tokens MUST be rejected. In this case, the server application may return HTTP 
       status code 400 (Bad Request) or proceed with an application-specific invalid 
@@ -488,11 +488,11 @@
 	  want to include in the token the Token-Binding public key that the client
     uses when communicating with the Token Consumer, thus 
     <spanx style="emph">binding</spanx> the token to client's Token-Binding
-    keypair. The client
+    key pair. The client
     proves possession of the private key when communicating with 
     the Token Consumer through the <xref target="I-D.ietf-tokbind-protocol">Token
 	  Binding Protocol</xref>, and reveals the corresponding public key of this 
-    keypair as part of the Token Binding ID. Comparing the public key from the
+    key pair as part of the Token Binding ID. Comparing the public key from the
     token with the public key from the Token Binding ID allows the Token 
     Consumer to verify that the token was sent to it by the legitimate 
     client.</t>
@@ -589,7 +589,7 @@
 	Token Provider ("TP1") needs to redirect the
 client to another Token Provider ("TP2"), rather than 
 directly back to the Token Consumer, it can be
-accomodated using the header fields defined in this 
+accommodated using the header fields defined in this 
 specification in the following fashion ("the
 redirect-chain approach"):
 	
@@ -731,7 +731,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
    +-------------------------------->|                      |
      | 3b. HTTPS GET or POST with                           |
      | ETBMSG[[{EKM1}Ks1,TBID1,provided_token_binding]]     |
-     | conveying Authn Reponse containing                   |
+     | conveying Authn Response containing                   |
      | ID Token w/TBID1, issued for TC                      |
      |                               |                      |
      |                               |                      |
