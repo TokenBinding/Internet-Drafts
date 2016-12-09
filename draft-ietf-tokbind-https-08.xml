@@ -578,7 +578,7 @@
 	
 	<t>As described above, the TokenBindingMessage MUST
 	additionally contain a Provided Token Binding ID, i.e., a
-	TokenBinding structure with TokenBindingType
+	TokenBinding structure with TokenBindingType of 
 	provided_token_binding, which MUST be signed with the Token
 	Binding key used by the client for connections between itself
 	and the Token Provider (more specifically, the web origin that
@@ -625,7 +625,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         even if those key parameters are different from the ones 
         negotiated with the origin that the header field is sent to.</t>
         <t>Token Providers SHOULD support all the Token Binding key parameters
-        specified in the <xref target="I-D.ietf-tokbind-protocol"/>. 
+        specified in <xref target="I-D.ietf-tokbind-protocol"/>. 
         If a token provider does not support the key parameters
         specified in the referred_token_binding TokenBinding in the
         TokenBindingMessage, it MUST NOT issue a bound token.</t>
