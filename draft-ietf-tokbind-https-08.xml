@@ -343,7 +343,7 @@
       4.2. "Server Processing Rules" of <xref target="I-D.ietf-tokbind-protocol"/>.
       If validation fails and a Token Binding is rejected, any associated bound 
       tokens MUST also be rejected by the server. HTTP requests containing invalid 
-      tokens MUST be rejected. In this case, the server application may return HTTP 
+      tokens MUST be rejected. In this case, the server application MAY return HTTP 
       status code 400 (Bad Request) or proceed with an application-specific invalid 
       token response (e.g. directing the client to re-authenticate and present a 
       different token), or terminate the connection.</t>
