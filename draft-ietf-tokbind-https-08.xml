@@ -772,7 +772,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         Include-Referred-Token-Binding-ID HTTP response header field to a Web browser,
         thus signaling to the Token Binding implementation in the Web browser
         that the Web application associated with the server's origin
-        intents to convey the Web browser's Token Binding ID to another server.
+        intends to convey the Web browser's Token Binding ID to another server.
         Other signaling mechanisms are possible, but are outside the scope of this
         specification.
         <list style="hanging" hangIndent="7">
@@ -791,12 +791,13 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         prevent attackers from exporting and replaying tokens used in
         protocols between the client and Token Consumer, thereby
         impersonating legitimate users and gaining access to protected
-        resources. Bound tokens can still be replayed by  malware
-        present in the client. In order to export the token to
-        another machine and successfully replay it, the attacker also
-        needs to export the corresponding private key. The Token
-        Binding private key is therefore a high-value asset and MUST
-        be strongly protected, ideally by generating it in a hardware
+        resources. Although bound tokens can still be replayed by any malware
+        present in clients (which may be undetectable by a server), 
+        in order to export bound tokens to
+        other machines and successfully replay them, attackers also
+        need to export the corresponding Token Binding private keys. Token
+        Binding private keys are therefore high-value assets and SHOULD
+        be strongly protected, ideally by generating them in a hardware
         security module that prevents key export.</t>
       </section>
       <section title="Triple Handshake Vulnerability in TLS 1.2 and Older TLS Versions">
