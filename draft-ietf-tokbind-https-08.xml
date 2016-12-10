@@ -980,7 +980,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         </t>
         <t>In the case of HTTP cookies, servers may use Token Binding to secure their cookies. 
           These cookies can be attached to any 
-          sub-domain of effective top-level domains, and clients therefore should use the same 
+          sub-domain of effective top-level domains (eTLDs), 
+          and clients therefore should use the same 
           Token Binding key across such subdomains. This will ensure that any server
           capable of receiving the cookie will see the same Token Binding ID from 
           the client, and thus be able to verify the token binding of the cookie.
