@@ -571,8 +571,8 @@
         TokenBinding MUST be signed 
 	with the Token Binding key used by the client for connections
 	between itself and the Token Consumer (more specifically, the
-	web origin that issued the Include-Referred-Token-Binding-ID
-	response header field). The Token Binding ID established by this
+	server that issued the Include-Referred-Token-Binding-ID
+	response header field, whose hostname ). The Token Binding ID established by this
 	TokenBinding is called a <spanx style="emph">Referred Token
 	Binding ID</spanx>.</t>
 	
@@ -581,7 +581,7 @@
 	TokenBinding structure with TokenBindingType of 
 	provided_token_binding, which MUST be signed with the Token
 	Binding key used by the client for connections between itself
-	and the Token Provider (more specifically, the web origin that
+	and the Token Provider (more specifically, the server that
 	the token request is being sent to).
  </t>
 	
@@ -623,7 +623,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         key parameters negotiated with the Token Consumer in the
         referred_token_binding TokenBinding of the TokenBindingMessage,
         even if those key parameters are different from the ones 
-        negotiated with the origin that the header field is sent to.</t>
+        negotiated with the server that the header field is sent to.</t>
         <t>Token Providers SHOULD support all the Token Binding key parameters
         specified in <xref target="I-D.ietf-tokbind-protocol"/>. 
         If a token provider does not support the key parameters
@@ -771,7 +771,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         can return an 
         Include-Referred-Token-Binding-ID HTTP response header field to a Web browser,
         thus signaling to the Token Binding implementation in the Web browser
-        that the Web application associated with the server's origin
+        that the server
         intends to convey the Web browser's Token Binding ID to another server.
         Other signaling mechanisms are possible, but are outside the scope of this
         specification.
@@ -871,9 +871,9 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         </t>
         <t>
           Therefore, we need to protect the integrity of the Sec-Token-Binding
-          header field. One origin should not be able to set the Sec-Token-Binding header field
+          header field. One eTLD+1 should not be able to set the Sec-Token-Binding header field
           (through a DOM API or otherwise) that the User Agent uses with
-          another origin. Employing the "Sec-" header field prefix helps to meet this 
+          another eTLD+1. Employing the "Sec-" header field prefix helps to meet this 
           requirement by denoting the header field name to be a "forbidden header name",
           see <xref target="fetch-spec"/>. 
         </t>
