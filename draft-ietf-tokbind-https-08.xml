@@ -51,7 +51,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-https-07" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-https-08" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -397,14 +397,16 @@
     </section>
 
     <section title="TLS Renegotiation">
-      <t>Token Binding over HTTP/1.1 <xref target="RFC7230"/> can be performed in combination with 
-      TLS renegotiation. In this case, renegotiation MUST only occur between a client's HTTP 
-      request and the server's response, the client MUST NOT send any pipelined requests, and the 
-      client MUST NOT initiate renegotiation (i.e. the client may only send a renegotiation 
-      ClientHello in response to the server's HelloRequest). These conditions ensure that both the 
-      client and the server can clearly identify which TLS Exported Keying Material value 
-      <xref target="RFC5705" /> to use when generating or verifying the TokenBindingMessage. This 
-      also prevents a TokenBindingMessage from being split across TLS renegotiation(s).</t>
+      <t>Token Binding over HTTP/1.1 <xref target="RFC7230"/> can be performed in combination with
+      TLS renegotiation. In this case, renegotiation MUST only occur between a client's HTTP request
+      and the server's response, the client MUST NOT send any pipelined requests, and the client
+      MUST NOT initiate renegotiation (i.e., the client may only send a renegotiation ClientHello in
+      response to the server's HelloRequest). These conditions ensure that both the client and the
+      server can clearly identify which TLS Exported Keying Material value <xref target="RFC5705" />
+      to use when generating or verifying the TokenBindingMessage. This also prevents a
+      TokenBindingMessage from being split across TLS renegotiation boundaries (i.e., due to TLS
+      record layer fragmentation of "client messages" -- see Section 6.2.1 of <xref
+      target="RFC5246"/>).</t>
     </section>
 
     <section title="First-party Use Cases">
@@ -1080,9 +1082,17 @@ contexts. Other approaches are possible, but are outside the scope of this speci
     </section> <!-- IANA cons -->
 
     <section anchor="Acknowledgements" title="Acknowledgements">
-      <t>This document incorporates comments and suggestions offered by Eric Rescorla, Gabriel 
-      Montenegro, Martin Thomson, Vinod Anupam, Anthony Nadalin, Michael B. Jones, Bill Cox, Nick 
-      Harper, Brian Campbell, and others.</t>
+      <t>This document incorporates comments and suggestions offered by 
+      Vinod Anupam, 
+      Brian Campbell, 
+      Bill Cox, 
+      Nick Harper, 
+      Michael B. Jones, 
+      Gabriel Montenegro, 
+      Anthony Nadalin, 
+      Eric Rescorla, 
+      Martin Thomson, 
+      and others.</t>
     </section>
   </middle>
 
@@ -1134,7 +1144,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
     <references title="Informative References">
       &RFC5746;
       &RFC6749;
-      &RFC6750;
+      <!-- &RFC6750; -->
       &RFC7540;
       &RFC7627;
 
@@ -1189,6 +1199,9 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       v06 2016-08-26  Andrei Popov   Clarified that renegotiation indication ext. is only needed when renegotiation is enabled.
       v07 2016-11-16  Andrei Popov   Undid the change from 2016-08-26 above. Renegotiation indication is always needed.
       v07 2016-11-22  Andrei Popov   Merged PR #81: renegotiation requirements.
+      v08 2016-12-06  Jeff Hodges    init -08
+      v08 2016-12-06  Jeff Hodges    add explanation of splitting across renego boundaries
+      v08 2016-12-06  Jeff Hodges    alphabetize acks.
     -->
   </back>
 </rfc>
