@@ -408,7 +408,8 @@
     </section>
 
     <section title="First-party Use Cases">
-      <t>In a first-party use case, an HTTP server issues a security token
+      <t>In a first-party use case (also known as a 
+      "same-site" use case), an HTTP server issues a security token
       such as a cookie (or similar) to a client, and expects the client to return
       the security token at a later time, e.g., in order
       to authenticate. Binding the security token to the TLS connection between
