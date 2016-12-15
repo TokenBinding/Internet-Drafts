@@ -217,39 +217,41 @@
       <xref target="RFC5246" /> bindings spanning multiple TLS sessions and connections. 
       Applications are then enabled to cryptographically bind security tokens to the TLS layer, 
       preventing token export and replay attacks. To protect privacy, the Token Binding 
-      identifiers are only transmitted encrypted and can be reset by the user at any time.</t>
+      identifiers are only conveyed over TLS and can be reset by the user at any time.</t>
     </abstract>
   </front>
 
   <middle>
     <section title="Introduction">
-      <t>Servers generate various security tokens (e.g. HTTP cookies, OAuth tokens) for 
-      applications to access protected resources. Any party in possession of such token 
-      gains access to the protected resource. Attackers export bearer tokens from the user’s 
-      machine, present them to the servers, and impersonate authenticated users. The idea of 
-      Token Binding is to prevent such attacks by cryptographically binding security tokens to 
-      the TLS layer.</t>
+      <t>Often, servers generate various security tokens (e.g. HTTP cookies, OAuth tokens) for 
+      applications to present when accessing protected resources. In general, any party in 
+      possession of bearer security tokens gain access to certain protected resource(s). Attackers 
+      take advantage of this by exporting bearer tokens from user’s application connections or 
+      machines, presenting them to application servers, and impersonating authenticated users. The 
+      idea of Token Binding is to prevent such attacks by cryptographically binding application 
+      security tokens to the underlying TLS layer.</t>
 
-      <t>A Token Binding is established by the user agent generating a private-public key 
-      pair (possibly within a secure hardware module, such as TPM) per target server, and 
-      proving possession of the private key on every TLS connection to the target server. The 
-      proof of possession involves signing the exported keying material <xref target="RFC5705" /> 
-      for the TLS connection with the private key. The corresponding public key is included in the 
-      Token Binding identifier structure (described in the <xref target="TBMessage-TBID"/> 
-      "<xref target="TBMessage-TBID" format="title"/>"). Token Bindings are long-lived, i.e. they 
-      encompass multiple TLS connections and TLS sessions between a given client and server. To 
-      protect privacy, Token Binding IDs are never transmitted in clear text and can be reset by 
-      the user at any time, e.g. when clearing browser cookies.</t>
+      <t>A Token Binding is established by a user agent generating a private-public key pair 
+      (possibly, within a secure hardware module, such as TPM) per target server, providing the 
+      public key to the server, and proving possession of the corresponding private key, on every 
+      TLS connection to the server. The proof of possession involves signing the exported keying 
+      material (EKM) <xref target="RFC5705" /> from the TLS connection with the private key. The 
+      corresponding public key is included in the Token Binding identifier structure (described in 
+      the <xref target="TBMessage-TBID"/> "<xref target="TBMessage-TBID" format="title"/>"). Token 
+      Bindings are long-lived, i.e., they encompass multiple TLS connections and TLS sessions 
+      between a given client and server. To protect privacy, Token Binding IDs are never conveyed 
+      over insecure connections and can be reset by the user at any time, e.g., when clearing 
+      browser cookies.</t>
 
       <t>When issuing a security token to a client that supports Token Binding, a server 
       includes the client’s Token Binding ID in the token. Later on, when a client presents 
-      a security token containing a Token Binding ID, the server makes sure the ID in the 
+      a security token containing a Token Binding ID, the server ensures the ID in the 
       token matches the ID of the Token Binding established with the client. In the case of 
-      a mismatch, the server discards the token.</t>
+      a mismatch, the server rejects the token (details are application-specific).</t>
 
-      <t>In order to successfully export and replay a bound security token, the attacker needs 
-      to also be able to export the client’s private key, which is hard to do in the case of the 
-      key generated in a secure hardware module.</t>
+      <t>In order to successfully export and replay a bound security token, an attacker needs to 
+      also be able to export the client’s private key, which is hard to do if the key is specially 
+      protected, e.g., generated in a secure hardware module.</t>
 
       <section title="Requirements Language">
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -259,16 +261,15 @@
     </section>
 
     <section title="Token Binding Protocol Overview">
-      <t>The client and server use the Token Binding Negotiation TLS Extension 
-      <xref target="I-D.ietf-tokbind-negotiation"/> to negotiate the Token Binding protocol 
-      version and the parameters (signature algorithm, length) of the Token Binding key. This 
-      negotiation does not require additional round-trips.</t>
+      <t>In the course of a TLS handshake, a client and server use the Token Binding Negotiation 
+      TLS Extension <xref target="I-D.ietf-tokbind-negotiation"/> to negotiate the Token Binding 
+      protocol version and the parameters (signature algorithm, length) of the Token Binding key. 
+      This negotiation does not require additional round-trips.</t>
 
       <t>The Token Binding protocol consists of one message sent by the client to the server, 
-      proving possession of one or more client-generated asymmetric keys. This message is 
-      only sent if the client and server agree on the use of the Token Binding protocol and the 
-      key parameters. The Token Binding message is sent with the application protocol data in TLS 
-      application_data records.</t>
+      proving possession of one or more client-generated asymmetric private keys. This message is 
+      not sent if the Token Binding Negotiation has been unsuccessful. The Token Binding message is 
+      sent with the application protocol data over TLS.</t>
 
       <t>A server receiving the Token Binding message verifies that the key parameters in the 
       message match the Token Binding parameters negotiated via 
@@ -278,13 +279,13 @@
       established with the ID contained in the Token Binding message.</t>
 
       <t>When a server supporting the Token Binding protocol receives a bound token, the server 
-      compares the Token Binding ID in the security token with the Token Binding ID 
-      established with the client. If the bound token came from a TLS connection without a Token 
-      Binding, or if the IDs don't match, the token is discarded.</t>
+      compares the Token Binding ID in the token with the Token Binding ID established with the 
+      client. If the bound token came from a TLS connection without a Token Binding, or if the 
+      Token Binding IDs do not match, the token is rejected.</t>
 
       <t>This document defines the format of the Token Binding protocol message, the process of 
       establishing a Token Binding, the format of the Token Binding ID, and the process of 
-      validating a security token. Token Binding Negotiation TLS Extension 
+      validating a bound token. Token Binding Negotiation TLS Extension 
       <xref target="I-D.ietf-tokbind-negotiation"/> describes the negotiation of the Token 
       Binding protocol and key parameters. Token Binding over HTTP 
       <xref target="I-D.ietf-tokbind-https"/> explains how the Token Binding message is 
@@ -385,9 +386,9 @@
         referred_token_binding where Token Bindings are established between multiple communicating 
         parties: User Agent, Identity Provider and Relying Party. User Agent sends 
         referred_token_binding to the Identity Provider in order to prove possession of the Token 
-        Binding key it uses with the Relying Party. The Identity Provider can then bind the token it 
-        is supplying (for presentation to the Relying Party) to the Token Binding ID contained in the 
-        referred_token_binding. Such bound token enjoys the protections discussed below in 
+        Binding key it uses with the Relying Party. The Identity Provider can then bind the token 
+        it is supplying (for presentation to the Relying Party) to the Token Binding ID contained 
+        in the referred_token_binding. Such a bound token enjoys the protections discussed below in 
         <xref target="Security"/> "<xref target="Security" format="title"/>".</t>
       </section>
 
@@ -400,17 +401,17 @@
         </t>
 
         <t>When rsa2048_pkcs1.5 or rsa2048_pss is used, RSAPublicKey.modulus and 
-        RSAPublicKey.publicexponent contain the modulus and exponent of the 2048-bit RSA public key 
+        RSAPublicKey.publicexponent contain the modulus and exponent of a 2048-bit RSA public key 
         represented in big-endian format, with leading zero bytes omitted.</t>
 
         <t>When ecdsap256 is used, ECPoint.point contains the X coordinate followed by the Y 
-        coordinate of the Curve P-256 key. The X and Y coordinates are unsigned 32-byte integers 
+        coordinate of a Curve P-256 key. The X and Y coordinates are unsigned 32-byte integers 
         encoded in big-endian format, preserving any leading zero bytes. Future specifications may 
         define Token Binding keys using other elliptic curves with their corresponding signature 
         and point formats.</t>
 
         <t>Token Binding protocol implementations SHOULD make Token Binding IDs available to the 
-        application as opaque byte sequences. E.g. server applications will use Token Binding IDs 
+        application as opaque byte sequences. E.g., server applications will use Token Binding IDs 
         when generating and verifying bound tokens.</t>
       </section>
 
@@ -678,16 +679,19 @@
       <section anchor="Security-TokenReplay" title="Security Token Replay">
         <t>The goal of the Token Binding protocol is to prevent attackers from exporting and 
         replaying security tokens, thereby impersonating legitimate users and gaining access to 
-        protected resources. Bound tokens can still be replayed by the malware present in the 
-        User Agent. In order to export the token to another machine and successfully replay it, 
-        the attacker also needs to export the corresponding private key. Token Binding private 
-        keys are therefore high-value assets and SHOULD be strongly protected, ideally by 
-        generating them in a hardware security module that prevents key export.</t>
+        protected resources. Bound tokens can be replayed by the malware present in User Agents, 
+        which may be undetectable by a server. However, in order to export bound tokens to other 
+        machines and successfully replay them, attackers also need to export corresponding Token 
+        Binding private keys. Token Binding private keys are therefore high-value assets and SHOULD 
+        be strongly protected, ideally by generating them in a hardware security module that 
+        prevents key export.</t>
+
         <t>The manner in which a token is bound to the TLS layer is application-defined and beyond 
         the scope of this document. However, the resulting bound token needs to be 
         integrity-protected, so that an attacker cannot remove the binding or substitute a Token 
         Binding ID of their choice without detection.</t>
       </section>
+
       <section title="Downgrade Attacks">
         <t>The Token Binding protocol is only used when negotiated via 
         <xref target="I-D.ietf-tokbind-negotiation"/> within the TLS handshake. TLS prevents 
@@ -697,7 +701,7 @@
         and key length used in the TokenBinding of type "provided_token_binding" MUST match the 
         parameters negotiated via <xref target="I-D.ietf-tokbind-negotiation"/>.</t>
       </section>
-      
+
       <section title="Privacy Considerations" anchor="privacy-cons">
         <t>The Token Binding protocol uses persistent, long-lived Token Binding IDs. To protect 
         privacy, Token Binding IDs are never transmitted in clear text and can be reset by the user 
@@ -869,6 +873,7 @@
       v11 2016-11-22  Andrei Popov   Merged PR #81: renegotiation requirements.
       v12 2016-11-29  Jeff Hodges    Init -12.
       v12 2016-12-06  Jeff Hodges    Polish renegotiation requirements. Fixup figure.
+      v12 2016-12-08  Jeff Hodges    Editotial polishing of Abstract, Intro, Overview, Security-TokenReplay.
     -->
   </back>
 </rfc>
