@@ -1193,6 +1193,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       v07 2016-11-22  Andrei Popov   Merged PR #81: renegotiation requirements.
       v08 2016-12-06  Jeff Hodges    Init -08.
       v08 2016-12-06  Jeff Hodges    Add explanation of splitting across renego boundaries.
+      v08 2016-12-14  Jeff Hodges    Various editorial cleanups.
     -->
   </back>
 </rfc>
