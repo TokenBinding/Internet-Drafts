@@ -41,7 +41,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-11" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-12" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -353,9 +353,10 @@
   struct {
       TokenBindingType tokenbinding_type;
       TokenBindingID tokenbindingid;
-      opaque signature<0..2^16-1>;  /* Signature over the concatenation of 
-                                       tokenbinding_type, key_parameters and 
-                                       exported keying material (EKM) */
+      opaque signature<0..2^16-1>; /* Signature over the concatenation
+                                      of tokenbinding_type, 
+                                      key_parameters and exported 
+                                      keying material (EKM) */
       Extension extensions<0..2^16-1>;
   } TokenBinding;
 
@@ -437,20 +438,24 @@
           </list>
         </t>
 
-        <t>Please note that TLS 1.2 and earlier versions support renegotiaion, which produces a new 
-        TLS master secret for the same connection, with its associated session keys and EKM value.
-        TokenBinding.signature MUST use the EKM value derived from the same TLS master secret that 
-        produced the session keys encrypting the application_data record containing this 
-        TokenBinding. Such use of the current EKM for the TLS connection prevents the replay of 
-        bound tokens within renegotiated TLS sessions, but requires the application to synchronize 
-        Token Binding message generation and verification with the TLS handshake state.</t>
+        <t>Please note that TLS 1.2 and earlier versions support renegotiation, which produces a 
+        new TLS master secret for the same connection, with associated session keys and EKM value. 
+        TokenBinding.signature MUST be a signature of the EKM value derived from the TLS master 
+        secret that produced the session keys encrypting the TLS application_data record(s) 
+        containing this TokenBinding. Such use of the current EKM for the TLS connection makes 
+        replay of bound tokens within renegotiated TLS sessions detectable, but requires the 
+        application to synchronize Token Binding message generation and verification with the TLS 
+        handshake state.</t>
 
-        <t>Specifications defining the use of Token Binding with various application protocols, 
-        such as Token Binding over HTTP <xref target="I-D.ietf-tokbind-https"/>, may prohibit the 
-        use of TLS renegotiation in combination with Token Binding. Alternatively, such 
-        specifications need to define a way to determine which EKM value corresponds to a given 
-        TokenBindingMessage, and a mechanism preventing a TokenBindingMessage from being split 
-        across the renegotiation boundary.</t>
+        <t>Specifications defining the use of Token Binding with application protocols, such as 
+        Token Binding over HTTP <xref target="I-D.ietf-tokbind-https"/>, MAY prohibit the use of 
+        TLS renegotiation in combination with Token Binding, obviating the need for such 
+        synchronization. Alternatively, such specifications need to define a way to determine which 
+        EKM value corresponds to a given TokenBindingMessage, and a mechanism preventing a 
+        TokenBindingMessage from being split across TLS renegotiation boundaries (i.e., due to TLS 
+        message fragmentation - see Section 6.2.1 of <xref target="RFC5246"/>). Note that 
+        application layer messages conveying a TokenBindingMessage may cross renegotiation 
+        boundaries in ways that make processing difficult.</t>
 
         <t>The EKM is obtained using the Keying Material Exporters for TLS defined in 
         <xref target="RFC5705" />, by supplying the following input values:
@@ -862,6 +867,8 @@
       v11 2016-11-17  Andrei Popov   TB verification failure results in TB and associated bound tokens rejection, not necessarily connection termination.
       v11 2016-11-17  Andrei Popov   Clarified the use of TB with renegotiation and the fact that new signature schemes may require longer exporter output.
       v11 2016-11-22  Andrei Popov   Merged PR #81: renegotiation requirements.
+      v12 2016-11-29  Jeff Hodges    Init -12.
+      v12 2016-12-06  Jeff Hodges    Polish renegotiation requirements. Fixup figure.
     -->
   </back>
 </rfc>
