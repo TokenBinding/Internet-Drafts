@@ -956,7 +956,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           must be communicated to the Token Producer in a manner that can not
           be affected by the man-in-the-middle (who, as we recall, can modify
           redirect URLs and Javascript at the client). Including the referred
-          Token Binding message in the Sec-Token-Binding header field (as opposed to,
+          Token Binding structure in the Sec-Token-Binding header field (as opposed to,
           say, including the referred Token Binding key in an application-level
           message as part of the redirect URL) is one way to assure that the
           man-in-the-middle between client and Token Consumer cannot affect the
