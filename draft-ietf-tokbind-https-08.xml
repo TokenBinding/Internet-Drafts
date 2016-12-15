@@ -573,7 +573,7 @@
 	with the Token Binding key used by the client for connections
 	between itself and the Token Consumer (more specifically, the
 	server that issued the Include-Referred-Token-Binding-ID
-	response header field, whose hostname ). The Token Binding ID established by this
+	response header field). The Token Binding ID established by this
 	TokenBinding is called a <spanx style="emph">Referred Token
 	Binding ID</spanx>.</t>
 	
