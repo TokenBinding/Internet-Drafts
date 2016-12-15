@@ -995,7 +995,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           permissible to use different Token Binding key scoping rules, such as
           using the same Token Binding key for both the Relying Party and the Identity
           Provider. Absent such special knowledge, conservative key-scoping rules
-          should be used, assuring that clients use different Token Binding keys
+          should be used, assuring that clients use different Token Binding key pairs
           with different servers.
         </t>
       </section>
