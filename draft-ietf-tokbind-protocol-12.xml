@@ -728,8 +728,8 @@
         Binding keys to the same group(s) of applications that share the same tokens.</t>
       </section>
       <section title="Triple Handshake Vulnerability in TLS 1.2 and Older TLS Versions">
-        <t>The Token Binding protocol relies on the exported keying material (EKM) to associate a 
-        TLS connection with a Token Binding. The triple handshake attack 
+        <t>The Token Binding protocol relies on the TLS Exporters <xref target="RFC5705" /> to 
+        associate a TLS connection with a Token Binding. The triple handshake attack 
         <xref target="TRIPLE-HS" /> is a known vulnerability in TLS 1.2 and older TLS versions, 
         allowing the attacker to synchronize keying material between TLS connections. The attacker 
         can then successfully replay bound tokens. For this reason, the Token Binding protocol MUST 
