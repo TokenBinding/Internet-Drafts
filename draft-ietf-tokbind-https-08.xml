@@ -417,7 +417,7 @@
       since the server can detect if the security token is
       replayed inappropriately, e.g., over other TLS connections.</t>
       
-      <t>See <xref target="I-D.ietf-tokbind-protocol"/> Section 6 for 
+      <t>See <xref target="I-D.ietf-tokbind-protocol"/> Section 5 for 
       general guidance regarding binding of security tokens and their 
       subsequent validation.</t>
       
