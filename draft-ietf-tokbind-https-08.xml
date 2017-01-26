@@ -774,8 +774,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         thus signaling to the Token Binding implementation in the Web browser
         that the server
         intends to convey the Web browser's Token Binding ID to another server.
-        Other signaling mechanisms are possible, but are outside the scope of this
-        specification.
+        Other signaling mechanisms are possible, and are specific to the application
+        layer protocol, but are outside the scope of this specification.
         <list style="hanging" hangIndent="7">
           <t hangText="NOTE:">
             See <xref target="privacy-cons"/> 
