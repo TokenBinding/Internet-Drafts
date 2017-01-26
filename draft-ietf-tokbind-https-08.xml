@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- This template is for creating an Internet Draft using xml2rfc,
      which is available here: http://xml.resource.org. -->
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
@@ -340,9 +340,9 @@
 
       <t>A TokenBindingMessage is validated by the server as described in Section 
       4.2. "Server Processing Rules" of <xref target="I-D.ietf-tokbind-protocol"/>.
-      If validaion fails and a Token Binding is rejected, any associated bound 
+      If validation fails and a Token Binding is rejected, any associated bound 
       tokens MUST also be rejected by the server. HTTP requests containing invalid 
-      tokens MUST be rejected. In this case, the server application may return HTTP 
+      tokens MUST be rejected. In this case, the server application MAY return HTTP 
       status code 400 (Bad Request) or proceed with an application-specific invalid 
       token response (e.g. directing the client to re-authenticate and present a 
       different token), or terminate the connection.</t>
@@ -408,7 +408,8 @@
     </section>
 
     <section title="First-party Use Cases">
-      <t>In a first-party use case, an HTTP server issues a security token
+      <t>In a first-party use case (also known as a 
+      "same-site" use case), an HTTP server issues a security token
       such as a cookie (or similar) to a client, and expects the client to return
       the security token at a later time, e.g., in order
       to authenticate. Binding the security token to the TLS connection between
@@ -488,11 +489,11 @@
 	  want to include in the token the Token-Binding public key that the client
     uses when communicating with the Token Consumer, thus 
     <spanx style="emph">binding</spanx> the token to client's Token-Binding
-    keypair. The client
+    key pair. The client
     proves possession of the private key when communicating with 
     the Token Consumer through the <xref target="I-D.ietf-tokbind-protocol">Token
 	  Binding Protocol</xref>, and reveals the corresponding public key of this 
-    keypair as part of the Token Binding ID. Comparing the public key from the
+    key pair as part of the Token Binding ID. Comparing the public key from the
     token with the public key from the Token Binding ID allows the Token 
     Consumer to verify that the token was sent to it by the legitimate 
     client.</t>
@@ -571,17 +572,17 @@
         TokenBinding MUST be signed 
 	with the Token Binding key used by the client for connections
 	between itself and the Token Consumer (more specifically, the
-	web origin that issued the Include-Referred-Token-Binding-ID
+	server that issued the Include-Referred-Token-Binding-ID
 	response header field). The Token Binding ID established by this
 	TokenBinding is called a <spanx style="emph">Referred Token
 	Binding ID</spanx>.</t>
 	
 	<t>As described above, the TokenBindingMessage MUST
 	additionally contain a Provided Token Binding ID, i.e., a
-	TokenBinding structure with TokenBindingType
+	TokenBinding structure with TokenBindingType of 
 	provided_token_binding, which MUST be signed with the Token
 	Binding key used by the client for connections between itself
-	and the Token Provider (more specifically, the web origin that
+	and the Token Provider (more specifically, the server that
 	the token request is being sent to).
  </t>
 	
@@ -589,7 +590,7 @@
 	Token Provider ("TP1") needs to redirect the
 client to another Token Provider ("TP2"), rather than 
 directly back to the Token Consumer, it can be
-accomodated using the header fields defined in this 
+accommodated using the header fields defined in this 
 specification in the following fashion ("the
 redirect-chain approach"):
 	
@@ -623,9 +624,9 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         key parameters negotiated with the Token Consumer in the
         referred_token_binding TokenBinding of the TokenBindingMessage,
         even if those key parameters are different from the ones 
-        negotiated with the origin that the header field is sent to.</t>
+        negotiated with the server that the header field is sent to.</t>
         <t>Token Providers SHOULD support all the Token Binding key parameters
-        specified in the <xref target="I-D.ietf-tokbind-protocol"/>. 
+        specified in <xref target="I-D.ietf-tokbind-protocol"/>. 
         If a token provider does not support the key parameters
         specified in the referred_token_binding TokenBinding in the
         TokenBindingMessage, it MUST NOT issue a bound token.</t>
@@ -731,7 +732,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
    +-------------------------------->|                      |
      | 3b. HTTPS GET or POST with                           |
      | ETBMSG[[{EKM1}Ks1,TBID1,provided_token_binding]]     |
-     | conveying Authn Reponse containing                   |
+     | conveying Authn Response containing                   |
      | ID Token w/TBID1, issued for TC                      |
      |                               |                      |
      |                               |                      |
@@ -771,8 +772,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         can return an 
         Include-Referred-Token-Binding-ID HTTP response header field to a Web browser,
         thus signaling to the Token Binding implementation in the Web browser
-        that the Web application associated with the server's origin
-        intents to convey the Web browser's Token Binding ID to another server.
+        that the server
+        intends to convey the Web browser's Token Binding ID to another server.
         Other signaling mechanisms are possible, and are specific to the application
         layer protocol, but are outside the scope of this specification.
         <list style="hanging" hangIndent="7">
@@ -791,12 +792,13 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         prevent attackers from exporting and replaying tokens used in
         protocols between the client and Token Consumer, thereby
         impersonating legitimate users and gaining access to protected
-        resources. Bound tokens can still be replayed by  malware
-        present in the client. In order to export the token to
-        another machine and successfully replay it, the attacker also
-        needs to export the corresponding private key. The Token
-        Binding private key is therefore a high-value asset and MUST
-        be strongly protected, ideally by generating it in a hardware
+        resources. Although bound tokens can still be replayed by any malware
+        present in clients (which may be undetectable by a server), 
+        in order to export bound tokens to
+        other machines and successfully replay them, attackers also
+        need to export the corresponding Token Binding private keys. Token
+        Binding private keys are therefore high-value assets and SHOULD
+        be strongly protected, ideally by generating them in a hardware
         security module that prevents key export.</t>
       </section>
       <section title="Triple Handshake Vulnerability in TLS 1.2 and Older TLS Versions">
@@ -870,9 +872,9 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         </t>
         <t>
           Therefore, we need to protect the integrity of the Sec-Token-Binding
-          header field. One origin should not be able to set the Sec-Token-Binding header field
+          header field. One eTLD+1 should not be able to set the Sec-Token-Binding header field
           (through a DOM API or otherwise) that the User Agent uses with
-          another origin. Employing the "Sec-" header field prefix helps to meet this 
+          another eTLD+1. Employing the "Sec-" header field prefix helps to meet this 
           requirement by denoting the header field name to be a "forbidden header name",
           see <xref target="fetch-spec"/>. 
         </t>
@@ -955,7 +957,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           must be communicated to the Token Producer in a manner that can not
           be affected by the man-in-the-middle (who, as we recall, can modify
           redirect URLs and Javascript at the client). Including the referred
-          Token Binding message in the Sec-Token-Binding header field (as opposed to,
+          Token Binding structure in the Sec-Token-Binding header field (as opposed to,
           say, including the referred Token Binding key in an application-level
           message as part of the redirect URL) is one way to assure that the
           man-in-the-middle between client and Token Consumer cannot affect the
@@ -979,7 +981,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         </t>
         <t>In the case of HTTP cookies, servers may use Token Binding to secure their cookies. 
           These cookies can be attached to any 
-          sub-domain of effective top-level domains, and clients therefore should use the same 
+          sub-domain of effective top-level domains (eTLDs), 
+          and clients therefore should use the same 
           Token Binding key across such subdomains. This will ensure that any server
           capable of receiving the cookie will see the same Token Binding ID from 
           the client, and thus be able to verify the token binding of the cookie.
@@ -993,7 +996,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           permissible to use different Token Binding key scoping rules, such as
           using the same Token Binding key for both the Relying Party and the Identity
           Provider. Absent such special knowledge, conservative key-scoping rules
-          should be used, assuring that clients use different Token Binding keys
+          should be used, assuring that clients use different Token Binding key pairs
           with different servers.
         </t>
       </section>
@@ -1190,6 +1193,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       v07 2016-11-22  Andrei Popov   Merged PR #81: renegotiation requirements.
       v08 2016-12-06  Jeff Hodges    Init -08.
       v08 2016-12-06  Jeff Hodges    Add explanation of splitting across renego boundaries.
+      v08 2016-12-14  Jeff Hodges    Various editorial cleanups.
     -->
   </back>
 </rfc>
