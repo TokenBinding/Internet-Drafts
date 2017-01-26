@@ -222,7 +222,7 @@
 
     <abstract>
       <t>This document describes a collection of mechanisms that allow
-      HTTP servers to cryptographically bind authentication tokens
+      HTTP servers to cryptographically bind authentication or authorization tokens
       (such as cookies and OAuth tokens) to <xref
       target="RFC5246">TLS</xref> connections.</t>
 
