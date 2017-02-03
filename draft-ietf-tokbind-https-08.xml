@@ -297,24 +297,26 @@
       </section>
     </section>
 
-    <section title="The Sec-Token-Binding Header Field">
+    <section title="The Sec-Token-Binding HTTP Request Header Field">
       <t>Once a client and server have negotiated the Token Binding
       Protocol with HTTP/1.1 or HTTP/2 (see <xref
       target="I-D.ietf-tokbind-protocol"/> and <xref
       target="I-D.ietf-tokbind-negotiation"/>), clients
-      MUST include the Sec-Token-Binding header field in their HTTP requests. The ABNF 
-      of the Sec-Token-Binding header field is (in <xref target="RFC7230"/> style, see also <xref target="RFC7231"/> Section 8.3):
+      MUST include a Sec-Token-Binding header field in their HTTP requests, and MUST include only
+      one such header field per HTTP request. The Sec-Token-Binding header field MUST NOT
+      be included in HTTP responses. 
+      The ABNF of the Sec-Token-Binding header field is (in
+      <xref target="RFC7230"/> style, see also <xref target="RFC7231"/> Section 8.3):
       </t>
       <figure><artwork><![CDATA[
   Sec-Token-Binding = EncodedTokenBindingMessage
         ]]></artwork></figure>
 
-      <t>The header field name is <spanx style="verb">Sec-Token-Binding</spanx> 
-      and its value is a base64url encoding of the TokenBindingMessage defined 
-      in <xref target="I-D.ietf-tokbind-protocol"/> using the URL- and 
-      filename-safe character set described in Section 5 of 
-      <xref target="RFC4648"/>, with all trailing pad characters '=' omitted 
-      and without the inclusion of any line breaks, whitespace, or other 
+      <t>The header field name is <spanx style="verb">Sec-Token-Binding</spanx> and its single
+      value, EncodedTokenBindingMessage, is a base64url encoding of a single TokenBindingMessage,
+      as defined in <xref target="I-D.ietf-tokbind-protocol"/>, using the URL- and filename-safe
+      character set described in Section 5 of <xref target="RFC4648"/>, with all trailing pad
+      characters '=' omitted and without the inclusion of any line breaks, whitespace, or other
       additional characters.</t>
 
       <t>For example:</t>
@@ -322,6 +324,12 @@
   Sec-Token-Binding: <base64url-encoded TokenBindingMessage>
         ]]></artwork></figure>
       
+      <t>If the server recieves more than one Sec-Token-Binding header field in 
+      an HTTP request, then the server MUST process only the first such header
+      field. If the processed Sec-Token-Binding header field contains more than 
+      one EncodedTokenBindingMessage (e.g., delimited by commas, see Section 3.2 of <xref target="RFC7230"/>),
+      the server MUST ignore the header field. The Sec-Token-Binding header field
+      SHOULD NOT be stored by origin servers on PUT requests. </t>
 
       <t>The TokenBindingMessage MUST contain one TokenBinding structure 
       with TokenBindingType of provided_token_binding, which MUST be signed
