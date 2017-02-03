@@ -492,7 +492,7 @@
 	  want to include in the token the Token Binding ID that the client
     uses when communicating with the Token Consumer, thus 
     <spanx style="emph">binding</spanx> the token to the client's Token Binding
-    private key. The client
+    key pair. The client
     proves possession of the private key when communicating with 
     the Token Consumer through the <xref target="I-D.ietf-tokbind-protocol">Token
 	  Binding Protocol</xref>, and reveals the corresponding public key of this 
