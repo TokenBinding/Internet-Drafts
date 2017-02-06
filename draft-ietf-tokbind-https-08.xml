@@ -1197,6 +1197,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       v08 2016-12-06  Jeff Hodges    Init -08.
       v08 2016-12-06  Jeff Hodges    Add explanation of splitting across renego boundaries.
       v08 2016-12-14  Jeff Hodges    Various editorial cleanups.
+      v08 2017-01-31  Jeff Hodges    'TB key' terminology cleanup, see #87 
+      v08 2017-02-06  Jeff Hodges    Andrei-Popov review fixups.
     -->
   </back>
 </rfc>
