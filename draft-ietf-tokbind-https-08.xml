@@ -303,7 +303,8 @@
       target="I-D.ietf-tokbind-protocol"/> and <xref
       target="I-D.ietf-tokbind-negotiation"/>), clients
       MUST include a Sec-Token-Binding header field in their HTTP requests, and MUST include only
-      one such header field per HTTP request. The Sec-Token-Binding header field MUST NOT
+      one such header field per HTTP request. Also, 
+      The Sec-Token-Binding header field MUST NOT
       be included in HTTP responses. 
       The ABNF of the Sec-Token-Binding header field is (in
       <xref target="RFC7230"/> style, see also <xref target="RFC7231"/> Section 8.3):
