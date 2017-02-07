@@ -329,9 +329,15 @@
       an HTTP request, then the server MUST process only the first such header
       field. If the processed Sec-Token-Binding header field contains more than 
       one EncodedTokenBindingMessage (e.g., delimited by commas, see Section 3.2 of <xref target="RFC7230"/>),
-      the server MUST ignore the header field. The Sec-Token-Binding header field
-      SHOULD NOT be stored by origin servers on PUT requests. </t>
-
+      the server MUST ignore the header field. Additionally, the Sec-Token-Binding 
+      header field:
+      <list>
+        <t>SHOULD NOT be stored by origin servers on PUT requests,</t> 
+        <t>MAY be listed by a server in a Vary response header field, and,</t>
+        <t>MUST NOT be used in HTTP trailers.</t>
+      </list>
+      </t>
+      
       <t>The TokenBindingMessage MUST contain one TokenBinding structure 
       with TokenBindingType of provided_token_binding, which MUST be signed
       with the Token Binding private key used by the client for connections
@@ -1088,9 +1094,6 @@ contexts. Other approaches are possible, but are outside the scope of this speci
   Specification document(s):   this one
         </artwork>
       </figure>
-    <t>[[TODO: possibly add further considerations wrt the behavior of the above 
-    header fields, per &lt;https://tools.ietf.org/html/rfc7231#section-8.3&gt;]]
-    </t>
 
     </section> <!-- IANA cons -->
 
@@ -1208,6 +1211,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       v08 2016-12-14  Jeff Hodges    Various editorial cleanups.
       v08 2017-01-31  Jeff Hodges    'TB key' terminology cleanup, see #87 
       v08 2017-02-06  Jeff Hodges    Andrei-Popov review fixups.
+      v08 2017-02-07  Jeff Hodges    further issue #88 changes.
     -->
   </back>
 </rfc>
