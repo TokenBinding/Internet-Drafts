@@ -41,7 +41,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-12" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-13" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -690,6 +690,10 @@
         the scope of this document. However, the resulting bound token needs to be 
         integrity-protected, so that an attacker cannot remove the binding or substitute a Token 
         Binding ID of their choice without detection.</t>
+
+        <t>The Token Binding protocol does not prevent cooperating clients from sharing a bound 
+        token. A client could intentionally export a bound token with the corresponding Token 
+        Binding private key, or perform signatures using this key on behalf of another client.</t>
       </section>
 
       <section title="Downgrade Attacks">
@@ -874,6 +878,7 @@
       v12 2016-11-29  Jeff Hodges    Init -12.
       v12 2016-12-06  Jeff Hodges    Polish renegotiation requirements. Fixup figure.
       v12 2016-12-08  Jeff Hodges    Editotial polishing of Abstract, Intro, Overview, Security-TokenReplay.
+      v13 2017-02-16  Andrei Popov   Addressing Denis' comment regarding cooperating clients.
     -->
   </back>
 </rfc>
