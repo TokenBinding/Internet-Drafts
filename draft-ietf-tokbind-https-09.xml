@@ -50,7 +50,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-https-08" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-https-09" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -1211,6 +1211,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       v08 2017-02-06  Jeff Hodges    Andrei-Popov review fixups.
       v08 2017-02-07  Jeff Hodges    further issue #88 changes.
       v08 2017-02-15  Jeff Hodges    polishing the "receives more than one STB header" language fixes #88.
+      v09 2017-02-15  Jeff Hodges    Applying Mike Jones' editorial feedback.
     -->
   </back>
 </rfc>
