@@ -23,6 +23,7 @@
 <!ENTITY RFC7540 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7540.xml">
 <!ENTITY RFC7541 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7541.xml">
 <!ENTITY RFC7627 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7627.xml">
+<!ENTITY OpenID.Core SYSTEM "https://openid.net/bibxml/reference.OpenID.Core.xml">
 
 ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
@@ -170,7 +171,7 @@
 
     <author fullname="Jeff Hodges" initials="J."
             surname="Hodges">
-      <organization>Paypal</organization>
+      <organization>PayPal</organization>
 
       <address>
         <postal>
@@ -223,11 +224,10 @@
     <abstract>
       <t>This document describes a collection of mechanisms that allow
       HTTP servers to cryptographically bind security tokens
-      (such as cookies and OAuth tokens) to <xref
-      target="RFC5246">TLS</xref> connections.</t>
+      (such as cookies and OAuth tokens) to TLS connections.</t>
 
-      <t>We describe both <spanx style="emph">first-party</spanx> and
-      <spanx style="emph">federated</spanx> scenarios. In a first-party
+      <t>We describe both first-party and
+      federated scenarios. In a first-party
       scenario, an HTTP server is able to cryptographically bind the security
       tokens it issues to a client, and which the client
       subsequently returns to the server, to the TLS connection 
@@ -238,11 +238,10 @@
       <t>Federated token bindings, on the other hand, allow servers to
       cryptographically bind security tokens to a TLS
       connection that the client has with
-      a <spanx style="emph">different</spanx> server than the one
+      a different server than the one
       issuing the token.</t>
 
-      <t>This Internet-Draft is a companion document to <xref
-      target="I-D.ietf-tokbind-protocol">The Token Binding Protocol</xref></t>
+      <t>This Internet-Draft is a companion document to The Token Binding Protocol.</t>
     </abstract>
   </front>
 
@@ -253,12 +252,12 @@
       and a server. The Token Binding ID of a TLS connection is constructed using the
       public key of a private-public key pair.
       The client proves possession of the corresponding private key.
-      This Token Binding key pair is long-lived
-      (i.e., subsequent TLS connections
+      This Token Binding key pair is long-lived.
+      I.e., subsequent TLS connections
       between the same client and server have the same Token Binding
-      ID, unless specifically reset, e.g., by the user). 
-      When issuing a security token (e.g. an HTTP cookie or an
-      OAuth token) to a client, the server can include the Token
+      ID, unless specifically reset, e.g., by the user. 
+      When issuing a security token (e.g., an HTTP cookie or an
+      OAuth token <xref target="RFC6749"/>) to a client, the server can include the Token
       Binding ID in the token, thus cryptographically binding the
       token to TLS connections between that particular client and
       server, and inoculating the token against abuse (re-use, 
@@ -280,13 +279,13 @@
       <t>TokenBindingMessages allow clients to establish multiple
       Token Binding IDs with the server, by including multiple
       TokenBinding structures in the TokenBindingMessage. By default,
-      a client will establish a <spanx style="emph">provided</spanx>
+      a client will establish a provided
       Token Binding ID with the server, indicating a Token Binding ID
       that the client will persistently use with the server. Under
-      certain conditions, the client can also include a <spanx
-      style="emph">referred</spanx> Token Binding ID in the
+      certain conditions, the client can also include a referred
+      Token Binding ID in the
       TokenBindingMessage, indicating a Token Binding ID that the
-      client is using with a <spanx style="emph">different</spanx>
+      client is using with a different
       server than the one that the TokenBindingMessage is sent
       to. This is useful in federation scenarios.</t>
 
@@ -297,7 +296,7 @@
       </section>
     </section>
 
-    <section title="The Sec-Token-Binding HTTP Request Header Field">
+    <section title="The Sec-Token-Binding HTTP Request Header Field" anchor="sctn-secTB-header">
       <t>Once a client and server have negotiated the Token Binding
       Protocol with HTTP/1.1 or HTTP/2 (see <xref
       target="I-D.ietf-tokbind-protocol"/> and <xref
@@ -307,16 +306,16 @@
       The Sec-Token-Binding header field MUST NOT
       be included in HTTP responses. 
       The ABNF of the Sec-Token-Binding header field is (in
-      <xref target="RFC7230"/> style, see also <xref target="RFC7231"/> Section 8.3):
+      <xref target="RFC7230"/> style, see also Section 8.3 of <xref target="RFC7231"/>):
       </t>
       <figure><artwork><![CDATA[
   Sec-Token-Binding = EncodedTokenBindingMessage
         ]]></artwork></figure>
 
-      <t>The header field name is <spanx style="verb">Sec-Token-Binding</spanx> and its single
+      <t>The header field name is Sec-Token-Binding and its single
       value, EncodedTokenBindingMessage, is a base64url encoding of a single TokenBindingMessage,
       as defined in <xref target="I-D.ietf-tokbind-protocol"/>, using the URL- and filename-safe
-      character set described in Section 5 of <xref target="RFC4648"/>, with all trailing pad
+      character set described in Section 5 of <xref target="RFC4648"/>, with all trailing padding
       characters '=' omitted and without the inclusion of any line breaks, whitespace, or other
       additional characters.</t>
 
@@ -343,8 +342,7 @@
       (clients use different Token Binding key pairs for different
       servers, see <xref target="sctn-keypair-scope"/> below). 
       The Token Binding ID established by this TokenBinding
-      is called a <spanx style="emph">Provided Token Binding
-      ID</spanx>.</t>
+      is called a Provided Token Binding ID.</t>
       
       <t>The TokenBindingMessage MAY also contain one TokenBinding structure
       with TokenBindingType of referred_token_binding, as specified in
@@ -355,12 +353,12 @@
       specification.</t>
 
       <t>A TokenBindingMessage is validated by the server as described in Section 
-      4.2. "Server Processing Rules" of <xref target="I-D.ietf-tokbind-protocol"/>.
+      4.2. ("Server Processing Rules") of <xref target="I-D.ietf-tokbind-protocol"/>.
       If validation fails and a Token Binding is rejected, any associated bound 
       tokens MUST also be rejected by the server. HTTP requests containing invalid 
       tokens MUST be rejected. In this case, the server application MAY return HTTP 
       status code 400 (Bad Request) or proceed with an application-specific invalid 
-      token response (e.g. directing the client to re-authenticate and present a 
+      token response (e.g., directing the client to re-authenticate and present a 
       different token), or terminate the connection.</t>
 
       <t>In HTTP/2, the client SHOULD use <xref
@@ -374,8 +372,8 @@
         anchor="sctn-keypair-scope">
         
         <t>HTTPS is used in conjunction with various application 
-        protocols, and application contexts, in various ways. 
-        For example, general purpose Web browsing is one such HTTP-based 
+        protocols and application contexts, in various ways. 
+        For example, general-purpose Web browsing is one such HTTP-based 
         application context. Within the latter context, HTTP cookies 
         <xref target="RFC6265"/> are typically utilized for state management, 
         including client authentication. 
@@ -391,16 +389,19 @@
         the encompassing application. 
         </t>
         
-        <t>The scoping for those Token Binding key pairs generated by Web browsers in 
-        the context of the first-party and federation use cases defined in this 
-        specification (below), and to be used for binding HTTP cookies MUST be at the 
-        granularity of "effective top-level domain (public suffix) + 1" (eTLD+1), 
-          i.e., at the same granularity at which cookies can be set 
-          (see <xref target="RFC6265"/>).  Key pairs used to bind other application
+        <t>The scoping of Token Binding key pairs generated by Web browsers for use in 
+        first-party and federation use cases defined in this 
+        specification (<xref target="federation"/>, below), and intended for 
+        binding HTTP cookies, MUST be at the 
+        granularity of "effective top-level domain (public suffix) + 1" (eTLD+1).
+          I.e., at the same granularity at which cookies can be set 
+          (see <xref target="RFC6265"/>).</t> 
+          
+        <t>Key pairs used to bind other application
           tokens, such as OAuth tokens or Open ID Connect "ID Tokens", SHOULD generally
           adhere to the above eTLD+1
           scoping requirement for those tokens being employed in first-party
-          or federation scenarios as described below. Applications other than Web
+          or federation scenarios. Applications other than Web
           browsers MAY use different key pair scoping rules. See also <xref 
           target="sctn-priv-tbkey-scoping"/>, below.</t>
           
@@ -415,37 +416,37 @@
       <t>Token Binding over HTTP/1.1 <xref target="RFC7230"/> can be performed in combination with 
       TLS renegotiation. In this case, renegotiation MUST only occur between a client's HTTP 
       request and the server's response, the client MUST NOT send any pipelined requests, and the 
-      client MUST NOT initiate renegotiation (i.e., the client may only send a renegotiation 
-      ClientHello in response to the server's HelloRequest). These conditions ensure that both the 
+      client MUST NOT initiate renegotiation. (I.e., the client may only send a renegotiation 
+      ClientHello in response to the server's HelloRequest.) These conditions ensure that both the 
       client and the server can clearly identify which TLS Exported Keying Material value 
       <xref target="RFC5705" /> to use when generating or verifying the TokenBindingMessage. This 
-      also prevents a TokenBindingMessage from being split across TLS renegotiation boundaries 
-      (i.e., due to TLS message fragmentation - see Section 6.2.1 of <xref target="RFC5246"/>).</t>
+      also prevents a TokenBindingMessage from being split across TLS renegotiation boundaries. 
+      (I.e., due to TLS message fragmentation - see Section 6.2.1 of <xref target="RFC5246"/>.)</t>
     </section>
 
-    <section title="First-party Use Cases">
+    <section title="First-Party Use Cases">
       <t>In a first-party use case (also known as a 
       "same-site" use case), an HTTP server issues a security token
       such as a cookie (or similar) to a client, and expects the client to return
       the security token at a later time, e.g., in order
       to authenticate. Binding the security token to the TLS connection between
-      client and server protects the security token from misuse 
+      client and server protects the security token from misuse,
       since the server can detect if the security token is
       replayed inappropriately, e.g., over other TLS connections.</t>
       
-      <t>See <xref target="I-D.ietf-tokbind-protocol"/> Section 5 for 
+      <t>See Section 5 of <xref target="I-D.ietf-tokbind-protocol"/> for 
       general guidance regarding binding of security tokens and their 
       subsequent validation.</t>
       
     </section>
     
-    <section title="Federation Use Cases">
+    <section title="Federation Use Cases" anchor="federation">
 
       <section title="Introduction">
 	<t>For privacy reasons, clients use different Token Binding key pairs to
 	establish Provided Token Binding IDs with different
 	servers. As a result, a server cannot bind a security token
-	(such as an OAuth token or an OpenID Connect identity token)
+	(such as an OAuth token or an OpenID Connect ID Token <xref target="OpenID.Core"/>)
 	to a TLS connection that the client has with a different
 	server. This is, however, a common requirement in federation
 	scenarios: For example, an Identity Provider may wish to issue
@@ -453,21 +454,21 @@
 	token to the TLS connection between the client and a Relying
 	Party.</t>
 	
-	<t>In this section we describe mechanisms to achieve this. The
+	<t>In this section, we describe mechanisms to achieve this. The
 	common idea among these mechanisms is that a server (called
-	the <spanx style="emph">Token Consumer</spanx> in this
+	the Token Consumer in this
 	document) signals to the client that it should reveal the Provided
 	Token Binding ID that is used between the client and itself,
-	to another server (called the <spanx style="emph">Token
-	Provider</spanx> in this document). Also common across the
+	to another server (called the Token
+	Provider in this document). Also common across the
 	mechanisms is how the Token Binding ID is revealed to the
 	Token Provider: The client uses the <xref
 	target="I-D.ietf-tokbind-protocol">Token Binding Protocol</xref>, and
 	includes a TokenBinding structure in the Sec-Token-Binding HTTP
 	header field defined above.  What differs between the various
-	mechanisms is <spanx style="emph">how</spanx> the Token
+	mechanisms is how the Token
 	Consumer signals to the client that it should reveal the Token Binding ID
-	to the Token Provider. Below we specify one such mechanism, which is 
+	to the Token Provider. Below, we specify one such mechanism, which is 
   suitable for redirect-based interactions between Token Consumers and
   Token Providers.</t>
       </section>
@@ -476,16 +477,16 @@
 	<t>In a Federated Sign-On protocol, an Identity Provider issues
 	an identity token to a client, which sends the identity token
 	to a Relying Party to authenticate itself. Examples of this
-	include OpenID Connect (where the identity token is called "ID
-	Token") and SAML (where the identity token is a SAML
+	include OpenID Connect (in which the identity token is called an "ID
+	Token") and SAML (in which the identity token is a SAML
 	assertion).</t>
 	<t>To better protect the security of the identity token, the
 	Identity Provider may wish to bind the identity token to the TLS
 	connection between the client and the Relying Party, thus
-	ensuring that only said client can use the identity token: The
-	Relying Party will compare the Token Binding ID in the identity
-	token with the Token Binding ID of the TLS connection between it
-	and the client.</t>
+	ensuring that only said client can use the identity token; the
+	Relying Party will compare the Token Binding ID (or a cryptographic 
+	hash of it) in the identity token with the Token Binding ID of the 
+	TLS connection between it and the client.</t>
 	<t>This is an example of a federation scenario, which more
 	generally can be described as follows:
 	<list style="symbols">
@@ -502,14 +503,15 @@
 	  Token Consumer, not just the client to which it was
 	  issued.</t>
 	  <t>Therefore, in the previous step, the Token Provider may
-	  want to include in the token the Token Binding ID that the client
+	  want to include in the token the Token Binding ID (or a 
+	  cryptographic hash of it) that the client
     uses when communicating with the Token Consumer, thus 
-    <spanx style="emph">binding</spanx> the token to the client's Token Binding
+    binding the token to the client's Token Binding
     key pair. The client
     proves possession of the private key when communicating with 
     the Token Consumer through the <xref target="I-D.ietf-tokbind-protocol">Token
-	  Binding Protocol</xref>, and reveals the corresponding public key of this 
-    key pair as part of the Token Binding ID. Comparing the Token Binding ID from the
+	  Binding Protocol</xref>, and uses the corresponding public key of this 
+    key pair as a component of the Token Binding ID. Comparing the Token Binding ID from the
     token to the Token Binding ID established with the client allows the Token 
     Consumer to verify that the token was sent to it by the legitimate 
     client.</t>
@@ -528,16 +530,16 @@
 	Consumer requests the client to do so.</t>
 	<t>Below, we specify how Token Consumers can signal this request in
     redirect-based federation protocols. Note that this assumes that the federated
-    sign-on flow starts at the Token Consumer, or at the very least includes a redirect
-    from Token Consumer to Token Provider. It is outside the scope of this
+    sign-on flow starts at the Token Consumer, or at the very least, includes a redirect
+    from the Token Consumer to the Token Provider. It is outside the scope of this
     document to specify similar mechanisms for flows that do not include such redirects.</t>
       </section>
       
       <section title="HTTP Redirects" anchor="sctn-http-redir">
 	<t>When a Token Consumer redirects the client to a Token Provider as a means to deliver the token
-	request, it SHOULD include a Include-Referred-Token-Binding-ID HTTP response header field in its
+	request, it SHOULD include an Include-Referred-Token-Binding-ID HTTP response header field in its
 	HTTP response. The ABNF of the Include-Referred-Token-Binding-ID header is (in <xref
-	target="RFC7230"/> style, see also <xref target="RFC7231"/> Section 8.3):</t>
+	target="RFC7230"/> style, see also Section 8.3 of <xref target="RFC7231"/>):</t>
 	<figure><artwork><![CDATA[
   Include-Referred-Token-Binding-ID = "true"
         ]]></artwork></figure>
@@ -581,7 +583,7 @@
 	has negotiated the Token Binding Protocol with both the Token
 	Consumer and the Token Provider, it already sends the
  Sec-Token-Binding header field to the Token Provider with each HTTP
-	request (see above).</t>
+	request (as described in <xref target="sctn-secTB-header"/> above).</t>
 
 	<t>The TokenBindingMessage SHOULD contain a TokenBinding with
 	TokenBindingType referred_token_binding. If included, this 
@@ -590,8 +592,8 @@
 	between itself and the Token Consumer (more specifically, the
 	server that issued the Include-Referred-Token-Binding-ID
 	response header field). The Token Binding ID established by this
-	TokenBinding is called a <spanx style="emph">Referred Token
-	Binding ID</spanx>.</t>
+	TokenBinding is called a Referred Token
+	Binding ID.</t>
 	
 	<t>As described above, the TokenBindingMessage MUST
 	additionally contain a Provided Token Binding ID, i.e., a
@@ -602,7 +604,7 @@
 	the token request is being sent to).
  </t>
 	
-	<t>If for some deployment-specific reason the initial 
+	<t>If, for some deployment-specific reason, the initial 
 	Token Provider ("TP1") needs to redirect the
 client to another Token Provider ("TP2"), rather than 
 directly back to the Token Consumer, it can be
@@ -654,7 +656,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         <t> The diagram below shows a 
            typical HTTP Redirect-based Web Browser SSO Profile
            (no artifact, no callbacks), featuring binding of,
-           e.g., a TLS Token Binding ID into an OpenID Connect "ID Token".
+           e.g., a TLS Token Binding ID into an OpenID Connect ID Token.
         </t>
         
         <texttable>
@@ -673,14 +675,14 @@ contexts. Other approaches are possible, but are outside the scope of this speci
                       TokenBinding (TB)struct(s), e.g.:
                       ETBMSG[[TB]] or ETBMSG[[TB1],[TB2]]</c>
 
-           <c>ID Token:</c>  <c>the "ID Token" in OIDC, it is the semantic equivalent
+           <c>ID Token:</c>  <c>the ID Token in OpenID Connect, it is the semantic equivalent
                       of a SAML "authentication assertion". "ID Token w/TBIDn"
                       denotes a "token bound" ID Token containing TBIDn.</c>
 
            <c>Ks &amp; Kp:</c>   <c>private (aka secret) key, and public key, respectively,
                       of client-side Token Binding key pair</c>
 
-           <c>OIDC:</c>      <c>Open ID Connect</c>
+           <c>OIDC:</c>      <c>OpenID Connect</c>
 
            <c>TB:</c>        <c>TokenBinding struct containing signed EKM, TBID, and
                       TB type, e.g.: [{EKM1}Ks1,TBID1,provided_token_binding]</c>
@@ -795,7 +797,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         <list style="hanging" hangIndent="7">
           <t hangText="NOTE:">
             See <xref target="privacy-cons"/> 
-            "<xref target="privacy-cons" format="title"/>",
+            ("<xref target="privacy-cons" format="title"/>"),
             for privacy guidance regarding the use of this functionality. 
           </t>
         </list>
@@ -841,7 +843,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           secret by the client. If the private key is not secret, then another
           actor in the system could create a valid Token Binding header field,
           impersonating the client. This can render the main purpose of the
-          protocol - to bind bearer tokens to certain clients - moot: Consider,
+          protocol - to bind bearer tokens to certain clients - moot. Consider,
           for example, an attacker who obtained (perhaps through a network
           intrusion) an authentication cookie that a client uses with a certain
           server. Consider further that the server bound that cookie to the
@@ -854,7 +856,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           case, did not successfully bind the cookie to the client.
         </t>
         <t>
-          Likewise, we need integrity protection of the Sec-Token-Binding header field: A
+          Likewise, we need integrity protection of the Sec-Token-Binding header field. A
           client should not be tricked into sending a Sec-Token-Binding header field to a
           server that contains Token Binding messages about key pairs that the
           client does not control. Consider an attacker A that somehow has
@@ -867,8 +869,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           secret. Such considerations might lead some clients to not treat the
           EKM as a secret.) Such an attacker A could craft a Sec-Token-Binding
           header field with A's key pair over C's EKM. If the attacker could now
-          trick C to send such a header field to S, it would appear to S as if C
-          controls a certain key pair when in fact it does not (the attacker A
+          trick C into sending such a header field to S, it would appear to S as if C
+          controls a certain key pair, when in fact it does not (the attacker A
           controls the key pair).
         </t>
         <t>
@@ -897,7 +899,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       </section>
       <section title="Securing Federated Sign-On Protocols">
         <t>
-          As explained above, in a federated sign-in scenario a client will prove possession of two
+          As explained above, in a federated sign-in scenario, a client will prove possession of two
           different Token Binding private keys to a Token Provider: One private key corresponds to
           the "provided" Token Binding ID (which the client normally uses with the Token Provider),
           and the other is the Token Binding private key corresponding to the "referred" Token
@@ -941,7 +943,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           of the client's Token Binding private key. Therefore, it can either choose to
           replace the Token Binding ID in requests from the client to the
           Token Provider, and create a Sec-Token-Binding header field that matches the
-          TLS connection between the man-in-the-middle and the Token Provider;
+          TLS connection between the man-in-the-middle and the Token Provider,
           or it can choose to leave the Sec-Token-Binding header field unchanged. If it
           chooses the latter, the signature in the Token Binding message
           (created by the original client on the exported keying material (EKM)
@@ -955,22 +957,22 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           Token Binding ID that the client's authentication token is bound to.
           Either way, the man-in-the-middle is detected by the Token Provider,
           but only if the proof of possession of the provided Token Binding
-          private key is required in the protocol (as we do above).
+          private key is required in the protocol (as is done above).
         </t>
         <t>
           Next, consider the presence of a man-in-the-middle between client and
           Token Consumer. That man-in-the-middle can intercept and modify any
-          message sent by the client to the Token Consumer, and any message
+          message sent by the client to the Token Consumer and any message
           sent by the Token Consumer to the client. The Token Consumer is the
           party that redirects the client to the Token Provider. In this case,
-          the man-in-the-middle controls the redirect URL, and can tamper with
+          the man-in-the-middle controls the redirect URL and can tamper with
           any redirect URL issued by the Token Consumer (as well as with any
           Javascript running in the origin of the Token Consumer). The goal of
-          the man-in-the-middle is to trick the Token Provider to issue a token
-          bound to <spanx style="emph">its</spanx> Token Binding ID, not to
+          the man-in-the-middle is to trick the Token Provider to issuing a token
+          bound to its Token Binding ID, not to
           the Token Binding ID of the legitimate client. To thwart this goal
           of the man-in-the-middle, the client's referred Token Binding ID
-          must be communicated to the Token Producer in a manner that can not
+          must be communicated to the Token Producer in a manner that cannot
           be affected by the man-in-the-middle (who, as we recall, can modify
           redirect URLs and Javascript at the client). Including the referred
           Token Binding structure in the Sec-Token-Binding header field (as opposed to,
@@ -992,8 +994,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         <t>Clients use different Token Binding key pairs for different servers, so as 
           to not allow Token Binding to become a tracking tool across different servers.
           However, the scoping of the Token Binding key pairs to servers varies according
-          to the scoping rules of the application protocol (<xref 
-          target="I-D.ietf-tokbind-protocol"/> section 4.1).
+          to the scoping rules of the application protocol (Section 4.1 of <xref 
+          target="I-D.ietf-tokbind-protocol"/>).
         </t>
         <t>In the case of HTTP cookies, servers may use Token Binding to secure their cookies. 
           These cookies can be attached to any 
@@ -1016,30 +1018,30 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           with different servers.
         </t>
       </section>
-      <section title="Life Time of Token Binding Key Pairs">
+      <section title="Lifetime of Token Binding Key Pairs">
         <t>Token Binding key pairs do not have an expiration time. This means that they 
-          can potentially be used by a server to track a user across an extended
+          can potentially be used by a server to track a user for an extended
           period of time (similar to a long-lived cookie). HTTPS clients such as 
-          web user agents should therefore provide a user interface for discarding
+          Web user agents should therefore provide a user interface for discarding
           Token Binding key pairs (similar to the affordances provided to delete cookies).
         </t>
         <t>If a user agent provides modes such as private browsing mode in which
           the user is promised that browsing state such as cookies are discarded 
           after the session is over, the user agent should also discard Token
           Binding key pairs from such modes after the session is over. Generally speaking,
-          users should be given the same level of control over life time of Token
+          users should be given the same level of control over lifetime of Token
           Binding key pairs as they have over cookies or other potential tracking 
           mechanisms.
         </t>
       </section>
       <section title="Correlation" anchor="Correlation">
         <t>
-          An application's various communicating endpoints, that receive Token Binding 
-          IDs for TLS connections other than their own, obtain information about the 
-          application's other TLS connections (in this context, "an application" is a 
+          An application's various communicating endpoints that receive Token Binding 
+          IDs for TLS connections other than their own obtain information about the 
+          application's other TLS connections. (In this context, "an application" is a 
           combination of client-side and server-side components, communicating over 
-          HTTPS, where the client side may be either or both web browser-based or native 
-          application-based). These other Token Binding IDs can serve as correlation 
+          HTTPS, where the client side may be either or both Web browser-based or native 
+          application-based.) These other Token Binding IDs can serve as correlation 
           handles for the endpoints of the other connections. If the receiving endpoints 
           are otherwise aware of these other connections, then no additional information 
           is being exposed. For instance, if in a redirect-based federation protocol, 
@@ -1055,7 +1057,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           Also, Token Binding implementations must take care to only reveal Token 
           Binding IDs to other endpoints if the application associated with a Token 
           Binding ID signals to do so, see <xref target="impl-cons"/> 
-          "<xref target="impl-cons" format="title"/>".
+          ("<xref target="impl-cons" format="title"/>").
         </t>
         <t>
           Finally, care should be taken to ensure that unrelated applications do not 
@@ -1152,6 +1154,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       &RFC6749;
       &RFC7540;
       &RFC7627;
+      &OpenID.Core;
 
       <reference anchor="TRIPLE-HS">
         <front>
