@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- This template is for creating an Internet Draft using xml2rfc,
      which is available here: http://xml.resource.org. -->
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
@@ -397,7 +397,7 @@
         MAY be more narrow if cookies are scoped more narrowly.</t> 
         
         <t>Key pairs used to bind other application
-          tokens, such as OAuth tokens or Open ID Connect "ID Tokens", SHOULD generally
+          tokens, such as OAuth tokens or OpenID Connect ID Tokens, SHOULD generally
           adhere to the above eTLD+1
           scoping requirement for those tokens being employed in first-party
           or federation scenarios. Applications other than Web
