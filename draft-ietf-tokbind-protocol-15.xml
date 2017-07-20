@@ -11,8 +11,8 @@
 <!ENTITY RFC7230 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7230.xml">
 <!ENTITY RFC7540 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7540.xml">
 <!ENTITY RFC5705 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5705.xml">
-<!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
-<!ENTITY RFC3447 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3447.xml">
+<!ENTITY RFC8126 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8126.xml">
+<!ENTITY RFC8017 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8017.xml">
 <!ENTITY RFC7627 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7627.xml">
 <!ENTITY RFC5746 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5746.xml">
 <!ENTITY RFC6749 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6749.xml">
@@ -42,7 +42,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-14" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-15" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -215,22 +215,23 @@
     <abstract>
       <t>This document specifies Version 1.0 of the Token Binding protocol. The Token Binding 
       protocol allows client/server applications to create long-lived, uniquely identifiable TLS 
-      <xref target="RFC5246" /> bindings spanning multiple TLS sessions and connections. 
-      Applications are then enabled to cryptographically bind security tokens to the TLS layer, 
-      preventing token export and replay attacks. To protect privacy, the Token Binding 
-      identifiers are only conveyed over TLS and can be reset by the user at any time.</t>
+      bindings spanning multiple TLS sessions and connections. Applications are then enabled to 
+      cryptographically bind security tokens to the TLS layer, preventing token export and replay 
+      attacks. To protect privacy, the Token Binding identifiers are only conveyed over TLS and can 
+      be reset by the user at any time.</t>
     </abstract>
   </front>
 
   <middle>
     <section title="Introduction">
       <t>Often, servers generate various security tokens (e.g. HTTP cookies, OAuth 
-      <xref target="RFC5746" /> tokens) for applications to present when accessing protected 
+      <xref target="RFC6749" /> tokens) for applications to present when accessing protected 
       resources. In general, any party in possession of bearer security tokens gain access to 
       certain protected resource(s). Attackers take advantage of this by exporting bearer tokens 
       from user’s application connections or machines, presenting them to application servers, and 
       impersonating authenticated users. The idea of Token Binding is to prevent such attacks by 
-      cryptographically binding application security tokens to the underlying TLS layer.</t>
+      cryptographically binding application security tokens to the underlying TLS 
+      <xref target="RFC5246" /> layer.</t>
 
       <t>A Token Binding is established by a user agent generating a private-public key pair 
       (possibly, within a secure hardware module, such as TPM) per target server, providing the 
@@ -417,11 +418,11 @@
 
       <section title="TokenBinding.signature">
         <t>When rsa2048_pkcs1.5 is used, TokenBinding.signature contains the signature generated 
-        using the RSASSA-PKCS1-v1_5 signature scheme defined in <xref target="RFC3447"/> with 
+        using the RSASSA-PKCS1-v1_5 signature scheme defined in <xref target="RFC8017"/> with 
         SHA256 as the hash function.</t>
 
         <t>When rsa2048_pss is used, TokenBinding.signature contains the signature generated using 
-        the RSASSA-PSS signature scheme defined in <xref target="RFC3447"/> with SHA256 as the hash 
+        the RSASSA-PSS signature scheme defined in <xref target="RFC8017"/> with SHA256 as the hash 
         function. MGF1 with SHA256 MUST be used as the mask generation function, and the salt 
         length MUST equal 32 bytes.</t>
 
@@ -592,7 +593,7 @@
         </t>
 
         <t>This registry operates under the "Expert Review" policy as defined in 
-        <xref target="RFC5226"/>. The designated expert is advised to encourage the inclusion of a 
+        <xref target="RFC8126"/>. The designated expert is advised to encourage the inclusion of a 
         reference to a permanent and readily available specification that enables the creation of 
         interoperable implementations using the identified set of Token Binding key parameters.</t>
 
@@ -631,7 +632,7 @@
         </t>
 
         <t>This registry operates under the "Expert Review" policy as defined in 
-        <xref target="RFC5226"/>. The designated expert is advised to encourage the inclusion of a 
+        <xref target="RFC8126"/>. The designated expert is advised to encourage the inclusion of a 
         reference to a permanent and readily available specification that enables the creation of 
         interoperable implementations using the identified Token Binding type.</t>
 
@@ -664,7 +665,7 @@
         </t>
 
         <t>This registry operates under the "Expert Review" policy as defined in 
-        <xref target="RFC5226"/>. The designated expert is advised to encourage the inclusion of a 
+        <xref target="RFC8126"/>. The designated expert is advised to encourage the inclusion of a 
         reference to a permanent and readily available specification that enables the creation of 
         interoperable implementations using the identified Token Binding extension. This document 
         creates no initial registrations in the "Token Binding Extensions" registry.</t>
@@ -772,8 +773,7 @@
       &RFC7230;
       &RFC7540;
       &RFC5705;
-      &RFC5226;
-      &RFC3447;
+      &RFC8126;
       &RFC7627;
       &RFC5746;
       <?rfc include="reference.I-D.ietf-tokbind-negotiation.xml"?>
@@ -803,6 +803,7 @@
 
     <references title="Informative References">
       &RFC6749;
+      &RFC8017;
       <reference anchor="TRIPLE-HS">
         <front>
           <title>Triple Handshakes and Cookie Cutters: Breaking and Fixing Authentication over 
@@ -861,6 +862,7 @@
       v12 2016-12-08  Jeff Hodges    Editotial polishing of Abstract, Intro, Overview, Security-TokenReplay.
       v13 2017-02-16  Andrei Popov   Addressing Denis' comment regarding cooperating clients.
       v14 2017-04-04  Andrei Popov   Incorporating WGLC feedback.
+      v15 2017-07-20  Andrei Popov   Fixing ID nits.
     -->
   </back>
 </rfc>

@@ -7,9 +7,7 @@
      An alternate method (rfc include) is described in the references. -->
 
 <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
-<!ENTITY RFC4366 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4366.xml">
 <!ENTITY RFC5246 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml">
-<!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
 <!ENTITY RFC5705 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5705.xml">
 <!ENTITY RFC7627 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7627.xml">
 <!ENTITY RFC5746 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5746.xml">
@@ -39,7 +37,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-negotiation-08" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-negotiation-09" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -185,9 +183,8 @@
          keywords will be used for the search engine. -->
 
     <abstract>
-      <t>This document specifies a Transport Layer Security (TLS) <xref target="RFC5246" /> 
-      extension for the negotiation of Token Binding protocol 
-      <xref target="I-D.ietf-tokbind-protocol"/> version and key parameters.</t>
+      <t>This document specifies a Transport Layer Security (TLS) extension for the negotiation of 
+      Token Binding protocol version and key parameters.</t>
     </abstract>
   </front>
 
@@ -196,10 +193,10 @@
       <t>In order to use the Token Binding protocol <xref target="I-D.ietf-tokbind-protocol"/>, 
       the client and server need to agree on the Token Binding protocol version and the parameters 
       (signature algorithm, length) of the Token Binding key. This document specifies a new TLS 
-      extension to accomplish this negotiation without introducing additional network 
-      round-trips in TLS 1.2 and earlier versions. The negotiation of the Token Binding protocol 
-      and key parameters in combination with TLS 1.3 and later versions is beyond the scope of this 
-      document.</t>
+      <xref target="RFC5246" /> extension to accomplish this negotiation without introducing 
+      additional network round-trips in TLS 1.2 and earlier versions. The negotiation of the Token 
+      Binding protocol and key parameters in combination with TLS 1.3 and later versions is beyond 
+      the scope of this document.</t>
 
       <section title="Requirements Language">
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -324,9 +321,8 @@ struct {
     </section>
 
     <section title="IANA Considerations">
-      <t>This document updates the TLS "ExtensionType Values" registry originally created in 
-      <xref target="RFC4366"/>. IANA has provided the following temporary registration for the 
-      "token_binding" TLS extension:
+      <t>This document updates the TLS "ExtensionType Values" registry. IANA has provided the 
+      following temporary registration for the "token_binding" TLS extension:
         <list style="empty">
           <t>Value: 24</t>
           <t>Extension name: token_binding</t>
@@ -387,9 +383,7 @@ struct {
 
     <references title="Normative References">
       &RFC2119;
-      &RFC4366;
       &RFC5246;
-      &RFC5226;
       &RFC5705;
       &RFC7627;
       &RFC5746;
@@ -433,6 +427,7 @@ struct {
       v06 2016-11-16  Andrei Popov   Undid the change from 2016-08-26 above. Renegotiation indication is always needed.
       v07 2016-12-23  Andrei Popov   Clarifying the TLS versions affected by the triple handshake attack.
       v08 2017-04-04  Andrei Popov   Incorporating WGLC comments.
+      v09 2017-07-20  Andrei Popov   Fixing ID nits.
     -->
   </back>
 </rfc>
