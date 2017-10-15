@@ -37,7 +37,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-negotiation-09" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-negotiation-10" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -224,23 +224,24 @@ enum {
 struct {
     uint8 major;
     uint8 minor;
-} ProtocolVersion;
+} TB_ProtocolVersion;
 
 enum {
-    (255)
+    rsa2048_pkcs1.5(0), rsa2048_pss(1), ecdsap256(2), (255)
 } TokenBindingKeyParameters;
 
 struct {
-    ProtocolVersion token_binding_version;
+    TB_ProtocolVersion token_binding_version;
     TokenBindingKeyParameters key_parameters_list<1..2^8-1>
 } TokenBindingParameters;
         ]]></artwork>
         </figure>
 
       <t>"token_binding_version" indicates the version of the Token Binding protocol the client 
-      wishes to use during this connection.  This SHOULD be the latest (highest valued) version 
-      supported by the client. <xref target="I-D.ietf-tokbind-protocol"/> describes version {1, 0} 
-      of the protocol.</t>
+      wishes to use during this connection. If the client supports multiple Token Binding protocol 
+      versions, it SHOULD indicate the latest (highest valued) version in 
+      TokenBindingParameters.token_binding_version.
+      <xref target="I-D.ietf-tokbind-protocol"/> describes version {1, 0} of the protocol.</t>
 
       <t>RFC EDITOR: PLEASE REMOVE THE FOLLOWING PARAGRAPH: Prototype implementations of Token 
       Binding drafts can indicate support of a specific draft version, e.g. {0, 1} or {0, 2}.</t>
@@ -272,9 +273,13 @@ struct {
       "extension_data" field of the "token_binding" extension is structured the same as described 
       above for the client "extension_data".</t>
 
-      <t>"token_binding_version" contains the lower of the Token Binding protocol version offered 
-      by the client in the "token_binding" extension and the highest version supported by the 
-      server.</t>
+      <t>"token_binding_version" contains the lower of: 
+        <list style="symbols">
+          <t>the Token Binding protocol version offered by the client in the "token_binding" 
+          extension and</t>
+          <t>the highest version supported by the server.</t>
+        </list>
+      </t>
 
       <t>"key_parameters_list" contains exactly one Token Binding key parameters identifier 
       selected by the server from the client's list.</t>
@@ -306,10 +311,10 @@ struct {
       <t>If the "token_binding" extension is included in the server hello and the client supports 
       the Token Binding protocol version selected by the server, it means that the version and key 
       parameters have been negotiated between the client and the server and SHALL be definitive for 
-      the TLS connection. Please note that TLS 1.2 and earlier versions support renegotiation, 
-      allowing the client and server to renegotiate the Token Binding protocol version and key 
-      parameters on the same connection. The client MUST use the negotiated key parameters in the 
-      "provided_token_binding" as described in <xref target="I-D.ietf-tokbind-protocol"/>.</t>
+      the TLS connection. TLS 1.2 and earlier versions support renegotiation, allowing the client 
+      and server to renegotiate the Token Binding protocol version and key parameters on the same 
+      connection. The client MUST use the negotiated key parameters in the "provided_token_binding" 
+      as described in <xref target="I-D.ietf-tokbind-protocol"/>.</t>
 
       <t>If the client does not support the Token Binding protocol version selected by the server, 
       then the connection proceeds without Token Binding.</t>
@@ -428,6 +433,7 @@ struct {
       v07 2016-12-23  Andrei Popov   Clarifying the TLS versions affected by the triple handshake attack.
       v08 2017-04-04  Andrei Popov   Incorporating WGLC comments.
       v09 2017-07-20  Andrei Popov   Fixing ID nits.
+      v10 2017-10-15  Andrei Popov   Addressing AD review comments.
     -->
   </back>
 </rfc>

@@ -42,7 +42,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-15" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-16" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -247,9 +247,9 @@
 
       <t>When issuing a security token to a client that supports Token Binding, a server 
       includes the client’s Token Binding ID (or its cryptographic hash) in the token. Later on, 
-      when a client presents a security token containing a Token Binding ID, the server ensures the 
-      ID in the token matches the ID of the Token Binding established with the client. In the case 
-      of a mismatch, the server rejects the token (details are application-specific).</t>
+      when a client presents a security token containing a Token Binding ID, the server verifies 
+      that the ID in the token matches the ID of the Token Binding established with the client. In 
+      the case of a mismatch, the server rejects the token (details are application-specific).</t>
 
       <t>In order to successfully export and replay a bound security token, an attacker needs to 
       also be able to use the client’s private key, which is hard to do if the key is specially 
@@ -325,7 +325,7 @@
 
   struct {
       opaque point <1..2^8-1>;
-  } ECPoint;
+  } TB_ECPoint;
 
   struct {
       TokenBindingKeyParameters key_parameters;
@@ -336,18 +336,18 @@
           case rsa2048_pss:
               RSAPublicKey rsapubkey;
           case ecdsap256: 
-              ECPoint point;
+              TB_ECPoint point;
       } TokenBindingPublicKey;
   } TokenBindingID;
 
   enum {
-      (255)        /* No initial ExtensionType registrations */
-  } ExtensionType;
+      (255)        /* No initial TB_ExtensionType registrations */
+  } TB_ExtensionType;
 
   struct {
-      ExtensionType extension_type;
+      TB_ExtensionType extension_type;
       opaque extension_data<0..2^16-1>;
-  } Extension;
+  } TB_Extension;
 
   enum {
       provided_token_binding(0), referred_token_binding(1), (255)
@@ -356,21 +356,21 @@
   struct {
       TokenBindingType tokenbinding_type;
       TokenBindingID tokenbindingid;
-      opaque signature<0..2^16-1>; /* Signature over the concatenation
-                                      of tokenbinding_type, 
-                                      key_parameters and exported 
-                                      keying material (EKM) */
-      Extension extensions<0..2^16-1>;
+      opaque signature<64..2^16-1>; /* Signature over the concatenation
+                                       of tokenbinding_type, 
+                                       key_parameters and exported 
+                                       keying material (EKM) */
+      TB_Extension extensions<0..2^16-1>;
   } TokenBinding;
 
   struct {
-      TokenBinding tokenbindings<0..2^16-1>;
+      TokenBinding tokenbindings<132..2^16-1>;
   } TokenBindingMessage;
         ]]></artwork>
 
         <postamble>The Token Binding message consists of a series of TokenBinding structures, each 
         containing the type of the token binding, the TokenBindingID, a signature using the Token 
-        Binding key, optionally followed by Extension structures.
+        Binding key, optionally followed by TB_Extension structures.
         </postamble>
       </figure>
 
@@ -390,22 +390,21 @@
         referred_token_binding to the Identity Provider in order to prove possession of the Token 
         Binding key it uses with the Relying Party. The Identity Provider can then bind the token 
         it is supplying (for presentation to the Relying Party) to the Token Binding ID contained 
-        in the referred_token_binding. Such a bound token enjoys the protections discussed below in 
-        <xref target="Security"/> "<xref target="Security" format="title"/>".</t>
+        in the referred_token_binding.</t>
       </section>
 
       <section anchor="TBMessage-TBID" title="TokenBinding.tokenbindingid">
         <t>The ID of the Token Binding established as a result of Token Binding message processing 
         contains the identifier of the negotiated key parameters, the length (in bytes) of the 
-        Token Binding public key, and the Token Binding public key itself. Token Binding ID can be 
-        obtained from the TokenBinding structure by discarding the Token Binding type, signature 
+        Token Binding public key, and the Token Binding public key itself. The Token Binding ID can 
+        be obtained from the TokenBinding structure by discarding the Token Binding type, signature 
         and extensions.</t>
 
         <t>When rsa2048_pkcs1.5 or rsa2048_pss is used, RSAPublicKey.modulus and 
         RSAPublicKey.publicexponent contain the modulus and exponent of a 2048-bit RSA public key 
         represented in big-endian format, with leading zero bytes omitted.</t>
 
-        <t>When ecdsap256 is used, ECPoint.point contains the X coordinate followed by the Y 
+        <t>When ecdsap256 is used, TB_ECPoint.point contains the X coordinate followed by the Y 
         coordinate of a Curve P-256 key. The X and Y coordinates are unsigned 32-byte integers 
         encoded in big-endian format, preserving any leading zero bytes. Future specifications may 
         define Token Binding keys using other elliptic curves with their corresponding signature 
@@ -470,7 +469,7 @@
       </section>
 
       <section title="TokenBinding.extensions">
-        <t>A Token Binding message may optionally contain a series of Extension structures, each 
+        <t>A Token Binding message may optionally contain a series of TB_Extension structures, each 
         consisting of an extension_type and extension_data. The structure and meaning of 
         extension_data depends on the specific extension_type.</t>
 
@@ -545,7 +544,7 @@
         <xref target="BoundSecurityToken"/>.</t>
 
         <t> If a Token Binding is rejected, any associated bound tokens MUST also be rejected by 
-        the server. The effect of this is application-specific, e.g. failing requests, a 
+        the server. The effect of this is application-specific, e.g., failing requests, a 
         requirement for the client to re-authenticate and present a different token, or connection 
         termination.</t>
       </section>
@@ -711,7 +710,7 @@
         <t>The Token Binding protocol uses persistent, long-lived Token Binding IDs. To protect 
         privacy, Token Binding IDs are never transmitted in clear text and can be reset by the user 
         at any time, e.g. when clearing browser cookies. Some applications offer a special privacy 
-        mode where they don't store or use tokens supplied by the server, e.g. "in private" 
+        mode where they don't store or use tokens supplied by the server, e.g., "in private" 
         browsing. When operating in this special privacy mode, applications SHOULD use newly 
         generated Token Binding keys and delete them when exiting this mode, or else SHOULD 
         NOT negotiate Token Binding at all.</t>
@@ -863,6 +862,7 @@
       v13 2017-02-16  Andrei Popov   Addressing Denis' comment regarding cooperating clients.
       v14 2017-04-04  Andrei Popov   Incorporating WGLC feedback.
       v15 2017-07-20  Andrei Popov   Fixing ID nits.
+      v16 2017-10-15  Andrei Popov   Addressing AD comments.
     -->
   </back>
 </rfc>
