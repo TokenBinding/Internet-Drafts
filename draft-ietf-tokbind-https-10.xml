@@ -51,7 +51,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-https-10" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-https-11" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -1010,6 +1010,33 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           contains both: a proof of possession of the provided Token Binding
           key, as well as a proof of possession of the referred Token Binding
           key.
+        </t>
+        <t>
+          Note that the presence of Token Binding does not relieve the Token 
+          Provider and Token Consumer from performing various checks to ensure
+          the security of clients during federated sign-on protocols. These 
+          include the following:
+          <list style="symbols">
+            <t>
+              The Token Provider should not issue tokens to Token Consumers that
+              have been shown to act maliciously. To aid in this, the federation
+              protocol should identify the Token Consumer to the Token Provider
+              (e.g., through OAuth client IDs or similar mechanisms), and the
+              Token Provider should ensure that tokens are indeed issued to the
+              Token Consumer identified in the token request (e.g., by verifying
+              that the redirect URI is associated with the OAuth client ID.)
+            </t>
+            <t>
+              The Token Consumer should verify that the tokens were issued for
+              it, and not some other token consumer. To aid in this, the 
+              federation protocol should include an audience parameter in the 
+              token response, or apply equivalent mechanisms (the implicit OAuth
+              flow requires Token Consumers to identify themselves when they
+              exchange OAuth authorization codes for OAuth refresh tokens,
+              leaving it up to the Token Provider to verify that the 
+              OAuth authorization was delivered to the correct Token Consumer).
+            </t>
+          </list>		  
         </t>
       </section>
     </section>
