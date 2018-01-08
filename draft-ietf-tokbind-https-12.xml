@@ -364,7 +364,7 @@
         </list>
       </t>
       
-      <t>The TokenBindingMessage MUST contain one TokenBinding structure 
+      <t>The TokenBindingMessage MUST contain exactly one TokenBinding structure 
       with TokenBindingType of provided_token_binding, which MUST be signed
       with the Token Binding private key used by the client for connections
       between itself and the server that the HTTP request is sent to
@@ -373,7 +373,7 @@
       The Token Binding ID established by this TokenBinding
       is called a Provided Token Binding ID.</t>
       
-      <t>The TokenBindingMessage MAY also contain one TokenBinding structure
+      <t>The TokenBindingMessage MAY also contain exactly one TokenBinding structure
       with TokenBindingType of referred_token_binding, as specified in
       <xref target="sctn-http-redir"/>. In addition to the latter,
       or rather than the latter, the TokenBindingMessage 
