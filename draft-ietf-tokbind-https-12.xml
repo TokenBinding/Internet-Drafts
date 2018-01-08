@@ -347,7 +347,10 @@
 
       <t>For example:</t>
       <figure><artwork><![CDATA[
-  Sec-Token-Binding: <base64url-encoded TokenBindingMessage>
+  Sec-Token-Binding: AIkAAgBBQFzK4_bhAqLDwRQxqJWte33d7hZ0hZWHwk-miKPg4E\
+                     9fcgs7gBPoz-9RfuDfN9WCw6keHEw1ZPQMGs9CxpuHm-YAQM_j\
+                     aOwwej6a-cQBGU7CJpUHOvXG4VvjNq8jDsvta9Y8_bPEPj25Gg\
+                     mKiPjhJEtZA6mJ_9SNifLvVBTi7fR9wSAAAA
         ]]></artwork></figure>
       
       <t>If the server receives more than one Sec-Token-Binding header field
