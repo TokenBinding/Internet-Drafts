@@ -481,7 +481,7 @@
 	an identity token to a client and cryptographically bind that
 	token to the TLS connection between the client and a Relying
 	Party.</t>
-	
+	  
 	<t>In this section, we describe mechanisms to achieve this. The
 	common idea among these mechanisms is that a server (called
 	the Token Consumer in this
@@ -499,6 +499,45 @@
 	to the Token Provider. Below, we specify one such mechanism, which is 
   suitable for redirect-based interactions between Token Consumers and
   Token Providers.</t>
+  
+  <figure><artwork><![CDATA[
+   Client                        Token Consumer         Token Provider
+   +--------+                        +----+                +-----+
+   | Client |                        | TC |                | TP  |
+   +--------+                        +----+                +-----+
+       |                               |                      |
+       |                               |                      |
+       |                               |                      |
+       | Client interacts w/TC         |                      |
+       | using TokenBindingID TBID1:   |                      |
+       | TBMSG[[provided_token_binding,|                      |
+       |        TBID1, signature]]     |                      |
+       |------------------------------>|                      |
+       |                               |                      |
+       | Client interacts w/TP                                |
+       | using TokenBindingID TBID2:                          |
+       | TBMSG[[provided_token_binding,                       |
+       |        TBID2, signature]]                            |
+       |----------------------------------------------------->|
+       |                                                      |
+       |                               |                      |
+       | TC signals permission to      |                      |
+       | reveal TBID1 to TP            |                      |
+       |<------------------------------|                      |
+       |                               |                      |
+       |                                                      |
+       | Client interacts w/TP                                |
+       | using TokenBindingID TBID1 and TBID2:                |
+       | TBMSG[[provided_token_binding,                       |
+       |        TBID2, signature],                            |
+       |       [referred_token_binding,                       |
+       |        TBID1, sognature]]                            |
+       |----------------------------------------------------->|
+       |                                                      |
+       |                               |                      |
+       |                               |                      |        
+  ]]></artwork></figure>
+  
       </section>
 
       <section title="Overview">
