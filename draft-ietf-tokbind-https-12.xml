@@ -531,7 +531,7 @@
        | TBMSG[[provided_token_binding,                       |
        |        TBID2, signature],                            |
        |       [referred_token_binding,                       |
-       |        TBID1, sognature]]                            |
+       |        TBID1, signature]]                            |
        |----------------------------------------------------->|
        |                                                      |
        |                               |                      |
