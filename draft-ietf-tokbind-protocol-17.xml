@@ -42,7 +42,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-16" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-17" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -185,7 +185,7 @@
       </address>
     </author>
 
-    <date year="2017" />
+    <date year="2018" />
 
     <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
          in the current day for you. If only the current year is specified, xml2rfc will fill 
@@ -224,7 +224,7 @@
 
   <middle>
     <section title="Introduction">
-      <t>Often, servers generate various security tokens (e.g. HTTP cookies, OAuth 
+      <t>Servers often generate various security tokens (e.g. HTTP cookies, OAuth 
       <xref target="RFC6749" /> tokens) for applications to present when accessing protected 
       resources. In general, any party in possession of bearer security tokens gain access to 
       certain protected resource(s). Attackers take advantage of this by exporting bearer tokens 
@@ -573,9 +573,10 @@
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
-      <t>This section establishes three IANA registries: "Token Binding Key Parameters", "Token 
-      Binding Types" and "Token Binding Extensions". It also registers a new TLS exporter label in 
-      the TLS Exporter Label Registry.</t>
+      <t>This section establishes three IANA registries on a new registry page entitled "Token 
+      Binding Protocol": "Token Binding Key Parameters", "Token Binding Types" and "Token Binding 
+      Extensions". It also registers a new TLS exporter label in the TLS Exporter Label 
+      Registry.</t>
 
       <section anchor="IANA-TBKeyParams" title="Token Binding Key Parameters Registry">
         <t>This document establishes a registry for identifiers of Token Binding key parameters 
@@ -602,13 +603,13 @@
             <t>Description: rsa2048_pkcs1.5</t>
             <t>Specification: this document</t>
           </list>
-
+          <list style="empty"><t>---------------------------------</t></list>
           <list style="empty">
             <t>Value: 1</t>
             <t>Description: rsa2048_pss</t>
             <t>Specification: this document</t>
           </list>
-
+          <list style="empty"><t>---------------------------------</t></list>
           <list style="empty">
             <t>Value: 2</t>
             <t>Description: ecdsap256</t>
@@ -641,7 +642,7 @@
             <t>Description: provided_token_binding</t>
             <t>Specification: this document</t>
           </list>
-
+          <list style="empty"><t>---------------------------------</t></list>
           <list style="empty">
             <t>Value: 1</t>
             <t>Description: referred_token_binding</t>
@@ -671,8 +672,13 @@
       </section>
 
       <section anchor="IANA-TBExpLab" title="Registration of Token Binding TLS Exporter Label">
-        <t>This document adds a registration for the "EXPORTER-Token-Binding" value in the TLS
-        Exporter Label Registry to correspond to this specification.</t>
+        <t>This document adds the following registration in the TLS Exporter Label Registry:
+          <list style="empty">
+            <t>Value: EXPORTER-Token-Binding</t>
+            <t>DTLS-OK: Y</t>
+            <t>Reference: this document</t>
+          </list>
+        </t>
       </section>
     </section> <!-- IANA Considerations -->
     
@@ -863,6 +869,8 @@
       v14 2017-04-04  Andrei Popov   Incorporating WGLC feedback.
       v15 2017-07-20  Andrei Popov   Fixing ID nits.
       v16 2017-10-15  Andrei Popov   Addressing AD comments.
+      v17 2018-04-11  Andrei Popov   Adding separators between initial registrations.
+                                     Clarifying IANA considerations.
     -->
   </back>
 </rfc>

@@ -37,7 +37,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-negotiation-10" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-negotiation-11" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -155,7 +155,7 @@
       </address>
     </author>
 
-    <date year="2017" />
+    <date year="2018" />
 
     <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
          in the current day for you. If only the current year is specified, xml2rfc will fill 
@@ -241,7 +241,9 @@ struct {
       wishes to use during this connection. If the client supports multiple Token Binding protocol 
       versions, it SHOULD indicate the latest (highest valued) version in 
       TokenBindingParameters.token_binding_version.
-      <xref target="I-D.ietf-tokbind-protocol"/> describes version {1, 0} of the protocol.</t>
+      <xref target="I-D.ietf-tokbind-protocol"/> describes version {1, 0} of the protocol.
+      Please note that the server MAY select any lower protocol version, see section 
+      <xref target="Negotiating"/> "<xref target="Negotiating" format="title"/>" for more details.</t>
 
       <t>RFC EDITOR: PLEASE REMOVE THE FOLLOWING PARAGRAPH: Prototype implementations of Token 
       Binding drafts can indicate support of a specific draft version, e.g. {0, 1} or {0, 2}.</t>
@@ -264,9 +266,9 @@ struct {
         version.</t>
         <t>The server finds acceptable Token Binding key parameters on the client's list.</t>
         <t>The server is also negotiating the Extended Master Secret <xref target="RFC7627" /> and 
-        Renegotiation Indication <xref target="RFC5746" /> TLS extensions. This requirement only 
-        applies when TLS 1.2 or an older TLS version is used (see security considerations section 
-        below for more details).</t>
+        Renegotiation Indication <xref target="RFC5746" /> TLS extensions. This requirement applies 
+        when TLS 1.2 or an older TLS version is used (see section <xref target="Security"/> 
+        "<xref target="Security" format="title"/>" below for more details).</t>
       </list></t>
 
       <t>The server will ignore any key parameters that it does not recognize. The 
@@ -285,7 +287,7 @@ struct {
       selected by the server from the client's list.</t>
     </section>
 
-    <section title="Negotiating Token Binding Protocol Version and Key Parameters">
+    <section anchor="Negotiating" title="Negotiating Token Binding Protocol Version and Key Parameters">
       <t>It is expected that a server will have a list of Token Binding key parameters identifiers 
       that it supports, in preference order. The server MUST only select an identifier that the 
       client offered. The server SHOULD select the most highly preferred key parameters identifier 
@@ -304,8 +306,8 @@ struct {
         <t>"key_parameters_list" includes an identifier that was not advertised by the client.</t>
         <t>TLS 1.2 or an older TLS version is used, but the Extended Master Secret 
         <xref target="RFC7627" /> and TLS Renegotiation Indication <xref target="RFC5746" /> 
-        extensions are not negotiated (see security considerations section below for more 
-        details).</t>
+        extensions are not negotiated (see section <xref target="Security"/> 
+        "<xref target="Security" format="title"/>" below for more details).</t>
       </list></t>
 
       <t>If the "token_binding" extension is included in the server hello and the client supports 
@@ -319,8 +321,8 @@ struct {
       <t>If the client does not support the Token Binding protocol version selected by the server, 
       then the connection proceeds without Token Binding.</t>
 
-      <t>Please note that the Token Binding protocol version and key parameters are negotiated for 
-      each TLS connection, which means that the client and server include their "token_binding" 
+      <t>The Token Binding protocol version and key parameters are negotiated for each TLS 
+      connection, which means that the client and server include their "token_binding" 
       extensions both in the full TLS handshake that establishes a new TLS session and in the 
       subsequent abbreviated TLS handshakes that resume the TLS session.</t>
     </section>
@@ -332,6 +334,7 @@ struct {
           <t>Value: 24</t>
           <t>Extension name: token_binding</t>
           <t>Reference: this document</t>
+          <t>Recommended: Yes</t>
         </list>
         IANA is requested to make this registration permanent, keeping the value of 24, which has 
         been used by the prototype implementations of the Token Binding protocol.
@@ -342,7 +345,7 @@ struct {
       this registry.</t>
     </section>
 
-    <section title="Security Considerations">
+    <section anchor="Security" title="Security Considerations">
       <section title="Downgrade Attacks">
         <t>The Token Binding protocol version and key parameters are negotiated via 
         "token_binding" extension  within the TLS handshake. TLS prevents active attackers from 
@@ -434,6 +437,8 @@ struct {
       v08 2017-04-04  Andrei Popov   Incorporating WGLC comments.
       v09 2017-07-20  Andrei Popov   Fixing ID nits.
       v10 2017-10-15  Andrei Popov   Addressing AD review comments.
+      v11 2018-04-11  Andrei Popov   Updating IANA considerations: Recommended column has been added to the extensions registry.
+                                     Clarifying the version negotiation language as suggested by EKR.
     -->
   </back>
 </rfc>
