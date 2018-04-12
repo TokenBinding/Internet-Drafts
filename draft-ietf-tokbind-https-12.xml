@@ -1193,8 +1193,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
 
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>This document incorporates comments and suggestions offered by Eric Rescorla, Gabriel 
-      Montenegro, Martin Thomson, Vinod Anupam, Anthony Nadalin, Michael B. Jones, Bill Cox, Nick 
-      Harper, Brian Campbell, and others.</t>
+      Montenegro, Martin Thomson, Vinod Anupam, Anthony Nadalin, Michael B. Jones, Bill Cox, Brian
+      Campbell, and others.</t>
     </section>
   </middle>
 
