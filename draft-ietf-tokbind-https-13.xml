@@ -52,7 +52,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-https-12" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-https-13" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -1195,6 +1195,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       <t>This document incorporates comments and suggestions offered by Eric Rescorla, Gabriel 
       Montenegro, Martin Thomson, Vinod Anupam, Anthony Nadalin, Michael B. Jones, Bill Cox, Brian
       Campbell, and others.</t>
+      <t>This document was produced under the chairmanship of John Bradley and Leif Johansson.
+      The area directors included Eric Rescorla, Kathleen Moriarty and Stephen Farrell.</t>
     </section>
   </middle>
 
@@ -1311,6 +1313,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       v08 2017-02-15  Jeff Hodges    polishing the "receives more than one STB header" language fixes #88.
       v09 2017-02-15  Jeff Hodges    Applying Mike Jones' editorial feedback.
       v12 2018-01-07  Dirk Balfanz   Addressing Eric Rescorla's editorial feedback.
+      v13 2018-04-12  Andrei Popov   Acknowledging tokbind chairs and ADs.
     -->
   </back>
 </rfc>

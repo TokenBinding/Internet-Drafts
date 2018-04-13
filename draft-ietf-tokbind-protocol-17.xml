@@ -753,6 +753,8 @@
       <t>This document incorporates comments and suggestions offered by Eric Rescorla, Gabriel 
       Montenegro, Martin Thomson, Vinod Anupam, Anthony Nadalin, Michael B. Jones, Bill Cox, Nick 
       Harper, Brian Campbell, and others.</t>
+      <t>This document was produced under the chairmanship of John Bradley and Leif Johansson. 
+      The area directors included Eric Rescorla, Kathleen Moriarty and Stephen Farrell.</t>
     </section>
   </middle>
 
@@ -871,6 +873,7 @@
       v16 2017-10-15  Andrei Popov   Addressing AD comments.
       v17 2018-04-11  Andrei Popov   Adding separators between initial registrations.
                                      Clarifying IANA considerations.
+                                     Acknowledging tokbind chairs and ADs.
     -->
   </back>
 </rfc>
