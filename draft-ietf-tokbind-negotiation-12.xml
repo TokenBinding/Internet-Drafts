@@ -37,7 +37,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-negotiation-11" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-negotiation-12" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -239,11 +239,15 @@ struct {
 
       <t>"token_binding_version" indicates the version of the Token Binding protocol the client 
       wishes to use during this connection. If the client supports multiple Token Binding protocol 
-      versions, it SHOULD indicate the latest (highest valued) version in 
-      TokenBindingParameters.token_binding_version.
-      <xref target="I-D.ietf-tokbind-protocol"/> describes version {1, 0} of the protocol.
-      Please note that the server MAY select any lower protocol version, see section 
-      <xref target="Negotiating"/> "<xref target="Negotiating" format="title"/>" for more details.</t>
+      versions, it SHOULD indicate the latest supported version (the one with the highest 
+      TB_ProtocolVersion.major and TB_ProtocolVersion.minor) in 
+      TokenBindingParameters.token_binding_version. E.g. if the client supports versions {1, 0} and 
+      {0, 13} of the Token Binding protocol, it SHOULD indicate version {1, 0}. Please note that 
+      the server MAY select any lower protocol version, see <xref target="Server"/> 
+      "<xref target="Server" format="title"/>" for more details. If the client does not support the 
+      Token Binding protocol version selected by the server, then the connection proceeds without 
+      Token Binding. <xref target="I-D.ietf-tokbind-protocol"/> describes version {1, 0} of the 
+      protocol.</t>
 
       <t>RFC EDITOR: PLEASE REMOVE THE FOLLOWING PARAGRAPH: Prototype implementations of Token 
       Binding drafts can indicate support of a specific draft version, e.g. {0, 1} or {0, 2}.</t>
@@ -254,7 +258,7 @@ struct {
       Binding key parameters.</t>
     </section>
 
-    <section title="Token Binding Negotiation Server Hello Extension">
+    <section anchor="Server" title="Token Binding Negotiation Server Hello Extension">
       <t>The server uses the "token_binding" TLS extension to indicate support for the Token 
       Binding protocol and to select the protocol version and key parameters.</t>
 
@@ -267,7 +271,7 @@ struct {
         <t>The server finds acceptable Token Binding key parameters on the client's list.</t>
         <t>The server is also negotiating the Extended Master Secret <xref target="RFC7627" /> and 
         Renegotiation Indication <xref target="RFC5746" /> TLS extensions. This requirement applies 
-        when TLS 1.2 or an older TLS version is used (see section <xref target="Security"/> 
+        when TLS 1.2 or an older TLS version is used (see <xref target="Security"/> 
         "<xref target="Security" format="title"/>" below for more details).</t>
       </list></t>
 
@@ -306,7 +310,7 @@ struct {
         <t>"key_parameters_list" includes an identifier that was not advertised by the client.</t>
         <t>TLS 1.2 or an older TLS version is used, but the Extended Master Secret 
         <xref target="RFC7627" /> and TLS Renegotiation Indication <xref target="RFC5746" /> 
-        extensions are not negotiated (see section <xref target="Security"/> 
+        extensions are not negotiated (see <xref target="Security"/> 
         "<xref target="Security" format="title"/>" below for more details).</t>
       </list></t>
 
@@ -319,7 +323,9 @@ struct {
       as described in <xref target="I-D.ietf-tokbind-protocol"/>.</t>
 
       <t>If the client does not support the Token Binding protocol version selected by the server, 
-      then the connection proceeds without Token Binding.</t>
+      then the connection proceeds without Token Binding. There is no requirement for the client to 
+      support any Token Binding versions other than the one advertised in the client's 
+      "token_binding" extension.</t>
 
       <t>The Token Binding protocol version and key parameters are negotiated for each TLS 
       connection, which means that the client and server include their "token_binding" 
@@ -442,6 +448,7 @@ struct {
       v11 2018-04-11  Andrei Popov   Updating IANA considerations: Recommended column has been added to the extensions registry.
                                      Clarifying the version negotiation language as suggested by EKR.
                                      Acknowledging tokbind chairs and ADs.
+      v12 2018-04-30  Andrei Popov   Clarifying the version negotiation language as suggested by Paul Kyzivat.
     -->
   </back>
 </rfc>
