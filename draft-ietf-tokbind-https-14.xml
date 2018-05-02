@@ -52,7 +52,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-https-13" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-https-14" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -267,7 +267,7 @@
       a different server than the one
       issuing the token.</t>
 
-      <t>This Internet-Draft is a companion document to The Token Binding Protocol.</t>
+      <t>This document is a companion document to The Token Binding Protocol.</t>
     </abstract>
   </front>
 
@@ -545,8 +545,8 @@
 	an identity token to a client, which sends the identity token
 	to a Relying Party to authenticate itself. Examples of this
 	include OpenID Connect (in which the identity token is called an "ID
-	Token") and SAML (in which the identity token is a SAML
-	assertion).</t>
+	Token") and <xref target="OASIS.saml-core-2.0-os">SAML</xref>
+	(in which the identity token is a SAML assertion).</t>
 	<t>To better protect the security of the identity token, the
 	Identity Provider may wish to bind the identity token to the TLS
 	connection between the client and the Relying Party, thus
@@ -1116,12 +1116,12 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         <t>Token Binding key pairs do not have an expiration time. This means that they 
           can potentially be used by a server to track a user for an extended
           period of time (similar to a long-lived cookie). HTTPS clients such as 
-          Web user agents should therefore provide a user interface for discarding
+          Web user agents SHOULD therefore provide a user interface for discarding
           Token Binding key pairs (similar to the affordances provided to delete cookies).
         </t>
         <t>If a user agent provides modes such as private browsing mode in which
           the user is promised that browsing state such as cookies are discarded 
-          after the session is over, the user agent should also discard Token
+          after the session is over, the user agent SHOULD also discard Token
           Binding key pairs from such modes after the session is over. Generally speaking,
           users should be given the same level of control over lifetime of Token
           Binding key pairs as they have over cookies or other potential tracking 
@@ -1275,6 +1275,40 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           <date year="2014" />
         </front>
       </reference>
+			<reference target="http://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf" anchor="OASIS.saml-core-2.0-os">
+				<front>
+					<title>
+						Assertions and Protocol for the OASIS Security Assertion Markup Language (SAML) V2.0
+					</title> 
+					<author fullname="Scott Cantor" initials="S." surname="Cantor">
+						<organization>Internet2</organization>
+						<address>
+							<email>cantor.2@osu.edu</email>
+						</address>
+					</author>
+					<author fullname="John Kemp" initials="J." surname="Kemp">
+						<organization>Nokia</organization>
+						<address>
+							<email>John.Kemp@nokia.com</email>
+						</address>
+					</author>
+					<author fullname="Rob Philpott" initials="R." surname="Philpott">
+						<organization>RSA Security</organization>
+						<address>
+							<email>rphilpott@rsasecurity.com</email>
+						</address>
+					</author>
+					<author fullname="Eve Maler" initials="E." surname="Maler">
+						<organization>Sun Microsystems</organization>
+						<address>
+							<email>eve.maler@sun.com</email>
+						</address>
+					</author>
+					<date year="2005" month="March"/>
+				</front>
+				<seriesInfo name="OASIS Standard" value="saml-core-2.0-os"/>
+				<format type="PDF" target="http://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf"/>
+			</reference>
     </references>
 
     <!-- Change Log
@@ -1314,6 +1348,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       v09 2017-02-15  Jeff Hodges    Applying Mike Jones' editorial feedback.
       v12 2018-01-07  Dirk Balfanz   Addressing Eric Rescorla's editorial feedback.
       v13 2018-04-12  Andrei Popov   Acknowledging tokbind chairs and ADs.
+      v14 2018-05-01  Dirk Balfanz   Cleanup and adding a SAML reference.	
     -->
   </back>
 </rfc>
