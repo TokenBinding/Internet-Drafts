@@ -7,6 +7,7 @@
      An alternate method (rfc include) is described in the references. -->
 
 <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC8174 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8174.xml">
 <!ENTITY RFC5246 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml">
 <!ENTITY RFC5705 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5705.xml">
 <!ENTITY RFC7627 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7627.xml">
@@ -37,7 +38,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-negotiation-12" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-negotiation-13" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -199,9 +200,10 @@
       the scope of this document.</t>
 
       <section title="Requirements Language">
-        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-        document are to be interpreted as described in <xref target="RFC2119" />.</t>
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD 
+        NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be 
+        interpreted as described in BCP 14 <xref target="RFC2119" /> <xref target="RFC8174" /> 
+        when, and only when, they appear in all capitals, as shown here.</t>
       </section>
     </section>
 
@@ -254,8 +256,8 @@ struct {
 
       <t>"key_parameters_list" contains the list of identifiers of the Token Binding key 
       parameters supported by the client, in descending order of preference. 
-      <xref target="I-D.ietf-tokbind-protocol"/> defines an initial set of identifiers for Token 
-      Binding key parameters.</t>
+      <xref target="I-D.ietf-tokbind-protocol"/> establishes an IANA registry for Token Binding key 
+      parameter identifiers.</t>
     </section>
 
     <section anchor="Server" title="Token Binding Negotiation Server Hello Extension">
@@ -283,7 +285,7 @@ struct {
         <list style="symbols">
           <t>the Token Binding protocol version offered by the client in the "token_binding" 
           extension and</t>
-          <t>the highest version supported by the server.</t>
+          <t>the highest Token Binding protocol version supported by the server.</t>
         </list>
       </t>
 
@@ -326,6 +328,11 @@ struct {
       then the connection proceeds without Token Binding. There is no requirement for the client to 
       support any Token Binding versions other than the one advertised in the client's 
       "token_binding" extension.</t>
+
+      <t>Client and server applications can choose to handle failure to negotiate Token Binding in 
+      a variety of ways, e.g.: continue using the connection as usual, shorten the lifetime of 
+      tokens issued during this connection, require stronger authentication, terminate the 
+      connection, etc.</t>
 
       <t>The Token Binding protocol version and key parameters are negotiated for each TLS 
       connection, which means that the client and server include their "token_binding" 
@@ -399,6 +406,7 @@ struct {
 
     <references title="Normative References">
       &RFC2119;
+      &RFC8174;
       &RFC5246;
       &RFC5705;
       &RFC7627;
@@ -449,6 +457,7 @@ struct {
                                      Clarifying the version negotiation language as suggested by EKR.
                                      Acknowledging tokbind chairs and ADs.
       v12 2018-04-30  Andrei Popov   Clarifying the version negotiation language as suggested by Paul Kyzivat.
+      v13 2018-05-09  Andrei Popov   Incorporating GEN-ART review feedback.
     -->
   </back>
 </rfc>

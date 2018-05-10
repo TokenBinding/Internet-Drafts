@@ -7,6 +7,7 @@
      An alternate method (rfc include) is described in the references. -->
 
 <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC8174 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8174.xml">
 <!ENTITY RFC5246 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml">
 <!ENTITY RFC7230 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7230.xml">
 <!ENTITY RFC7540 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7540.xml">
@@ -42,7 +43,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-17" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-18" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -234,16 +235,16 @@
       <xref target="RFC5246" /> layer.</t>
 
       <t>A Token Binding is established by a user agent generating a private-public key pair 
-      (possibly, within a secure hardware module, such as TPM) per target server, providing the 
-      public key to the server, and proving possession of the corresponding private key, on every 
-      TLS connection to the server. The proof of possession involves signing the exported keying 
-      material (EKM) <xref target="RFC5705" /> from the TLS connection with the private key. The 
-      corresponding public key is included in the Token Binding identifier structure (described in 
-      the <xref target="TBMessage-TBID"/> "<xref target="TBMessage-TBID" format="title"/>"). Token 
-      Bindings are long-lived, i.e., they encompass multiple TLS connections and TLS sessions 
-      between a given client and server. To protect privacy, Token Binding IDs are never conveyed 
-      over insecure connections and can be reset by the user at any time, e.g., when clearing 
-      browser cookies.</t>
+      (possibly within a secure hardware module, such as a Trusted Platform Module) per target 
+      server, providing the public key to the server, and proving possession of the corresponding 
+      private key, on every TLS connection to the server. The proof of possession involves signing 
+      the exported keying material (EKM) <xref target="RFC5705" /> from the TLS connection with the 
+      private key. The corresponding public key is included in the Token Binding identifier 
+      structure (described in the <xref target="TBMessage-TBID"/> "<xref target="TBMessage-TBID" 
+      format="title"/>"). Token Bindings are long-lived, i.e., they encompass multiple TLS 
+      connections and TLS sessions between a given client and server. To protect privacy, Token 
+      Binding IDs are never conveyed over insecure connections and can be reset by the user at any 
+      time, e.g., when clearing browser cookies.</t>
 
       <t>When issuing a security token to a client that supports Token Binding, a server 
       includes the client’s Token Binding ID (or its cryptographic hash) in the token. Later on, 
@@ -256,9 +257,10 @@
       protected, e.g., generated in a secure hardware module.</t>
 
       <section title="Requirements Language">
-        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-        document are to be interpreted as described in <xref target="RFC2119" />.</t>
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD 
+        NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be 
+        interpreted as described in BCP 14 <xref target="RFC2119" /> <xref target="RFC8174" /> 
+        when, and only when, they appear in all capitals, as shown here.</t>
       </section>
     </section>
 
@@ -267,6 +269,10 @@
       Negotiation TLS Extension <xref target="I-D.ietf-tokbind-negotiation"/> to negotiate the 
       Token Binding protocol version and the parameters (signature algorithm, length) of the Token 
       Binding key. This negotiation does not require additional round-trips.</t>
+
+      <t>As described in <xref target="I-D.ietf-tokbind-negotiation"/>, version 1.0 of the Token 
+      Binding protocol is represented by TB_ProtocolVersion.major = 1 and TB_ProtocolVersion.minor 
+      = 0 in the Token Binding Negotiation TLS Extension.</t>
 
       <t>The Token Binding protocol consists of one message sent by the client to the server, 
       proving possession of one or more client-generated asymmetric private keys. This message is 
@@ -411,8 +417,9 @@
         and point formats.</t>
 
         <t>Token Binding protocol implementations SHOULD make Token Binding IDs available to the 
-        application as opaque byte sequences. E.g., server applications will use Token Binding IDs 
-        when generating and verifying bound tokens.</t>
+        application as opaque byte sequences, so that applications do not rely on a particular 
+        Token Binding ID structure. E.g., server applications will use Token Binding IDs when 
+        generating and verifying bound tokens.</t>
       </section>
 
       <section title="TokenBinding.signature">
@@ -491,7 +498,7 @@
         server (e.g., via <xref target="I-D.ietf-tokbind-negotiation"/> or a different mechanism).
         </t>
         
-        <t>The client SHOULD generate and store Token Binding keys in a secure manner that prevents 
+        <t>The client MUST generate and store Token Binding keys in a secure manner that prevents 
         key export. In order to prevent cooperating servers from linking user identities, the scope 
         of the Token Binding keys MUST NOT be broader than the scope of the tokens, as defined by 
         the application protocol.</t>
@@ -593,8 +600,8 @@
         </t>
 
         <t>This registry operates under the "Expert Review" policy as defined in 
-        <xref target="RFC8126"/>. The designated expert is advised to encourage the inclusion of a 
-        reference to a permanent and readily available specification that enables the creation of 
+        <xref target="RFC8126"/>. The designated expert will require the inclusion of a reference 
+        to a permanent and readily available specification that enables the creation of 
         interoperable implementations using the identified set of Token Binding key parameters.</t>
 
         <t>An initial set of registrations for this registry follows:
@@ -632,8 +639,8 @@
         </t>
 
         <t>This registry operates under the "Expert Review" policy as defined in 
-        <xref target="RFC8126"/>. The designated expert is advised to encourage the inclusion of a 
-        reference to a permanent and readily available specification that enables the creation of 
+        <xref target="RFC8126"/>. The designated expert will require the inclusion of a reference 
+        to a permanent and readily available specification that enables the creation of 
         interoperable implementations using the identified Token Binding type.</t>
 
         <t>An initial set of registrations for this registry follows:
@@ -665,8 +672,8 @@
         </t>
 
         <t>This registry operates under the "Expert Review" policy as defined in 
-        <xref target="RFC8126"/>. The designated expert is advised to encourage the inclusion of a 
-        reference to a permanent and readily available specification that enables the creation of 
+        <xref target="RFC8126"/>. The designated expert will require the inclusion of a reference 
+        to a permanent and readily available specification that enables the creation of 
         interoperable implementations using the identified Token Binding extension. This document 
         creates no initial registrations in the "Token Binding Extensions" registry.</t>
       </section>
@@ -776,6 +783,7 @@
 
     <references title="Normative References">
       &RFC2119;
+      &RFC8174;
       &RFC5246;
       &RFC7230;
       &RFC7540;
@@ -874,6 +882,7 @@
       v17 2018-04-11  Andrei Popov   Adding separators between initial registrations.
                                      Clarifying IANA considerations.
                                      Acknowledging tokbind chairs and ADs.
+      v18 2018-05-09  Andrei Popov   Incorporating GEN-ART review feedback.
     -->
   </back>
 </rfc>

@@ -7,6 +7,7 @@
      An alternate method (rfc include) is described in the references. -->
 
 <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC8174 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8174.xml">
 <!ENTITY RFC2818 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2818.xml">
 <!ENTITY RFC3864 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3864.xml">
 <!ENTITY RFC4492 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4492.xml">
@@ -52,7 +53,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-https-14" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-https-15" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -316,9 +317,10 @@
       to. This is useful in federation scenarios.</t>
 
       <section title="Requirements Language">
-        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-        document are to be interpreted as described in <xref target="RFC2119" />.</t>
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD 
+        NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be 
+        interpreted as described in BCP 14 <xref target="RFC2119" /> <xref target="RFC8174" /> 
+        when, and only when, they appear in all capitals, as shown here.</t>
       </section>
     </section>
 
@@ -1218,6 +1220,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
 
     <references title="Normative References">
       &RFC2119;
+      &RFC8174;
       &RFC2818;
       &RFC3864;
       <!-- &RFC4492; -->
@@ -1348,7 +1351,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       v09 2017-02-15  Jeff Hodges    Applying Mike Jones' editorial feedback.
       v12 2018-01-07  Dirk Balfanz   Addressing Eric Rescorla's editorial feedback.
       v13 2018-04-12  Andrei Popov   Acknowledging tokbind chairs and ADs.
-      v14 2018-05-01  Dirk Balfanz   Cleanup and adding a SAML reference.	
+      v14 2018-05-01  Dirk Balfanz   Cleanup and adding a SAML reference.
+      v15 2018-05-09  Andrei Popov   Incorporating GEN-ART review feedback.
     -->
   </back>
 </rfc>
