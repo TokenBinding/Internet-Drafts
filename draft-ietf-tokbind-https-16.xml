@@ -342,7 +342,7 @@
 
       <t>The header field name is Sec-Token-Binding and its single
       value, EncodedTokenBindingMessage, is a base64url encoding of a single TokenBindingMessage,
-      as defined in <xref target="I-D.ietf-tokbind-protocol"/>, using the URL- and filename-safe
+      as defined in <xref target="I-D.ietf-tokbind-protocol"/>. The base64url encoding uses the URL- and filename-safe
       character set described in Section 5 of <xref target="RFC4648"/>, with all trailing padding
       characters '=' omitted and without the inclusion of any line breaks, whitespace, or other
       additional characters.</t>
