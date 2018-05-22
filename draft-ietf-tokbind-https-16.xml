@@ -1123,7 +1123,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         </t>
         <t>If a user agent provides modes such as private browsing mode in which
           the user is promised that browsing state such as cookies are discarded 
-          after the session is over, the user agent SHOULD also discard Token
+          after the session is over, the user agent MUST also discard Token
           Binding key pairs from such modes after the session is over. Generally speaking,
           users should be given the same level of control over lifetime of Token
           Binding key pairs as they have over cookies or other potential tracking 
