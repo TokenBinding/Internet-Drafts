@@ -491,7 +491,7 @@
 	common idea among these mechanisms is that a server (called
 	the Token Consumer in this
 	document) signals to the client that it should reveal the Provided
-	Token Binding ID that is used between the client and itself,
+	Token Binding ID that is used between the client and itself
 	to another server (called the Token
 	Provider in this document). Also common across the
 	mechanisms is how the Token Binding ID is revealed to the
@@ -588,17 +588,14 @@
     Consumer to verify that the token was sent to it by the legitimate 
     client.</t>
 	  <t>To allow the Token Provider to include the Token Binding ID in
-    the token, the Token Binding ID (between client and Token Consumer) must 
+    the token, the Token Binding ID between client and Token Consumer must 
     therefore be communicated to the Token Provider along with the token
     request. Communicating a Token Binding ID involves proving possession of a 
     private key and is described in the <xref target="I-D.ietf-tokbind-protocol">Token
 	  Binding Protocol</xref>.</t>
 	</list>
 	</t>
-	<t>The client will perform this last operation (proving
-	possession of a private key that corresponds to a Token Binding
-	ID between the client and the Token Consumer while delivering
-	the token request to the Token Provider) only if the Token
+	<t>The client will perform this last operation only if the Token
 	Consumer requests the client to do so.</t>
 	<t>Below, we specify how Token Consumers can signal this request in
     redirect-based federation protocols. Note that this assumes that the federated
