@@ -1129,7 +1129,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       <section title="Correlation" anchor="Correlation">
         <t>
           An application's various communicating endpoints that receive Token Binding 
-          IDs for TLS connections other than their own, obtain information about the 
+          IDs for TLS connections other than their own obtain information about the 
           application's other TLS connections. (In this context, "an application" is a 
           combination of client-side and server-side components, communicating over 
           HTTPS, where the client side may be either or both Web browser-based or native 
