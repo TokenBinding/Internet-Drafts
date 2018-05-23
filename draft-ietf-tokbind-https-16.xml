@@ -407,7 +407,7 @@
         <t>HTTPS is used in conjunction with various application 
         protocols and application contexts, in various ways. 
         For example, general-purpose Web browsing is one such HTTP-based 
-        application context. Within the that context, HTTP cookies 
+        application context. Within that context, HTTP cookies 
         <xref target="RFC6265"/> are typically utilized for state management, 
         including client authentication. 
         A related, though distinct, example of other HTTP-based
