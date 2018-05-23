@@ -887,6 +887,12 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         Binding private keys are therefore high-value assets and SHOULD
         be strongly protected, ideally by generating them in a hardware
         security module that prevents key export.</t>
+		
+		<t>This consideration is a special case of the Security Token Replay security
+		consideration laid out in the <xref target="I-D.ietf-tokbind-protocol">The 
+		Token Binding Protocol</xref> specification.
+		</t>
+		
       </section>
       <section title="Triple Handshake Vulnerability in TLS 1.2 and Older TLS Versions">
         <t>The Token Binding protocol relies on the exported key material (EKM)
