@@ -43,7 +43,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-protocol-18" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-protocol-19" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -288,7 +288,7 @@
 
       <t>When a server supporting the Token Binding protocol receives a bound token, the server 
       compares the Token Binding ID in the token with the Token Binding ID established with the 
-      client. If the bound token came from a TLS connection without a Token Binding, or if the 
+      client. If the bound token is received on a TLS connection without a Token Binding, or if the 
       Token Binding IDs do not match, the token is rejected.</t>
 
       <t>This document defines the format of the Token Binding protocol message, the process of 
@@ -397,6 +397,8 @@
         Binding key it uses with the Relying Party. The Identity Provider can then bind the token 
         it is supplying (for presentation to the Relying Party) to the Token Binding ID contained 
         in the referred_token_binding.</t>
+
+        <t>An implementation MUST ignore any unknown Token Binding types.</t>
       </section>
 
       <section anchor="TBMessage-TBID" title="TokenBinding.tokenbindingid">
@@ -485,8 +487,6 @@
         envisioned at the time of this writing is attestation: cryptographic proof that allows the 
         server to verify that the Token Binding key is hardware-bound. The definitions of such 
         Token Binding protocol extensions are outside the scope of this specification.</t>
-
-        <t>An implementation MUST ignore any unknown Token Binding types.</t>
       </section>
 
     </section>
@@ -494,7 +494,7 @@
     <section title="Establishing a Token Binding">
       <section title="Client Processing Rules">
         <t>The client MUST include at least one TokenBinding structure in the Token Binding message. 
-        The key parameters used in the provided_token_binding MUST match those negotiated with the 
+        The key parameters used in a provided_token_binding MUST match those negotiated with the 
         server (e.g., via <xref target="I-D.ietf-tokbind-negotiation"/> or a different mechanism).
         </t>
         
@@ -528,10 +528,11 @@
         <xref target="RFC5746" /> TLS extensions.</t>
 
         <t>If the use of the Token Binding protocol was not negotiated, but the client sends the 
-        Token Binding message, the server MUST reject any contained bindings. If the Token Binding 
-        type is "provided_token_binding", the server MUST verify that the signature algorithm 
-        (including elliptic curve in the case of ECDSA) and key length in the Token Binding message 
-        match those negotiated with this client (e.g., via 
+        Token Binding message, the server MUST reject any contained bindings.</t>
+
+        <t>If the Token Binding type is "provided_token_binding", the server MUST verify that the 
+        signature algorithm (including elliptic curve in the case of ECDSA) and key length in the 
+        Token Binding message match those negotiated with this client (e.g., via 
         <xref target="I-D.ietf-tokbind-negotiation"/> or a different mechanism). In the case of a 
         mismatch, the server MUST reject the binding. Token Bindings of type 
         "referred_token_binding" may use different key parameters than those negotiated with this 
@@ -550,10 +551,10 @@
         Token Binding IDs for bound security token creation and validation, see 
         <xref target="BoundSecurityToken"/>.</t>
 
-        <t> If a Token Binding is rejected, any associated bound tokens MUST also be rejected by 
-        the server. The effect of this is application-specific, e.g., failing requests, a 
-        requirement for the client to re-authenticate and present a different token, or connection 
-        termination.</t>
+        <t> If a Token Binding is rejected, any associated bound tokens presented on the current 
+        TLS connection MUST also be rejected by the server. The effect of this is 
+        application-specific, e.g., failing requests, a requirement for the client to 
+        re-authenticate and present a different token, or connection termination.</t>
       </section>
     </section>
 
@@ -599,7 +600,7 @@
           </list>
         </t>
 
-        <t>This registry operates under the "Expert Review" policy as defined in 
+        <t>This registry operates under the "Specification Required" policy as defined in 
         <xref target="RFC8126"/>. The designated expert will require the inclusion of a reference 
         to a permanent and readily available specification that enables the creation of 
         interoperable implementations using the identified set of Token Binding key parameters.</t>
@@ -638,7 +639,7 @@
           </list>
         </t>
 
-        <t>This registry operates under the "Expert Review" policy as defined in 
+        <t>This registry operates under the "Specification Required" policy as defined in 
         <xref target="RFC8126"/>. The designated expert will require the inclusion of a reference 
         to a permanent and readily available specification that enables the creation of 
         interoperable implementations using the identified Token Binding type.</t>
@@ -671,7 +672,7 @@
           </list>
         </t>
 
-        <t>This registry operates under the "Expert Review" policy as defined in 
+        <t>This registry operates under the "Specification Required" policy as defined in 
         <xref target="RFC8126"/>. The designated expert will require the inclusion of a reference 
         to a permanent and readily available specification that enables the creation of 
         interoperable implementations using the identified Token Binding extension. This document 
@@ -713,9 +714,9 @@
       <section title="Downgrade Attacks">
         <t>The Token Binding protocol MUST be negotiated using a mechanism that prevents downgrade. 
         E.g., <xref target="I-D.ietf-tokbind-negotiation"/> uses a TLS extension for Token Binding 
-        negotiation. TLS prevents active attackers from modifying the messages of the TLS handshake, 
-        therefore it is not possible for the attacker to remove or modify the Token Binding 
-        Negotiation TLS Extension. The signature algorithm and key length used in the TokenBinding 
+        negotiation. TLS detects handshake message modification by active attackers, therefore it 
+        is not possible for an attacker to remove or modify the "token_binding" extension without 
+        breaking the TLS handshake. The signature algorithm and key length used in the TokenBinding 
         of type "provided_token_binding" MUST match the negotiated parameters.</t>
       </section>
 
@@ -759,7 +760,7 @@
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>This document incorporates comments and suggestions offered by Eric Rescorla, Gabriel 
       Montenegro, Martin Thomson, Vinod Anupam, Anthony Nadalin, Michael B. Jones, Bill Cox, Nick 
-      Harper, Brian Campbell, and others.</t>
+      Harper, Brian Campbell, Benjamin Kaduk, Alexey Melnikov and others.</t>
       <t>This document was produced under the chairmanship of John Bradley and Leif Johansson. 
       The area directors included Eric Rescorla, Kathleen Moriarty and Stephen Farrell.</t>
     </section>
@@ -883,6 +884,7 @@
                                      Clarifying IANA considerations.
                                      Acknowledging tokbind chairs and ADs.
       v18 2018-05-09  Andrei Popov   Incorporating GEN-ART review feedback.
+      v18 2018-05-23  Andrei Popov   Incorporating IESG review feedback.
     -->
   </back>
 </rfc>
