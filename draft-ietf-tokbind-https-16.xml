@@ -655,8 +655,8 @@
   request that did not include the Token-Binding header field, the client MUST ignore
   the Include-Referred-Token-Binding-ID header field.</t>
 	
-	<t>This header field has only meaning if the HTTP status code is 301,
-	302, 303, 307 or 308, and MUST be ignored by the client for any other status
+	<t>This header field has only meaning if the HTTP status code is a redirection code (300-399),
+		 and MUST be ignored by the client for any other status
 	codes. If the client supports the Token Binding Protocol, and
 	has negotiated the Token Binding Protocol with both the Token
 	Consumer and the Token Provider, it already sends the
