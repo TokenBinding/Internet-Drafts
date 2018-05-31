@@ -386,7 +386,7 @@
       specification.</t>
 
       <t>A TokenBindingMessage is validated by the server as described in Section 
-      4.2. ("Server Processing Rules") of <xref target="I-D.ietf-tokbind-protocol"/>.
+      4.2 ("Server Processing Rules") of <xref target="I-D.ietf-tokbind-protocol"/>.
       If validation fails and a Token Binding is rejected, any associated bound 
       tokens MUST also be rejected by the server. HTTP requests containing invalid 
       tokens MUST be rejected. In this case, the server application MAY return HTTP 
@@ -663,7 +663,7 @@
  Sec-Token-Binding header field to the Token Provider with each HTTP
 	request (as described in <xref target="sctn-secTB-header"/> above).</t>
 
-	<t>The TokenBindingMessage SHOULD contain a TokenBinding with
+	<t>The TokenBindingMessage included in the redirect request to the Token Provider SHOULD contain a TokenBinding with
 	TokenBindingType referred_token_binding. If included, this 
         TokenBinding MUST be signed 
 	with the Token Binding private key used by the client for connections
@@ -958,7 +958,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
           related-domain attacks, etc.) In other words, A tricked C into
           logging into A's account on S. This could lead to a loss of privacy
           for C, since A presumably has some other way to also access the
-          account, and can thus indirectly observe A's behavior (for example,
+          account, and can thus indirectly observe C's behavior (for example,
           if S has a feature that lets account holders see their activity
           history on S).
         </t>
