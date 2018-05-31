@@ -743,8 +743,8 @@ contexts. Other approaches are possible, but are outside the scope of this speci
            <c>EKM:</c>       <c>TLS Exported Keying Material [RFC5705]</c>
 
            <c>{EKMn}Ksm:</c> <c>EKM for server "n", signed by private key of TBID "m",
-                      where "n" must represent server receiving the ETBMSG,
-                      if a conveyed TB's type is provided_token_binding, then
+                      where "n" must represent server receiving the ETBMSG.
+                      If a conveyed TB's type is provided_token_binding, then
                       m = n, else if TB's type is referred_token_binding, then
                       m != n. E.g., see step 1b in diagram below.</c>
 
@@ -1241,17 +1241,6 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       &RFC7541;
       <?rfc include="reference.I-D.ietf-tokbind-negotiation.xml"?>
       <?rfc include="reference.I-D.ietf-tokbind-protocol.xml"?>
-      
-      <reference anchor="fetch-spec" target="https://fetch.spec.whatwg.org/">
-        <front>
-          <title>Fetch</title>
-          <author>
-            <organization>WhatWG</organization>
-          </author>
-          <date />
-        </front>
-        <seriesInfo name="Living Standard" value="" />
-      </reference>
 	  
       <reference anchor="PSL" target="https://publicsuffix.org/">
   		<front>
@@ -1272,6 +1261,17 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       &RFC7627;
       &OpenID.Core;
 
+      <reference anchor="fetch-spec" target="https://fetch.spec.whatwg.org/">
+        <front>
+          <title>Fetch</title>
+          <author>
+            <organization>WhatWG</organization>
+          </author>
+          <date />
+        </front>
+        <seriesInfo name="Living Standard" value="" />
+      </reference>
+	  
       <reference anchor="TRIPLE-HS">
         <front>
           <title>Triple Handshakes and Cookie Cutters: Breaking and Fixing Authentication over 
@@ -1369,6 +1369,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       v13 2018-04-12  Andrei Popov   Acknowledging tokbind chairs and ADs.
       v14 2018-05-01  Dirk Balfanz   Cleanup and adding a SAML reference.
       v15 2018-05-09  Andrei Popov   Incorporating GEN-ART review feedback.
+	  v16 2018-05-31  Dirk Balfanz   Incorporating GEN-ART review feedback.
     -->
   </back>
 </rfc>
