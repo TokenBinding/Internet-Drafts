@@ -852,7 +852,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         presented above in <xref target="sctn-http-redir"/>.
       </t>
       <t>
-        Thus, platforms (web browsers, operating systems, etc.) 
+        Thus, platforms (Web browsers, operating systems, etc.) 
 		that implement Token Binding and expose its functionality to 
 		applications should provide means for such applications to generate 
         Token Binding messages containing Token Binding IDs of various 
