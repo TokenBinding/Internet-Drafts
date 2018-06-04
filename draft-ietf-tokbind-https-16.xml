@@ -852,23 +852,20 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         presented above in <xref target="sctn-http-redir"/>.
       </t>
       <t>
-        Thus, generic Token Binding implementations intended to support 
-        any HTTPS-based client-side application (e.g., so-called "native 
-        applications"), should provide means for applications to have 
-        Token Binding messages, containing Token Binding IDs of various 
-        application-specified Token Binding types and for 
-        application-specified TLS connections, conveyed over an 
-        application-specified HTTPS connection, i.e., within the 
-        TokenBindingMessage conveyed by the Sec-Token-Binding header 
-        field.
+        Thus, platforms (web browsers, operating systems, etc.) 
+		that implement Token Binding and expose its functionality to 
+		applications should provide means for such applications to generate 
+        Token Binding messages containing Token Binding IDs of various 
+        application-specified Token Binding types, to be conveyed by 
+		the Sec-Token-Binding header field.
       </t>
       <t>
-        However, such implementations MUST only convey Token Binding IDs 
+        However, such platforms MUST only convey Token Binding IDs 
         to servers if signaled to do so by an application. For example, a server
         can return an 
-        Include-Referred-Token-Binding-ID HTTP response header field to a Web browser,
+        Include-Referred-Token-Binding-ID HTTP response header field to a Web browser (the platform in this case),
         thus signaling to the Token Binding implementation in the Web browser
-        that the server
+        that the application
         intends to convey the Web browser's Token Binding ID to another server.
         Other signaling mechanisms are possible, and are specific to the application
         layer protocol, but are outside the scope of this specification.
