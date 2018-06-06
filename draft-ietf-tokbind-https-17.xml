@@ -53,7 +53,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-https-16" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-https-17" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -1373,6 +1373,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       v14 2018-05-01  Dirk Balfanz   Cleanup and adding a SAML reference.
       v15 2018-05-09  Andrei Popov   Incorporating GEN-ART review feedback.
 	  v16 2018-05-31  Dirk Balfanz   Incorporating GEN-ART review feedback.
+	  v17 2018-06-05  Dirk Balfanz   Incorporating GEN-ART review feedback.
     -->
   </back>
 </rfc>
