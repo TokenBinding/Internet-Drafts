@@ -647,9 +647,14 @@
 
   <t>When a client receives the Include-Referred-Token-Binding-ID header, it includes the 
   referred token binding even if both the Token Provider and the Token Consumer fall 
-  under the same eTLD+1 and the provided and referred token binding IDs are the same. 
-  Note that the referred token binding is sent only on the request resulting from the 
-  redirect and not on any subsequent requests to the Token Provider.</t>
+  under the same eTLD+1 and the provided and referred token binding IDs are the same.</t>
+  
+  <t>The referred token binding is sent only on the initial request resulting from the 
+  HTTP response that included the Include-Referred-Token-Binding-ID header. 
+  Should the response to that initial request be a further redirect, the original referred 
+  token binding is no longer included in subsequent requests. (A new referred token binding may be 
+  included if the redirecting endpoint itself responded with a Include-Referred-Token-Binding-ID
+  response header.)</t>
   
   <t>If the Include-Referred-Token-Binding-ID header field is received in response to a
   request that did not include the Token-Binding header field, the client MUST ignore
@@ -1257,6 +1262,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       &RFC7540;
       &RFC7627;
       &OpenID.Core;
+	  <?rfc include="reference.I-D.ietf-tokbind-tls13.xml"?>
 
       <reference anchor="fetch-spec" target="https://fetch.spec.whatwg.org/">
         <front>
