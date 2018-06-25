@@ -53,7 +53,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tokbind-https-17" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-tokbind-https-18" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -857,23 +857,18 @@ contexts. Other approaches are possible, but are outside the scope of this speci
         presented above in <xref target="sctn-http-redir"/>.
       </t>
       <t>
-        Thus, platforms (Web browsers, operating systems, etc.) 
-		that implement Token Binding and expose its functionality to 
-		applications should provide means for such applications to generate 
-        Token Binding messages containing Token Binding IDs of various 
-        application-specified Token Binding types, to be conveyed by 
-		the Sec-Token-Binding header field.
+        Thus, Token Binding implementations should provide APIs for such applications to generate 
+        Token Binding messages containing Token Binding IDs of various application-specified Token 
+        Binding types, to be conveyed by the Sec-Token-Binding header field.
       </t>
       <t>
-        However, such platforms MUST only convey Token Binding IDs 
-        to servers if signaled to do so by an application. For example, a server
-        can return an 
-        Include-Referred-Token-Binding-ID HTTP response header field to a Web browser (the platform in this case),
-        thus signaling to the Token Binding implementation in the Web browser
-        that the application
-        intends to convey the Web browser's Token Binding ID to another server.
-        Other signaling mechanisms are possible, and are specific to the application
-        layer protocol, but are outside the scope of this specification.
+        However, Token Binding implementations MUST only convey Token Binding IDs to servers if 
+        signaled to do so by an application. For example, a server can return an 
+        Include-Referred-Token-Binding-ID HTTP response header field to an application, which then 
+        signals to the Token Binding implementation that it intends to convey the Token Binding ID 
+        used with this server to another server. Other signaling mechanisms are possible, and are 
+        specific to the application layer protocol, but are outside the scope of this 
+        specification.
         <list style="hanging" hangIndent="7">
           <t hangText="NOTE:">
             See <xref target="privacy-cons"/> 
@@ -1372,8 +1367,9 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       v13 2018-04-12  Andrei Popov   Acknowledging tokbind chairs and ADs.
       v14 2018-05-01  Dirk Balfanz   Cleanup and adding a SAML reference.
       v15 2018-05-09  Andrei Popov   Incorporating GEN-ART review feedback.
-	  v16 2018-05-31  Dirk Balfanz   Incorporating GEN-ART review feedback.
-	  v17 2018-06-05  Dirk Balfanz   Incorporating GEN-ART review feedback.
+      v16 2018-05-31  Dirk Balfanz   Incorporating GEN-ART review feedback.
+      v17 2018-06-05  Dirk Balfanz   Incorporating GEN-ART review feedback.
+      v18 2018-06-25  Andrei Popov   Incorporating GEN-ART review feedback: clarifying Section 6.
     -->
   </back>
 </rfc>
