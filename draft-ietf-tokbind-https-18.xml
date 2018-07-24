@@ -146,31 +146,6 @@
       </address>
     </author>
 
-    <author fullname="Adam Langley" initials="A."
-            surname="Langley">
-      <organization>Google Inc.</organization>
-
-      <address>
-        <postal>
-          <street></street>
-
-          <!-- Reorder these if your country does things differently -->
-
-          <city></city>
-
-          <region></region>
-
-          <code></code>
-
-          <country>USA</country>
-        </postal>
-
-        <email>agl@google.com</email>
-
-        <!-- uri and facsimile elements may also be added -->
-      </address>
-    </author>
-
     <author fullname="Nick Harper" initials="N."
             surname="Harper">
       <organization>Google Inc.</organization>
@@ -1370,6 +1345,7 @@ contexts. Other approaches are possible, but are outside the scope of this speci
       v16 2018-05-31  Dirk Balfanz   Incorporating GEN-ART review feedback.
       v17 2018-06-05  Dirk Balfanz   Incorporating GEN-ART review feedback.
       v18 2018-06-25  Andrei Popov   Incorporating GEN-ART review feedback: clarifying Section 6.
+      v18 2018-07-23  Andrei Popov   Removing Adam Langley from the co-authors list, on his request.
     -->
   </back>
 </rfc>

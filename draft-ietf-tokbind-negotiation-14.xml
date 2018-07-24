@@ -131,31 +131,6 @@
       </address>
     </author>
 
-    <author fullname="Adam Langley" initials="A."
-            surname="Langley">
-      <organization>Google Inc.</organization>
-
-      <address>
-        <postal>
-          <street></street>
-
-          <!-- Reorder these if your country does things differently -->
-
-          <city></city>
-
-          <region></region>
-
-          <code></code>
-
-          <country>USA</country>
-        </postal>
-
-        <email>agl@google.com</email>
-
-        <!-- uri and facsimile elements may also be added -->
-      </address>
-    </author>
-
     <date year="2018" />
 
     <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
@@ -185,7 +160,8 @@
 
     <abstract>
       <t>This document specifies a Transport Layer Security (TLS) extension for the negotiation of 
-      Token Binding protocol version and key parameters.</t>
+      the Token Binding protocol version and key parameters. Negotiation of Token Binding in TLS 
+      1.3 and later versions is beyond the scope of this document.</t>
     </abstract>
   </front>
 
@@ -195,9 +171,9 @@
       the client and server need to agree on the Token Binding protocol version and the parameters 
       (signature algorithm, length) of the Token Binding key. This document specifies a new TLS 
       <xref target="RFC5246" /> extension to accomplish this negotiation without introducing 
-      additional network round-trips in TLS 1.2 and earlier versions. The negotiation of the Token 
-      Binding protocol and key parameters in combination with TLS 1.3 and later versions is beyond 
-      the scope of this document.</t>
+      additional network round-trips in TLS 1.2 and earlier versions. 
+      <xref target="I-D.ietf-tokbind-tls13"/> describes the negotiation of the Token Binding 
+      protocol and key parameters in combination with TLS 1.3 and later versions.</t>
 
       <section title="Requirements Language">
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD 
@@ -440,6 +416,7 @@ struct {
           <date year="2014" />
         </front>
       </reference>
+      <?rfc include="reference.I-D.ietf-tokbind-tls13.xml"?>
     </references>
 
     <!-- Change Log
@@ -462,6 +439,9 @@ struct {
       v12 2018-04-30  Andrei Popov   Clarifying the version negotiation language as suggested by Paul Kyzivat.
       v13 2018-05-09  Andrei Popov   Incorporating GEN-ART review feedback.
       v14 2018-05-23  Andrei Popov   Incorporating IESG review feedback.
+      v14 2018-07-24  Andrei Popov   Adding informative reference to the TBTLS13 document.
+                                     Adding language in the Abstract saying TLS 1.3 and later versions are out of scope.
+                                     Removing Adam Langley from the co-authors list, according to his request.
     -->
   </back>
 </rfc>

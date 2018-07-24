@@ -136,31 +136,6 @@
       </address>
     </author>
 
-    <author fullname="Adam Langley" initials="A."
-            surname="Langley">
-      <organization>Google Inc.</organization>
-
-      <address>
-        <postal>
-          <street></street>
-
-          <!-- Reorder these if your country does things differently -->
-
-          <city></city>
-
-          <region></region>
-
-          <code></code>
-
-          <country>USA</country>
-        </postal>
-
-        <email>agl@google.com</email>
-
-        <!-- uri and facsimile elements may also be added -->
-      </address>
-    </author>
-
     <author fullname="Jeff Hodges" initials="J."
             surname="Hodges">
       <organization>PayPal</organization>
@@ -427,7 +402,7 @@
       <section title="TokenBinding.signature">
         <t>When rsa2048_pkcs1.5 is used, TokenBinding.signature contains the signature generated 
         using the RSASSA-PKCS1-v1_5 signature scheme defined in <xref target="RFC8017"/> with 
-        SHA256 as the hash function.</t>
+        SHA256 <xref target="FIPS.180-2.2002"/> as the hash function.</t>
 
         <t>When rsa2048_pss is used, TokenBinding.signature contains the signature generated using 
         the RSASSA-PSS signature scheme defined in <xref target="RFC8017"/> with SHA256 as the hash 
@@ -493,10 +468,10 @@
     
     <section title="Establishing a Token Binding">
       <section title="Client Processing Rules">
-        <t>The client MUST include at least one TokenBinding structure in the Token Binding message. 
-        The key parameters used in a provided_token_binding MUST match those negotiated with the 
-        server (e.g., via <xref target="I-D.ietf-tokbind-negotiation"/> or a different mechanism).
-        </t>
+        <t>The client MUST include at least one TokenBinding structure in the Token Binding 
+        message. When a provided_token_bindng is included, the key parameters used in a 
+        provided_token_binding MUST match those negotiated with the server (e.g., via 
+        <xref target="I-D.ietf-tokbind-negotiation"/> or a different mechanism).</t>
         
         <t>The client MUST generate and store Token Binding keys in a secure manner that prevents 
         key export. In order to prevent cooperating servers from linking user identities, the scope 
@@ -815,6 +790,16 @@
         </front>
         <seriesInfo name="FIPS" value="186-4" />
       </reference>
+      <reference anchor="FIPS.180-2.2002">
+        <front>
+          <title>Secure Hash Standard</title>
+          <author>
+            <organization>National Institute of Standards and Technology</organization>
+          </author>
+          <date year="2002" />
+        </front>
+        <seriesInfo name="FIPS" value="180-2" />
+      </reference>
     </references>
 
     <references title="Informative References">
@@ -885,6 +870,9 @@
                                      Acknowledging tokbind chairs and ADs.
       v18 2018-05-09  Andrei Popov   Incorporating GEN-ART review feedback.
       v18 2018-05-23  Andrei Popov   Incorporating IESG review feedback.
+      v18 2018-07-24  Andrei Popov   Adding normative reference to the SHA256 specification.
+                                     Clarifying the language in section 4.1 per EKR's comment.
+                                     Removing Adam Langley from the co-authors list, according to his request.
     -->
   </back>
 </rfc>
